@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+
+<qresource prefix="/resources">
+    <file>img/titlescreen.jpg</file>
+    <file>img/black.jpg</file>
+	<file>maps/pacman_map.txt</file>
+</qresource>
+</RCC>
