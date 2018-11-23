@@ -1,5 +1,7 @@
 #include "pacmangame.h"
 #include <QTimer>
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 using namespace std;
 
@@ -17,7 +19,7 @@ PacmanGame::PacmanGame() :
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(refresh_frame()));
-    timer -> start(300);
+    timer -> start(20);
 }
 
 PacmanGame::~PacmanGame(){}
@@ -88,7 +90,14 @@ void PacmanGame::move_pacman(int r, int c) {
 void PacmanGame::move_ghost(int r, int c, Ghost* g) {
     if (g->get_time_in_box() > 0) {
         g->reduce_time_in_box();
+        return;
     }
+    int rv = std::rand();
+    if (rv % 4 == 0) g->move(r-1, c);
+    else if (rv % 4 == 1) g->move(r+1,c);
+    else if (rv%4 == 2) g->move(r, c+1);
+    else g->move(r,c-1);
+    if (((g->getRow() != r) || (g->getCol() != c))) board[r][c] = nullptr;
 }
 
 void PacmanGame::update_map() {

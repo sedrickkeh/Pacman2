@@ -34,6 +34,10 @@ void Pacman::eats_piece(bool eat) {
 
 void Pacman::move(int row, int col) {
     if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
+    if (*(board)[row][col] == nullptr) {
+        ((*board)[row][col]) = this;
+        this->row = row; this->col = col;
+    }
     if ((*board)[row][col] -> getImage() == 'W') return;
     else {
         delete ((*board)[row][col]);

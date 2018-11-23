@@ -3,6 +3,7 @@
 
 #include "character.h"
 #include "direction.h"
+#include "food.h"
 
 class Ghost : public Character
 {
@@ -16,6 +17,7 @@ public:
     void set_color(bool eaten);
     void update_points();
     void move(int row, int col);
+    Food* tempfood;
 
 private:
     int points = 200;
