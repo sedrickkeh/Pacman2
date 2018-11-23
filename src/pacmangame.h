@@ -8,6 +8,7 @@ using std::endl;
 #include <algorithm>
 #include <QObject>
 
+
 #include "Character.h"
 #include "wall.h"
 #include "food.h"
@@ -27,6 +28,7 @@ public:
     ~PacmanGame();
     void startGraphicUI();
     GameWindow* get_game_window() const;
+    Pacman* get_pacman();
 
 private:
     GameWindow* game_window;
@@ -53,7 +55,6 @@ private:
     void update_score();
     void update_map();
     void back_to_starting_pos();
-
     QTimer *timer;
 
 

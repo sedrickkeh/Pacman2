@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 //    ui->label->setStyleSheet("*{background-image: url(:/titlescreen.jpg);}");
-    QPixmap img("C:/Users/Sedrick/Desktop/Pacman/img/titlepage2.jpg");
+    QPixmap img("C:/Users/Mark Christopher Uy/Desktop/Pacman2/img/titlepage2.jpg");
     ui->label->setPixmap(img.scaled(1000, 500, Qt::KeepAspectRatio));
    connect(this->ui->startButton, &QPushButton::clicked, this, &MainWindow::startButton_clicked_handler);
 }

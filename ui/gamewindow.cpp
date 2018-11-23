@@ -44,3 +44,22 @@ void GameWindow::set_square(int row, int col, char i) {
    this->square[row][col]->set_piece(i);
 }
 
+
+void GameWindow::keyPressEvent(QKeyEvent * event){
+    if (event->key() == Qt::Key_W){
+        pacman_game->get_pacman()->update_direction(Dir::UP);
+        event->accept();
+    } else if (event->key() == Qt::Key_S){
+        pacman_game->get_pacman()->update_direction(Dir::DOWN);
+         event->accept();
+    } else if (event->key() == Qt::Key_A){
+         pacman_game->get_pacman()->update_direction(Dir::LEFT);
+          event->accept();
+    } else if (event->key() == Qt::Key_D){
+         pacman_game->get_pacman()->update_direction(Dir::RIGHT);
+          event->accept();
+    }
+
+}
+
+
