@@ -19,7 +19,12 @@ PacmanGame::PacmanGame() :
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(refresh_frame()));
+<<<<<<< HEAD
     timer -> start(20);
+=======
+
+    timer -> start(300);
+>>>>>>> c01acf9243a240c7e6229ab892c6ce2ac508ef59
 }
 
 PacmanGame::~PacmanGame(){}
@@ -111,3 +116,7 @@ void PacmanGame::update_map() {
 GameWindow* PacmanGame::get_game_window() const {return game_window;}
 
 void PacmanGame::process_user_input() {}
+
+Pacman* PacmanGame::get_pacman(){
+    return pacman;
+}

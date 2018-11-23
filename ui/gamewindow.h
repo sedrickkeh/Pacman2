@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QCloseEvent>
+#include <QKeyEvent>
 
 class Square;
 class PacmanGame;
@@ -26,7 +27,7 @@ public:
 private:
     void closeEvent(QCloseEvent *event);
     void make_grid();
-
+    void keyPressEvent(QKeyEvent* event);
     Ui::GameWindow *ui;
     Square* square[31][28];
     PacmanGame* pacman_game;
