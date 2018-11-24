@@ -38,30 +38,29 @@ private:
     Ghost* ghost2;
     Ghost* ghost3;
     Ghost* ghost4;
+    int current_score;
     int high_score;
-    int lives;
     int level;
 
     void load_map();
     void init_block(int row, int col, char c);
     void load_high_score();
 
-    bool game_over();
+    void complete_level();
     bool is_level_finished();
+
     bool exists_ghost_in_box();
 
     void move_pacman(int r, int c);
     void move_ghost(int r, int c, Ghost* g);
     void update_score();
     void update_map();
-    void back_to_starting_pos();
+    void game_over();
     QTimer *timer;
 
 
 private slots:
-    void process_user_input();
     void refresh_frame();
-
 };
 
 #endif // PACMANGAME_H

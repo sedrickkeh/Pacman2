@@ -17,7 +17,7 @@ public:
     void set_color(bool eaten);
     void update_points();
     void move(int row, int col);
-    Food* tempfood;
+    Character* prev;
 
 private:
     int points = 200;
