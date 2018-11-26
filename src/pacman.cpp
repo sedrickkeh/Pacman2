@@ -1,4 +1,5 @@
 #include "Pacman.h"
+#include "Wall.h"
 
 Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
 	Character(row, col, board),
@@ -25,7 +26,39 @@ void Pacman::update_superpower(bool sup) {
 }
 
 void Pacman::update_direction(Dir dir) {
-	direction = dir;
+    if (dir ==Dir::UP){
+        if (row==30) return;
+        if ((*board)[row+1][col]!=nullptr){
+            if ((*board)[row+1][col]->getImage()== Wall::IMAGE_WALL){
+                return;
+            }
+        }
+    }
+    else if (dir ==Dir::DOWN){
+        if (row==0) return;
+        if ((*board)[row-1][col]!=nullptr){
+            if ((*board)[row-1][col]->getImage()== Wall::IMAGE_WALL){
+                return;
+            }
+        }
+    }
+    else if (dir == Dir::LEFT){
+        if (col==0) return;
+        if ((*board)[row][col-1]!=nullptr){
+            if ((*board)[row][col-1]->getImage()== Wall::IMAGE_WALL){
+                return;
+            }
+        }
+    }
+    else if (dir == Dir::RIGHT){
+        if (col==27) return;
+        if ((*board)[row][col+1]!=nullptr){
+            if ((*board)[row][col+1]->getImage()== Wall::IMAGE_WALL){
+                return;
+            }
+        }
+    }
+    direction = dir;
 }
 
 void Pacman::eats_piece(bool eat) {

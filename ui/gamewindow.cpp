@@ -47,6 +47,8 @@ void GameWindow::set_square(int row, int col, char i) {
 
 void GameWindow::keyPressEvent(QKeyEvent * event){
     if (event->key() == Qt::Key_W){
+//        int row = pacman_game->get_pacman()->getRow();
+//        int col = pacman_game->get_pacman()->getCol();
         pacman_game->get_pacman()->update_direction(Dir::UP);
         event->accept();
     } else if (event->key() == Qt::Key_S){
