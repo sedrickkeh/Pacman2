@@ -1,5 +1,7 @@
 #include "pacmangame.h"
 #include <QTimer>
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 using namespace std;
 
@@ -8,7 +10,9 @@ PacmanGame::PacmanGame() :
     ghost1(nullptr),
     ghost2(nullptr),
     ghost3(nullptr),
-    ghost4(nullptr)
+    ghost4(nullptr),
+    current_score(0),
+    level(1)
 {
     game_window = new GameWindow(nullptr, this);
     for (int k = 0; k < 31; k ++) for (int l = 0; l < 28; l ++) board[k][l] = nullptr;
@@ -17,8 +21,7 @@ PacmanGame::PacmanGame() :
 
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(refresh_frame()));
-
-    timer -> start(300);
+    timer -> start(20);
 }
 
 PacmanGame::~PacmanGame(){}
@@ -73,7 +76,10 @@ void PacmanGame::refresh_frame() {
     move_ghost(ghost3->getRow(), ghost3->getCol(), ghost3);
     move_ghost(ghost4->getRow(), ghost4->getCol(), ghost4);
     move_pacman(pacman->getRow(), pacman->getCol());
+    update_score();
     update_map();
+    game_over();
+    complete_level();
 }
 
 void PacmanGame::move_pacman(int r, int c) {
@@ -83,13 +89,18 @@ void PacmanGame::move_pacman(int r, int c) {
     else if (dir == Dir::UP) pacman->move(row+1, col);
     else if (dir == Dir::LEFT) pacman->move(row, col-1);
     else if (dir == Dir::RIGHT) pacman->move(row, col+1);
-    if ((pacman->getRow() != r) || (pacman->getCol() != c)) board[r][c] = nullptr;
 }
 
 void PacmanGame::move_ghost(int r, int c, Ghost* g) {
     if (g->get_time_in_box() > 0) {
         g->reduce_time_in_box();
+        return;
     }
+    int rv = std::rand();
+    if (rv % 4 == 0) g->move(r-1, c);
+    else if (rv % 4 == 1) g->move(r+1,c);
+    else if (rv%4 == 2) g->move(r, c+1);
+    else g->move(r,c-1);
 }
 
 void PacmanGame::update_map() {
@@ -100,9 +111,39 @@ void PacmanGame::update_map() {
         }
 }
 
-GameWindow* PacmanGame::get_game_window() const {return game_window;}
+void PacmanGame::update_score() {
+    if (pacman->get_points_to_add() == -1) {
+        pacman->not_eat_piece();
+        return;
+    }
+    else {
+        current_score += pacman->get_points_to_add();
+        pacman->not_eat_piece();
+    }
+}
 
-void PacmanGame::process_user_input() {}
+void PacmanGame::complete_level() {
+    if (is_level_finished() == false) return;
+    else std::cout << "level complete" << std::endl;
+}
+
+bool PacmanGame::is_level_finished() {
+    for (int k = 0; k < 31; k ++)
+        for (int l = 0; l < 28; l ++) {
+            if (board[k][l] != nullptr && board[k][l] -> getImage() == 'F') return false;
+        }
+    if (ghost1 -> prev != nullptr && ghost1->prev->getImage() == 'F') return false;
+    if (ghost2 -> prev != nullptr && ghost2->prev->getImage() == 'F') return false;
+    if (ghost3 -> prev != nullptr && ghost3->prev->getImage() == 'F') return false;
+    if (ghost4 -> prev != nullptr && ghost4->prev->getImage() == 'F') return false;
+    return true;
+}
+
+void PacmanGame::game_over() {
+    if (pacman->get_lives() == 0) std::cout << "game over" << std::endl;
+}
+
+GameWindow* PacmanGame::get_game_window() const {return game_window;}
 
 Pacman* PacmanGame::get_pacman(){
     return pacman;

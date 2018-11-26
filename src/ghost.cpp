@@ -4,7 +4,8 @@ Ghost::Ghost(int row, int col, Character* (*board)[31][28], int timebox) :
     Character(row, col, board),
 	points(200),
 	time_in_box(timebox),
-	is_eaten(false)
+    is_eaten(false),
+    prev(nullptr)
 {}
 
 int Ghost::get_time_in_box() {
@@ -32,5 +33,18 @@ void Ghost::update_points() {
 }
 
 void Ghost::move(int row, int col) {
-
+    if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
+    if ((*board)[row][col] == nullptr) {
+        (*board)[this->row][this->col] = prev;
+        prev = ((*board)[row][col]);
+        ((*board)[row][col]) = this;
+        this->row = row; this->col = col;
+    }
+    else if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return;
+    else if ((*board)[row][col] -> getImage() == 'F') {
+        (*board)[this->row][this->col] = prev;
+        prev = ((*board)[row][col]);
+        ((*board)[row][col]) = this;
+        this->row = row; this->col = col;
+    }
 }
