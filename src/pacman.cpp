@@ -4,7 +4,7 @@
 Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
 	Character(row, col, board),
 	superpower(-1),
-    direction(Dir::LEFT),
+    direction(Dir::NONE),
     has_eaten_piece(false),
     gain(false),
     lose(false),
@@ -38,7 +38,7 @@ char Pacman::getImage() const {
 
 
 void Pacman::update_superpower() {
-    if (gain) superpower += 200;
+    if (gain) superpower += 100;
     else if (superpower > 0) --superpower;
     else if (superpower == 0) {lose = true; superpower = -1;}
     else superpower = -1;

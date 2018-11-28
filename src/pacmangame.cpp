@@ -84,6 +84,7 @@ void PacmanGame::refresh_frame() {
 }
 
 void PacmanGame::move_pacman(int r, int c) {
+    if (pacman->get_direction() == Dir::NONE) return;
     Dir dir = pacman->get_direction();
     int row = r; int col = c;
     if (dir == Dir::DOWN) pacman->move(row-1, col);
