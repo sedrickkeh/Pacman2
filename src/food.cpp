@@ -2,7 +2,7 @@
 
 Food::Food(int row, int col, Character* (*board)[31][28]) : 
 	Character(row, col, board),
-    points(20)
+    points(15)
 {}
 
 char Food::getImage() const {

@@ -11,7 +11,7 @@ int Ghost::get_time_in_box() {
 }
 
 void Ghost::reduce_time_in_box() {
-    time_in_box--;
+    --time_in_box;
 }
 
 char Ghost::getImage() const {
@@ -20,7 +20,7 @@ char Ghost::getImage() const {
 
 bool Ghost::moves_empty() {
     if (moves.empty()) return true;
-    else return false;
+    return false;
 }
 
 Dir Ghost::get_next_move() {
@@ -34,7 +34,21 @@ void Ghost::push_move(Dir d) {
 }
 
 void Ghost::move(int row, int col) {
+    if (col == -1 && row == 16) {
+        ((*board)[this->row][this->col]) = nullptr;
+        ((*board)[16][27]) = this;
+        this->row = 16; this->col = 27;
+        return;
+    }
+    if (col == 28 && row == 16) {
+        ((*board)[this->row][this->col]) = nullptr;
+        ((*board)[16][0]) = this;
+        this->row = 16; this->col = 0;
+        return;
+    }
+
     if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
+
     if ((*board)[row][col] == nullptr) {
         (*board)[this->row][this->col] = prev;
         prev = ((*board)[row][col]);
