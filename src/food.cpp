@@ -2,8 +2,7 @@
 
 Food::Food(int row, int col, Character* (*board)[31][28]) : 
 	Character(row, col, board),
-	points(20),
-	superpower(false)
+    points(20)
 {}
 
 char Food::getImage() const {
@@ -12,8 +11,4 @@ char Food::getImage() const {
 
 int Food::get_points() {
 	return points;
-}
-
-bool Food::is_superpower() {
-	return superpower;
 }

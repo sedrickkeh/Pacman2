@@ -4,25 +4,28 @@
 #include "character.h"
 #include "direction.h"
 #include "food.h"
+#include <vector>
+using namespace std;
+
 
 class Ghost : public Character
 {
 public:
-    Ghost(int row, int col, Character* (*board)[31][28], int timebox);
+    Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous);
     const static char IMAGE_GHOST = 'G';
     virtual char getImage() const override;
     int get_time_in_box();
     void reduce_time_in_box();
-    void eaten(bool eat);
-    void set_color(bool eaten);
-    void update_points();
     void move(int row, int col);
     Character* prev;
 
-private:
-    int points = 200;
+    bool moves_empty();
+    Dir get_next_move();
+    void push_move(Dir d);
+
+protected:
     int time_in_box = 10;
-    bool is_eaten = false;
+    vector<Dir> moves;
 };
 
 #endif // PACMAN_H

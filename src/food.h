@@ -10,11 +10,9 @@ public:
     const static char IMAGE_FOOD = 'F';
     virtual char getImage() const override;
     int get_points();
-    bool is_superpower();
 
-private:
+protected:
     int points;
-    bool superpower;
 };
 
 #endif // FOOD_H

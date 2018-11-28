@@ -1,11 +1,9 @@
 #include "ghost.h"
 
-Ghost::Ghost(int row, int col, Character* (*board)[31][28], int timebox) :
+Ghost::Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous) :
     Character(row, col, board),
-	points(200),
-	time_in_box(timebox),
-    is_eaten(false),
-    prev(nullptr)
+    prev(previous),
+    time_in_box(timebox)
 {}
 
 int Ghost::get_time_in_box() {
@@ -20,16 +18,19 @@ char Ghost::getImage() const {
     return IMAGE_GHOST;
 }
 
-void Ghost::eaten(bool eat) {
-	is_eaten = eat;
+bool Ghost::moves_empty() {
+    if (moves.empty()) return true;
+    else return false;
 }
 
-void Ghost::set_color(bool eaten) {
-
+Dir Ghost::get_next_move() {
+    Dir temp = moves[0];
+    moves.erase(moves.begin());
+    return temp;
 }
 
-void Ghost::update_points() {
-
+void Ghost::push_move(Dir d) {
+    moves.push_back(d);
 }
 
 void Ghost::move(int row, int col) {
@@ -41,7 +42,7 @@ void Ghost::move(int row, int col) {
         this->row = row; this->col = col;
     }
     else if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return;
-    else if ((*board)[row][col] -> getImage() == 'F') {
+    else if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'U') {
         (*board)[this->row][this->col] = prev;
         prev = ((*board)[row][col]);
         ((*board)[row][col]) = this;

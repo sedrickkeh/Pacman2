@@ -15,6 +15,8 @@ using std::endl;
 #include "pacman.h"
 #include "ghost.h"
 #include "direction.h"
+#include "superpower.h"
+#include "eatghost.h"
 
 #include "gamewindow.h"
 #include "square.h"
@@ -53,6 +55,10 @@ private:
 
     void move_pacman(int r, int c);
     void move_ghost(int r, int c, Ghost* g);
+    void gain_power();
+    void lose_power();
+    void set_weak(Ghost* g);
+    void set_unweak(Ghost* g);
     void update_score();
     void update_map();
     void game_over();
