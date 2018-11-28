@@ -66,6 +66,7 @@ void Pacman::update_direction(Dir dir) {
 void Pacman::eats_piece(Food* f) {
     has_eaten_piece = true;
     addpoints = f->get_points();
+
 }
 
 void Pacman::not_eat_piece() {
