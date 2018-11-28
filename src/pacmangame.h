@@ -8,8 +8,7 @@ using std::endl;
 #include <algorithm>
 #include <QObject>
 
-
-#include "Character.h"
+#include "character.h"
 #include "wall.h"
 #include "food.h"
 #include "pacman.h"
@@ -63,7 +62,6 @@ private:
     void update_map();
     void game_over();
     QTimer *timer;
-
 
 private slots:
     void refresh_frame();

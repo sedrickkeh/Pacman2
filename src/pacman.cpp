@@ -1,5 +1,5 @@
-#include "Pacman.h"
-#include "Wall.h"
+#include "pacman.h"
+#include "wall.h"
 
 Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
 	Character(row, col, board),
@@ -39,7 +39,7 @@ char Pacman::getImage() const {
 
 void Pacman::update_superpower() {
     if (gain) superpower += 200;
-    else if (superpower > 0) superpower--;
+    else if (superpower > 0) --superpower;
     else if (superpower == 0) {lose = true; superpower = -1;}
     else superpower = -1;
 }
@@ -101,6 +101,7 @@ int Pacman::get_lives() {
 
 void Pacman::encounter_ghost(Ghost* g) {
     ((*board)[this->row][this->col]) = nullptr;
+
     if ((*board)[7][13] == nullptr) {
         ((*board)[7][13]) = this;
         this->row = 7; this->col = 13;
@@ -117,11 +118,26 @@ void Pacman::encounter_ghost(Ghost* g) {
         ((*board)[7][10]) = this;
         this->row = 7; this->col = 10;
     }
-    lives--;
+
+    --lives;
 }
 
 void Pacman::move(int row, int col) {
+    if (col == -1 && row == 16) {
+        ((*board)[this->row][this->col]) = nullptr;
+        ((*board)[16][27]) = this;
+        this->row = 16; this->col = 27;
+        return;
+    }
+    if (col == 28 && row == 16) {
+        ((*board)[this->row][this->col]) = nullptr;
+        ((*board)[16][0]) = this;
+        this->row = 16; this->col = 0;
+        return;
+    }
+
     if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
+
     if ((*board)[row][col] == nullptr) {
         ((*board)[this->row][this->col]) = nullptr;
         ((*board)[row][col]) = this;
@@ -146,4 +162,3 @@ void Pacman::move(int row, int col) {
         encounter_ghost(dynamic_cast<Ghost*>((*board)[row][col]));
     }
 }
-

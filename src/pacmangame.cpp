@@ -59,7 +59,7 @@ void PacmanGame::load_map() {
             else if (line[k] == 'F') board[rownum][k] = new Food(rownum, k, &board);
             else if (line[k] == 'U') board[rownum][k] = new Superpower(rownum, k, &board);
         }
-        rownum--;
+        --rownum;
     }
 }
 
@@ -156,14 +156,17 @@ void PacmanGame::complete_level() {
 }
 
 bool PacmanGame::is_level_finished() {
-    for (int k = 0; k < 31; k ++)
+    for (int k = 0; k < 31; k ++) {
         for (int l = 0; l < 28; l ++) {
             if (board[k][l] != nullptr && (board[k][l] -> getImage() == 'F' || board[k][l] -> getImage() == 'S')) return false;
         }
+    }
+
     if (ghost1 -> prev != nullptr && (ghost1->prev->getImage() == 'F' || ghost1->prev->getImage() == 'F')) return false;
     if (ghost2 -> prev != nullptr && (ghost2->prev->getImage() == 'F' || ghost2->prev->getImage() == 'F')) return false;
     if (ghost3 -> prev != nullptr && (ghost3->prev->getImage() == 'F' || ghost3->prev->getImage() == 'F')) return false;
     if (ghost4 -> prev != nullptr && (ghost4->prev->getImage() == 'F' || ghost4->prev->getImage() == 'F')) return false;
+
     return true;
 }
 
