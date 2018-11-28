@@ -40,23 +40,24 @@ void PacmanGame::load_map() {
             }
             else if (line[k] == 'G') {
                 if (ghost1 == nullptr) {
-                    ghost1 = new Ghost(rownum, k, &board, 2);
+                    ghost1 = new Ghost(rownum, k, &board, 20, nullptr);
                     board[rownum][k] = ghost1;
                 }
                 else if (ghost2 == nullptr) {
-                    ghost2 = new Ghost(rownum, k, &board, 4);
+                    ghost2 = new Ghost(rownum, k, &board, 40, nullptr);
                     board[rownum][k] = ghost2;
                 }
                 else if (ghost3 == nullptr) {
-                    ghost3 = new Ghost(rownum, k, &board, 6);
+                    ghost3 = new Ghost(rownum, k, &board, 60, nullptr);
                     board[rownum][k] = ghost3;
                 }
                 else if (ghost4 == nullptr) {
-                    ghost4 = new Ghost(rownum, k, &board, 8);
+                    ghost4 = new Ghost(rownum, k, &board, 80, nullptr);
                     board[rownum][k] = ghost4;
                 }
             }
             else if (line[k] == 'F') board[rownum][k] = new Food(rownum, k, &board);
+            else if (line[k] == 'U') board[rownum][k] = new Superpower(rownum, k, &board);
         }
         rownum--;
     }
@@ -89,6 +90,9 @@ void PacmanGame::move_pacman(int r, int c) {
     else if (dir == Dir::UP) pacman->move(row+1, col);
     else if (dir == Dir::LEFT) pacman->move(row, col-1);
     else if (dir == Dir::RIGHT) pacman->move(row, col+1);
+    pacman->update_superpower();
+    if (pacman->just_eaten_superpower()) gain_power();
+    else if (pacman->just_lost_superpower()) lose_power();
 }
 
 void PacmanGame::move_ghost(int r, int c, Ghost* g) {
@@ -101,6 +105,33 @@ void PacmanGame::move_ghost(int r, int c, Ghost* g) {
     else if (rv % 4 == 1) g->move(r+1,c);
     else if (rv%4 == 2) g->move(r, c+1);
     else g->move(r,c-1);
+}
+
+void PacmanGame::gain_power() {
+    set_weak(ghost1);
+    set_weak(ghost2);
+    set_weak(ghost3);
+    set_weak(ghost4);
+    pacman->set_gain();
+}
+
+void PacmanGame::lose_power() {
+    set_unweak(ghost1);
+    set_unweak(ghost2);
+    set_unweak(ghost3);
+    set_unweak(ghost4);
+    pacman->set_lose();
+}
+
+void PacmanGame::set_weak(Ghost* g) {
+    //if (g->get_time_in_box() > 0) return;
+    EatGhost* temp = new EatGhost(g->getRow(), g->getCol(), &board, 0, g->prev);
+    g = temp;
+}
+
+void PacmanGame::set_unweak(Ghost* g) {
+    Ghost* temp = new Ghost(g->getRow(), g->getCol(), &board, 0, g->prev);
+    g = temp;
 }
 
 void PacmanGame::update_map() {
@@ -130,12 +161,12 @@ void PacmanGame::complete_level() {
 bool PacmanGame::is_level_finished() {
     for (int k = 0; k < 31; k ++)
         for (int l = 0; l < 28; l ++) {
-            if (board[k][l] != nullptr && board[k][l] -> getImage() == 'F') return false;
+            if (board[k][l] != nullptr && (board[k][l] -> getImage() == 'F' || board[k][l] -> getImage() == 'S')) return false;
         }
-    if (ghost1 -> prev != nullptr && ghost1->prev->getImage() == 'F') return false;
-    if (ghost2 -> prev != nullptr && ghost2->prev->getImage() == 'F') return false;
-    if (ghost3 -> prev != nullptr && ghost3->prev->getImage() == 'F') return false;
-    if (ghost4 -> prev != nullptr && ghost4->prev->getImage() == 'F') return false;
+    if (ghost1 -> prev != nullptr && (ghost1->prev->getImage() == 'F' || ghost1->prev->getImage() == 'F')) return false;
+    if (ghost2 -> prev != nullptr && (ghost2->prev->getImage() == 'F' || ghost2->prev->getImage() == 'F')) return false;
+    if (ghost3 -> prev != nullptr && (ghost3->prev->getImage() == 'F' || ghost3->prev->getImage() == 'F')) return false;
+    if (ghost4 -> prev != nullptr && (ghost4->prev->getImage() == 'F' || ghost4->prev->getImage() == 'F')) return false;
     return true;
 }
 

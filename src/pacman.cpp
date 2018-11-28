@@ -6,12 +6,26 @@ Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
 	superpower(-1),
     direction(Dir::LEFT),
     has_eaten_piece(false),
+    gain(false),
+    lose(false),
     addpoints(-1),
     lives(3)
 {}
 
-int Pacman::get_superpower() {
-	return superpower;
+bool Pacman::just_eaten_superpower() {
+    return gain;
+}
+
+bool Pacman::just_lost_superpower() {
+    return lose;
+}
+
+void Pacman::set_gain() {
+    gain = false;
+}
+
+void Pacman::set_lose() {
+    lose = false;
 }
 
 Dir Pacman::get_direction() {
@@ -23,8 +37,11 @@ char Pacman::getImage() const {
 }
 
 
-void Pacman::update_superpower(bool sup) {
-	superpower = sup;
+void Pacman::update_superpower() {
+    if (gain) superpower += 200;
+    else if (superpower > 0) superpower--;
+    else if (superpower == 0) {lose = true; superpower = -1;}
+    else superpower = -1;
 }
 
 void Pacman::update_direction(Dir dir) {
@@ -114,6 +131,13 @@ void Pacman::move(int row, int col) {
     else if ((*board)[row][col] -> getImage() == 'W') return;
     else if ((*board)[row][col] -> getImage() == 'F') {
         eats_piece(dynamic_cast<Food*>((*board)[row][col]));
+        ((*board)[this->row][this->col]) = nullptr;
+        ((*board)[row][col]) = this;
+        this->row = row; this->col = col;
+    }
+    else if ((*board)[row][col] -> getImage() == 'U') {
+        eats_piece(dynamic_cast<Food*>((*board)[row][col]));
+        gain = true;
         ((*board)[this->row][this->col]) = nullptr;
         ((*board)[row][col]) = this;
         this->row = row; this->col = col;

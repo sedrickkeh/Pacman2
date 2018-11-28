@@ -37,7 +37,9 @@ SOURCES += \
     src/wall.cpp \
     src/food.cpp \
     src/pacman.cpp \
-    src/ghost.cpp
+    src/ghost.cpp \
+    src/superpower.cpp \
+    src/eatghost.cpp
 
 HEADERS += \
         ui/mainwindow.h \
@@ -49,7 +51,9 @@ HEADERS += \
     src/food.h \
     src/pacman.h \
     src/ghost.h \
-    src/direction.h
+    src/direction.h \
+    src/superpower.h \
+    src/eatghost.h
 
 FORMS += \
         ui/mainwindow.ui \
