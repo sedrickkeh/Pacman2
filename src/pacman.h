@@ -21,6 +21,7 @@ public:
     void update_superpower();
     void update_direction(Dir dir);
     void eats_piece(Food* f);
+    void eats_ghost(Ghost* g, int row, int col);
     void not_eat_piece();
     void encounter_ghost(Ghost* g);
     void move(int row, int col);

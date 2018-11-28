@@ -109,26 +109,18 @@ void PacmanGame::move_ghost(int r, int c, Ghost* g) {
 }
 
 void PacmanGame::gain_power() {
-    EatGhost* temp = new EatGhost(ghost1->getRow(), ghost1->getCol(), &board, 0, ghost1->prev);
-    ghost1 = temp;
-    EatGhost* temp2 = new EatGhost(ghost2->getRow(), ghost2->getCol(), &board, 0, ghost2->prev);
-    ghost2 = temp2;
-    EatGhost* temp3 = new EatGhost(ghost3->getRow(), ghost3->getCol(), &board, 0, ghost3->prev);
-    ghost3 = temp3;
-    EatGhost* temp4 = new EatGhost(ghost4->getRow(), ghost4->getCol(), &board, 0, ghost4->prev);
-    ghost4 = temp4;
+    ghost1->set_eatmode(true);
+    ghost2->set_eatmode(true);
+    ghost3->set_eatmode(true);
+    ghost4->set_eatmode(true);
     pacman->set_gain();
 }
 
 void PacmanGame::lose_power() {
-    Ghost* temp = new Ghost(ghost1->getRow(), ghost1->getCol(), &board, 0, ghost1->prev);
-    ghost1 = temp;
-    Ghost* temp2 = new Ghost(ghost2->getRow(), ghost2->getCol(), &board, 0, ghost2->prev);
-    ghost2 = temp2;
-    Ghost* temp3 = new Ghost(ghost3->getRow(), ghost3->getCol(), &board, 0, ghost3->prev);
-    ghost3 = temp3;
-    Ghost* temp4 = new Ghost(ghost4->getRow(), ghost4->getCol(), &board, 0, ghost4->prev);
-    ghost4 = temp4;
+    ghost1->set_eatmode(false);
+    ghost2->set_eatmode(false);
+    ghost3->set_eatmode(false);
+    ghost4->set_eatmode(false);
     pacman->set_lose();
 }
 

@@ -83,7 +83,6 @@ void Pacman::update_direction(Dir dir) {
 void Pacman::eats_piece(Food* f) {
     has_eaten_piece = true;
     addpoints = f->get_points();
-
 }
 
 void Pacman::not_eat_piece() {
@@ -101,10 +100,9 @@ int Pacman::get_lives() {
 
 void Pacman::encounter_ghost(Ghost* g) {
     ((*board)[this->row][this->col]) = nullptr;
-
     if ((*board)[7][13] == nullptr) {
-        ((*board)[7][13]) = this;
-        this->row = 7; this->col = 13;
+       ((*board)[7][13]) = this;
+       this->row = 7; this->col = 13;
     }
     else if ((*board)[7][12] == nullptr) {
         ((*board)[7][12]) = this;
@@ -120,6 +118,21 @@ void Pacman::encounter_ghost(Ghost* g) {
     }
 
     --lives;
+
+}
+
+void Pacman::eats_ghost(Ghost* g, int row, int col) {
+    has_eaten_piece = true;
+    addpoints = g->get_points();
+    g -> set_eatmode(false);
+    if ((*board)[15][12] == nullptr) g -> move(15, 12);
+    else if ((*board)[16][12] == nullptr) g -> move(16, 12);
+    else if ((*board)[15][13] == nullptr) g -> move(15, 13);
+    else if ((*board)[16][13] == nullptr) g -> move(16, 13);
+    g -> set_time_in_box(20);
+    ((*board)[this->row][this->col]) = nullptr;
+    ((*board)[row][col]) = this;
+    this->row = row; this->col = col;
 }
 
 void Pacman::move(int row, int col) {
@@ -161,4 +174,8 @@ void Pacman::move(int row, int col) {
     else if ((*board)[row][col] -> getImage() == 'G') {
         encounter_ghost(dynamic_cast<Ghost*>((*board)[row][col]));
     }
+    else if ((*board)[row][col] -> getImage() == 'E') {
+        eats_ghost(dynamic_cast<Ghost*>((*board)[row][col]), row, col);
+    }
 }
+
