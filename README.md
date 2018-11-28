@@ -1,13 +1,9 @@
 # Pacman2
 
 Things to fix:
-- superpower (I'll do this)
-- wall portal 
-- gamewindow ui (Mark)
-- lives and current score lcd display (Mark) --> there's already lives and current score variables that work correctly. just need to put the lcd display in game window
-- record manager/high score
+- record manager
 - timer at start of level and when losing a life (3 2 1 start)
-- ghost movement algorithms
+- ghost movement algorithms (Clyde)
 - game over and level complete (right now the console just prints something)
     - dialog message box (like pipes)
     - update high score
