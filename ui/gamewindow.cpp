@@ -10,10 +10,10 @@ GameWindow::GameWindow(QWidget *parent, PacmanGame* _pacman_game) :
 {
    ui->setupUi(this);
    this->make_grid();
-   QPixmap img1("C:/Users/Mark Christopher Uy/Desktop/Pacman2/img/pac_man_hed.jpg");
-   QPixmap img2("C:/Users/Mark Christopher Uy/Desktop/Pacman2/img/lives.jpg");
-   QPixmap img3("C:/Users/Mark Christopher Uy/Desktop/Pacman2/img/highscore.jpg");
-   QPixmap img4("C:/Users/Mark Christopher Uy/Desktop/Pacman2/img/score.jpg");
+   QPixmap img1(":/resources/img/pac_man_hed.jpg");
+   QPixmap img2(":/resources/img/lives.jpg");
+   QPixmap img3(":/resources/img/highscore.jpg");
+   QPixmap img4(":/resources/img/score.jpg");
    ui->obj_1->setPixmap(img1.scaled(32, 32, Qt::KeepAspectRatio));
    ui->obj_2->setPixmap(img1.scaled(32,32,Qt::KeepAspectRatio));
    ui->obj_3->setPixmap(img1.scaled(32,32,Qt::KeepAspectRatio));
@@ -91,7 +91,7 @@ void GameWindow::set_lcd(int type, int value)
 void GameWindow::set_lives()
 {
     int lives = pacman_game->get_pacman()->get_lives();
-    QPixmap img2("C:/Users/Mark Christopher Uy/Desktop/Pacman2/img/lives.jpg");
+    QPixmap img2(":/resources/img/lives.jpg");
     QLabel* liveWidgets[5] = {ui->obj_1,ui->obj_2,ui->obj_3,ui->obj_4,ui->obj_5};
     int i =0;
     for (; i<lives; i++){

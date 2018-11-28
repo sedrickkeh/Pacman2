@@ -1,9 +1,11 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-
-<qresource prefix="/resources">
-    <file>img/titlescreen.jpg</file>
-    <file>img/black.jpg</file>
-	<file>maps/pacman_map.txt</file>
-</qresource>
+<RCC>
+    <qresource prefix="/resources">
+        <file>img/titlescreen.jpg</file>
+        <file>maps/pacman_map.txt</file>
+        <file>img/highscore.jpg</file>
+        <file>img/lives.jpg</file>
+        <file>img/pac_man_hed.jpg</file>
+        <file>img/score.jpg</file>
+        <file>img/titlepage.jpg</file>
+    </qresource>
 </RCC>

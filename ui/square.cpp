@@ -19,7 +19,7 @@ Square::Square(QWidget* parent, int _row, int _col) :
 }
 
 string Square::get_path() {
-    return ":/resources/img/black.jpg";
+    return ":/resources/img/pac_man_hed.jpg";
 }
 
 void Square::set_image(string path) {
