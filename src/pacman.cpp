@@ -1,6 +1,7 @@
 #include "pacman.h"
 #include "ghost.h"
 #include "wall.h"
+#include "ghostwall.h"
 
 Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
 	Character(row, col, board),
@@ -8,10 +9,11 @@ Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
     direction(Dir::NONE),
     has_eaten_piece(false),
     has_eaten_ghost(false),
+    has_encountered_ghost(false),
     gain(false),
     lose(false),
     addpoints(-1),
-    lives(1)
+    lives(2)
 {}
 
 bool Pacman::just_eaten_superpower() {
@@ -50,7 +52,7 @@ void Pacman::update_direction(Dir dir) {
     if (dir ==Dir::UP){
         if (row==30) return;
         if ((*board)[row+1][col]!=nullptr){
-            if ((*board)[row+1][col]->getImage()== Wall::IMAGE_WALL){
+            if ((*board)[row+1][col]->getImage()== Wall::IMAGE_WALL || (*board)[row+1][col]->getImage()== ghostwall::IMAGE_GHOSTWALL){
                 return;
             }
         }
@@ -58,7 +60,7 @@ void Pacman::update_direction(Dir dir) {
     else if (dir ==Dir::DOWN){
         if (row==0) return;
         if ((*board)[row-1][col]!=nullptr){
-            if ((*board)[row-1][col]->getImage()== Wall::IMAGE_WALL){
+            if ((*board)[row-1][col]->getImage()== Wall::IMAGE_WALL || (*board)[row-1][col]->getImage()== ghostwall::IMAGE_GHOSTWALL){
                 return;
             }
         }
@@ -66,7 +68,7 @@ void Pacman::update_direction(Dir dir) {
     else if (dir == Dir::LEFT){
         if (col==0) return;
         if ((*board)[row][col-1]!=nullptr){
-            if ((*board)[row][col-1]->getImage()== Wall::IMAGE_WALL){
+            if ((*board)[row][col-1]->getImage()== Wall::IMAGE_WALL || (*board)[row][col-1]->getImage()== ghostwall::IMAGE_GHOSTWALL){
                 return;
             }
         }
@@ -74,7 +76,7 @@ void Pacman::update_direction(Dir dir) {
     else if (dir == Dir::RIGHT){
         if (col==27) return;
         if ((*board)[row][col+1]!=nullptr){
-            if ((*board)[row][col+1]->getImage()== Wall::IMAGE_WALL){
+            if ((*board)[row][col+1]->getImage()== Wall::IMAGE_WALL || (*board)[row][col+1]->getImage()== ghostwall::IMAGE_GHOSTWALL){
                 return;
             }
         }
@@ -109,6 +111,8 @@ int Pacman::get_lives() {
 }
 
 void Pacman::encounter_ghost() {
+    has_encountered_ghost = true;
+
     ((*board)[this->row][this->col]) = nullptr;
     if ((*board)[7][13] == nullptr) {
        ((*board)[7][13]) = this;
@@ -129,6 +133,14 @@ void Pacman::encounter_ghost() {
 
     --lives;
 
+}
+
+bool Pacman::get_has_encountered_ghost() {
+    if (has_encountered_ghost == true) {
+        has_encountered_ghost = false;
+        return true;
+    }
+    return false;
 }
 
 void Pacman::eats_ghost(Ghost* g, int row, int col) {
@@ -166,13 +178,38 @@ void Pacman::move(int row, int col) {
 
     if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
 
+    if ((*board)[this->row][this->col - 1] != nullptr) {
+        if ((*board)[this->row][this->col-1]->getImage() == 'C' || (*board)[this->row][this->col-1]->getImage() == 'A' || (*board)[this->row][this->col-1]->getImage() == 'R')
+        {
+            encounter_ghost(); return;
+        }
+    }
+    if ((*board)[this->row][this->col + 1] != nullptr) {
+        if ((*board)[this->row][this->col+1]->getImage() == 'C' || (*board)[this->row][this->col+1]->getImage() == 'A' || (*board)[this->row][this->col+1]->getImage() == 'R')
+        {
+            encounter_ghost(); return;
+        }
+    }
+    if ((*board)[this->row - 1][this->col] != nullptr) {
+        if ((*board)[this->row-1][this->col]->getImage() == 'C' || (*board)[this->row-1][this->col]->getImage() == 'A' || (*board)[this->row-1][this->col]->getImage() == 'R')
+        {
+            encounter_ghost(); return;
+        }
+    }
+    if ((*board)[this->row + 1][this->col] != nullptr) {
+        if ((*board)[this->row+1][this->col]->getImage() == 'C' || (*board)[this->row+1][this->col]->getImage() == 'A' || (*board)[this->row+1][this->col]->getImage() == 'R')
+        {
+            encounter_ghost(); return;
+        }
+    }
+
     if ((*board)[row][col] == nullptr) {
         ((*board)[this->row][this->col]) = nullptr;
         ((*board)[row][col]) = this;
         this->row = row; this->col = col;
         return;
     }
-    else if ((*board)[row][col] -> getImage() == 'W') return;
+    else if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'V') return;
     else if ((*board)[row][col] -> getImage() == 'F') {
         eats_piece(dynamic_cast<Food*>((*board)[row][col]));
         ((*board)[this->row][this->col]) = nullptr;

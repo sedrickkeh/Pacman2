@@ -15,7 +15,7 @@ using std::endl;
 #include "ghost.h"
 #include "direction.h"
 #include "superpower.h"
-#include "eatghost.h"
+#include "ghostwall.h"
 
 #include "gamewindow.h"
 #include "square.h"
@@ -60,6 +60,7 @@ private:
     void set_weak(Ghost* g);
     void set_unweak(Ghost* g);
     void update_ghost_scores();
+    void reset_ghosts();
     void update_score();
     void update_map();
     void update_lives();
