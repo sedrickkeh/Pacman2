@@ -85,6 +85,7 @@ void PacmanGame::refresh_frame() {
     move_pacman(pacman->getRow(), pacman->getCol());
     update_score();
     update_lives();
+    if (pacman->get_has_encountered_ghost()) reset_ghosts();
     update_map();
     game_over();
     complete_level();
@@ -146,6 +147,13 @@ void PacmanGame::update_ghost_scores() {
         ghost4->update_points();
         pacman->not_eat_ghost();
     }
+}
+
+void PacmanGame::reset_ghosts() {
+    ghost1->move(15, 12);
+    ghost2->move(16, 12);
+    ghost3->move(15, 15);
+    ghost4->move(16, 15);
 }
 
 void PacmanGame::update_map() {

@@ -8,6 +8,7 @@ Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
     direction(Dir::NONE),
     has_eaten_piece(false),
     has_eaten_ghost(false),
+    has_encountered_ghost(false),
     gain(false),
     lose(false),
     addpoints(-1),
@@ -109,6 +110,8 @@ int Pacman::get_lives() {
 }
 
 void Pacman::encounter_ghost() {
+    has_encountered_ghost = true;
+
     ((*board)[this->row][this->col]) = nullptr;
     if ((*board)[7][13] == nullptr) {
        ((*board)[7][13]) = this;
@@ -129,6 +132,14 @@ void Pacman::encounter_ghost() {
 
     --lives;
 
+}
+
+bool Pacman::get_has_encountered_ghost() {
+    if (has_encountered_ghost == true) {
+        has_encountered_ghost = false;
+        return true;
+    }
+    return false;
 }
 
 void Pacman::eats_ghost(Ghost* g, int row, int col) {
