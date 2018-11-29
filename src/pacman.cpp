@@ -1,4 +1,5 @@
 #include "pacman.h"
+#include "ghost.h"
 #include "wall.h"
 
 Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
@@ -107,7 +108,7 @@ int Pacman::get_lives() {
     return lives;
 }
 
-void Pacman::encounter_ghost(Ghost* g) {
+void Pacman::encounter_ghost() {
     ((*board)[this->row][this->col]) = nullptr;
     if ((*board)[7][13] == nullptr) {
        ((*board)[7][13]) = this;
@@ -186,7 +187,7 @@ void Pacman::move(int row, int col) {
         this->row = row; this->col = col;
     }
     else if ((*board)[row][col] -> getImage() == 'G') {
-        encounter_ghost(dynamic_cast<Ghost*>((*board)[row][col]));
+        encounter_ghost();
     }
     else if ((*board)[row][col] -> getImage() == 'E') {
         eats_ghost(dynamic_cast<Ghost*>((*board)[row][col]), row, col);

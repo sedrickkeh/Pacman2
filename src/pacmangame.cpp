@@ -42,19 +42,19 @@ void PacmanGame::load_map() {
             }
             else if (line[k] == 'G') {
                 if (ghost1 == nullptr) {
-                    ghost1 = new Ghost(rownum, k, &board, 20, nullptr);
+                    ghost1 = new Ghost(rownum, k, &board, 20, nullptr, CHASE);
                     board[rownum][k] = ghost1;
                 }
                 else if (ghost2 == nullptr) {
-                    ghost2 = new Ghost(rownum, k, &board, 40, nullptr);
+                    ghost2 = new Ghost(rownum, k, &board, 40, nullptr, AMBUSH);
                     board[rownum][k] = ghost2;
                 }
                 else if (ghost3 == nullptr) {
-                    ghost3 = new Ghost(rownum, k, &board, 60, nullptr);
+                    ghost3 = new Ghost(rownum, k, &board, 60, nullptr, RANDOM);
                     board[rownum][k] = ghost3;
                 }
                 else if (ghost4 == nullptr) {
-                    ghost4 = new Ghost(rownum, k, &board, 80, nullptr);
+                    ghost4 = new Ghost(rownum, k, &board, 80, nullptr, RANDOM);
                     board[rownum][k] = ghost4;
                 }
             }
@@ -63,6 +63,10 @@ void PacmanGame::load_map() {
         }
         --rownum;
     }
+    ghost1->pacman = pacman;
+    ghost2->pacman = pacman;
+    ghost3->pacman = pacman;
+    ghost4->pacman = pacman;
 }
 
 void PacmanGame::init_block(int row, int col, char c) {
@@ -105,11 +109,13 @@ void PacmanGame::move_ghost(int r, int c, Ghost* g) {
         g->reduce_time_in_box();
         return;
     }
-    int rv = std::rand();
-    if (rv % 4 == 0) g->move(r-1, c);
-    else if (rv % 4 == 1) g->move(r+1,c);
-    else if (rv%4 == 2) g->move(r, c+1);
-    else g->move(r,c-1);
+
+    Dir direction = g->get_next_move();
+
+    if (direction == DOWN) {g->move(r-1, c); g->set_direction(DOWN);}
+    else if (direction == UP) {g->move(r+1,c); g->set_direction(UP);}
+    else if (direction == RIGHT) {g->move(r, c+1); g->set_direction(RIGHT);}
+    else {g->move(r,c-1); g->set_direction(LEFT);}
 }
 
 void PacmanGame::gain_power() {

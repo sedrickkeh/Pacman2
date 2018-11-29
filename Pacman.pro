@@ -53,7 +53,8 @@ HEADERS += \
     src/ghost.h \
     src/direction.h \
     src/superpower.h \
-    src/eatghost.h
+    src/eatghost.h \
+    src/movement.h
 
 FORMS += \
         ui/mainwindow.ui \

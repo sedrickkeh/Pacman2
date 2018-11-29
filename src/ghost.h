@@ -3,14 +3,18 @@
 
 #include "character.h"
 #include "direction.h"
+#include "pacman.h"
+#include "movement.h"
 #include "food.h"
 #include <vector>
 using namespace std;
 
+class Pacman;
+
 class Ghost : public Character
 {
 public:
-    Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous);
+    Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Movement pattern);
     ~Ghost() override;
     const static char IMAGE_GHOST = 'G';
     const static char IMAGE_EAT = 'E';
@@ -18,12 +22,14 @@ public:
     int get_time_in_box();
     void set_time_in_box(int t);
     void reduce_time_in_box();
+    bool potentialMove(int row, int col);
     void move(int row, int col);
     Character* prev;
+    Pacman* pacman;
 
-    bool moves_empty();
+    void calculateTarget(int &row, int &col);
     Dir get_next_move();
-    void push_move(Dir d);
+    void set_direction(Dir direction);
 
     void update_points();
     void reset_points();
@@ -34,7 +40,8 @@ public:
 protected:
     int points = 100;
     int time_in_box = 10;
-    vector<Dir> moves;
+    Dir direction;
+    Movement pattern;
     bool eatmode = false;
 };
 

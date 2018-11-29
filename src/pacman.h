@@ -4,7 +4,6 @@
 #include "character.h"
 #include "direction.h"
 #include "food.h"
-#include "ghost.h"
 #include "superpower.h"
 
 class Pacman : public Character
@@ -23,9 +22,9 @@ public:
     void eats_piece(Food* f);
     void eats_ghost(Ghost* g, int row, int col);
     void not_eat_piece();
+    void encounter_ghost();
     bool get_has_eaten_ghost();
     void not_eat_ghost();
-    void encounter_ghost(Ghost* g);
     void move(int row, int col);
     int get_lives();
     int get_points_to_add();
