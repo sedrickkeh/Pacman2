@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
     pacman_game(nullptr)
 {
     ui->setupUi(this);
-    //ui->label->setStyleSheet("*{background-image: url(:/titlescreen.jpg);}");
     QPixmap img(":/resources/img/titlepage.jpg");
     ui->label->setPixmap(img.scaled(1000, 500, Qt::KeepAspectRatio));
     connect(this->ui->startButton, &QPushButton::clicked, this, &MainWindow::start_button_clicked_handler);

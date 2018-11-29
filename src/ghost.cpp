@@ -113,13 +113,25 @@ void Ghost::move(int row, int col) {
         ((*board)[this->row][this->col]) = nullptr;
         ((*board)[16][27]) = this;
         this->row = 16; this->col = 27;
+        return;
     }
-    else if (col == 28 && row == 16) {
+    if (col == 28 && row == 16) {
         ((*board)[this->row][this->col]) = nullptr;
         ((*board)[16][0]) = this;
         this->row = 16; this->col = 0;
+        return;
     }
-    else if(potentialMove(row, col)) {
+
+    if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
+
+    if ((*board)[row][col] == nullptr) {
+        (*board)[this->row][this->col] = prev;
+        prev = ((*board)[row][col]);
+        ((*board)[row][col]) = this;
+        this->row = row; this->col = col;
+    }
+    else if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return;
+    else if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V') {
         (*board)[this->row][this->col] = prev;
         prev = ((*board)[row][col]);
         ((*board)[row][col]) = this;

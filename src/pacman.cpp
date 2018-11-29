@@ -13,7 +13,7 @@ Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
     gain(false),
     lose(false),
     addpoints(-1),
-    lives(2)
+    lives(5)
 {}
 
 char Pacman::getImage() const {
@@ -98,6 +98,8 @@ void Pacman::not_eat_piece() {
 
 void Pacman::encounter_ghost() {
     has_encountered_ghost = true;
+    --lives;
+    direction = NONE;
 
     ((*board)[this->row][this->col]) = nullptr;
     if ((*board)[7][13] == nullptr) {
@@ -116,8 +118,6 @@ void Pacman::encounter_ghost() {
         ((*board)[7][10]) = this;
         this->row = 7; this->col = 10;
     }
-
-    --lives;
 }
 
 void Pacman::eats_ghost(Ghost* g, int row, int col) {
