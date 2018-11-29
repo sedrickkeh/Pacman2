@@ -1,9 +1,9 @@
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "recordmanager.h"
-#include "pacmangame.h"
 
-#include <qinputdialog.h>
+#include "qinputdialog.h"
+#include "ui_mainwindow.h"
+#include "pacmangame.h"
+#include "recordmanager.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->label->setStyleSheet("*{background-image: url(:/titlescreen.jpg);}");
     QPixmap img(":/resources/img/titlepage.jpg");
     ui->label->setPixmap(img.scaled(1000, 500, Qt::KeepAspectRatio));
-    connect(this->ui->startButton, &QPushButton::clicked, this, &MainWindow::startButton_clicked_handler);
+    connect(this->ui->startButton, &QPushButton::clicked, this, &MainWindow::start_button_clicked_handler);
 }
 
 MainWindow::~MainWindow()
@@ -24,9 +24,8 @@ MainWindow::~MainWindow()
     delete this->rm;
 }
 
-void MainWindow::startButton_clicked_handler()
+void MainWindow::start_button_clicked_handler()
 {
-    if (this->pacman_game) delete this->pacman_game;
     this->pacman_game = new PacmanGame;
     this->pacman_game->startGraphicUI();
     connect(this->pacman_game->get_game_window(), &GameWindow::closed, this, &MainWindow::game_window_closed_handler);
@@ -35,7 +34,7 @@ void MainWindow::startButton_clicked_handler()
 
 void MainWindow::game_window_closed_handler() {
     if(pacman_game->get_score() > rm->get_lowest_score()){
-        QString name = QInputDialog::getText(this, "Highscore", "Enter Name");
+        QString name = QInputDialog::getText(this, "New Highscore", "Enter Name");
         rm->update_record(name, pacman_game->get_score());
     }
 

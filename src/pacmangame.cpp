@@ -36,7 +36,7 @@ void PacmanGame::load_map() {
         QString line = file.readLine();
         for (int k = 0; k < line.size()-1; k ++) {
             if (line[k] == 'W') board[rownum][k] = new Wall(rownum, k, &board);
-            else if (line[k] == 'V') board[rownum][k] = new ghostwall(rownum, k, &board);
+            else if (line[k] == 'V') board[rownum][k] = new Ghostwall(rownum, k, &board);
             else if (line[k] == 'P') {
                 pacman = new Pacman(rownum, k, &board);
                 board[rownum][k] = pacman;

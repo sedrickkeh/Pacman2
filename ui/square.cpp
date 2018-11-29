@@ -1,7 +1,6 @@
-#include <sstream>
-
 #include "square.h"
-#include <string>
+
+#include <sstream>
 #include <QPushButton>
 #include <QString>
 
@@ -16,14 +15,6 @@ Square::Square(QWidget* parent, int _row, int _col) :
 {
     this->render();
     connect(this, &Square::clicked, this, &Square::clicked_handler);
-}
-
-string Square::get_path() {
-    return ":/resources/img/pac_man_hed.jpg";
-}
-
-void Square::set_image(string path) {
-    setStyleSheet(QString::fromStdString("border-image: url(\"" + path + "\");"));
 }
 
 void Square::render() {
@@ -55,10 +46,6 @@ void Square::applyStyle() {
     setStyleSheet(QString::fromStdString(style_string));
 }
 
-void Square::clicked_handler() {
-    emit clicked_with_pos(this->row, this->col);
-}
-
 void Square::set_piece(char i) {
     this->piece = i;
     if (i == 'P') setStyle("background-color", "yellow");
@@ -76,4 +63,8 @@ void Square::set_piece(char i) {
 
 char Square::get_piece() const {
     return this->piece;
+}
+
+void Square::clicked_handler() {
+    emit clicked_with_pos(this->row, this->col);
 }

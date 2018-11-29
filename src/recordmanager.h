@@ -9,6 +9,7 @@ class RecordManager
     RecordManager();
     int get_score_at(int rank);
     int get_lowest_score();
+    int get_highest_score();
     int get_num_of_scores();
     void update_record(QString name, int score);
 

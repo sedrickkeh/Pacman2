@@ -57,6 +57,11 @@ int RecordManager::get_lowest_score()
     return scores[NUM_OF_SCORES-1];
 }
 
+int RecordManager::get_highest_score()
+{
+    return scores[0];
+}
+
 int RecordManager::get_num_of_scores()
 {
     return NUM_OF_SCORES;

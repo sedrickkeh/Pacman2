@@ -19,12 +19,7 @@ public:
     void set_piece(char i);
     char get_piece() const;
 
-    string get_path();
-    void set_image(string path);
-
 private:
-    void render();
-
     int row, col;
     StyleMap style;
     char piece;
@@ -32,6 +27,8 @@ private:
     static const int OFFSET_Y = 0;
     static const int SQUARE_WIDTH = 20;
     static const int SQUARE_HEIGHT = 20;
+
+    void render();
 
 signals:
     void clicked_with_pos(int row, int col);

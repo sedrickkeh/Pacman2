@@ -52,7 +52,7 @@ void Pacman::update_direction(Dir dir) {
     if (dir ==Dir::UP){
         if (row==30) return;
         if ((*board)[row+1][col]!=nullptr){
-            if ((*board)[row+1][col]->getImage()== Wall::IMAGE_WALL || (*board)[row+1][col]->getImage()== ghostwall::IMAGE_GHOSTWALL){
+            if ((*board)[row+1][col]->getImage()== Wall::IMAGE_WALL || (*board)[row+1][col]->getImage()== Ghostwall::IMAGE_GHOSTWALL){
                 return;
             }
         }
@@ -60,7 +60,7 @@ void Pacman::update_direction(Dir dir) {
     else if (dir ==Dir::DOWN){
         if (row==0) return;
         if ((*board)[row-1][col]!=nullptr){
-            if ((*board)[row-1][col]->getImage()== Wall::IMAGE_WALL || (*board)[row-1][col]->getImage()== ghostwall::IMAGE_GHOSTWALL){
+            if ((*board)[row-1][col]->getImage()== Wall::IMAGE_WALL || (*board)[row-1][col]->getImage()== Ghostwall::IMAGE_GHOSTWALL){
                 return;
             }
         }
@@ -68,7 +68,7 @@ void Pacman::update_direction(Dir dir) {
     else if (dir == Dir::LEFT){
         if (col==0) return;
         if ((*board)[row][col-1]!=nullptr){
-            if ((*board)[row][col-1]->getImage()== Wall::IMAGE_WALL || (*board)[row][col-1]->getImage()== ghostwall::IMAGE_GHOSTWALL){
+            if ((*board)[row][col-1]->getImage()== Wall::IMAGE_WALL || (*board)[row][col-1]->getImage()== Ghostwall::IMAGE_GHOSTWALL){
                 return;
             }
         }
@@ -76,7 +76,7 @@ void Pacman::update_direction(Dir dir) {
     else if (dir == Dir::RIGHT){
         if (col==27) return;
         if ((*board)[row][col+1]!=nullptr){
-            if ((*board)[row][col+1]->getImage()== Wall::IMAGE_WALL || (*board)[row][col+1]->getImage()== ghostwall::IMAGE_GHOSTWALL){
+            if ((*board)[row][col+1]->getImage()== Wall::IMAGE_WALL || (*board)[row][col+1]->getImage()== Ghostwall::IMAGE_GHOSTWALL){
                 return;
             }
         }

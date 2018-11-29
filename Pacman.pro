@@ -39,7 +39,6 @@ SOURCES += \
     src/pacman.cpp \
     src/ghost.cpp \
     src/superpower.cpp \
-    src/eatghost.cpp \
     src/recordmanager.cpp \
     src/ghostwall.cpp
 
@@ -55,7 +54,6 @@ HEADERS += \
     src/ghost.h \
     src/direction.h \
     src/superpower.h \
-    src/eatghost.h \
     src/movement.h \
     src/recordmanager.h \
     src/ghostwall.h

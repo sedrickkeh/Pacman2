@@ -2,11 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
-#include "gamewindow.h"
-#include <QImage>
 #include <QImage>
 #include <QPixmap>
+
+#include "gamewindow.h"
 
 namespace Ui {
 class MainWindow;
@@ -29,7 +28,7 @@ private:
     PacmanGame* pacman_game;
 
 private slots:
-    void startButton_clicked_handler();
+    void start_button_clicked_handler();
     void game_window_closed_handler();
 };
 
