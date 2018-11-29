@@ -1,21 +1,30 @@
 #include "ghost.h"
 #include <algorithm>
 
-Ghost::Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Movement pattern) :
+Ghost::Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Pacman* pacman, Movement pattern) :
     Character(row, col, board),
-    prev(previous),
     points(200),
     time_in_box(timebox),
     direction(NONE),
     pattern(pattern),
-    eatmode(false)
+    eatmode(false),
+    prev(previous),
+    pacman(pacman)
 {}
 
 Ghost::~Ghost() {
     delete prev;
 }
 
-int Ghost::get_time_in_box() {
+char Ghost::getImage() const {
+    if (eatmode) return IMAGE_EAT;
+    if (pattern == CHASE) return 'C';
+    if (pattern == AMBUSH) return 'A';
+    if (pattern == RANDOM) return 'R';
+    return IMAGE_GHOST;
+}
+
+int Ghost::get_time_in_box() const {
 	return time_in_box;
 }
 
@@ -27,39 +36,11 @@ void Ghost::reduce_time_in_box() {
     --time_in_box;
 }
 
-char Ghost::getImage() const {
-    if (eatmode) return IMAGE_EAT;
-    if (pattern == CHASE) return 'C';
-    if (pattern == AMBUSH) return 'A';
-    if (pattern == RANDOM) return 'R';
-    return IMAGE_GHOST;
+Character* Ghost::get_prev() const {
+    return prev;
 }
 
-void Ghost::calculateTarget(int &row, int &col) {
-    if (pattern == CHASE) {
-        row = pacman->getRow();
-        col = pacman->getCol();
-    }
-    else if (pattern == AMBUSH) {
-        int row = pacman->getRow(), col = pacman->getCol();
-
-        if (pacman->get_direction() == UP) row += 4;
-        else if (pacman->get_direction() == DOWN) row -= 4;
-        else if (pacman->get_direction() == LEFT) col -= 4;
-        else if (pacman->get_direction() == RIGHT) col += 4;
-
-        while(!potentialMove(row, col)){
-            if(row > pacman->getRow()) --row;
-            else if(row < pacman->getRow()) ++row;
-            else if(col > pacman->getCol()) --col;
-            else if(col < pacman->getCol()) ++col;
-
-            if(row == pacman->getRow() && col == pacman->getCol()) break;
-        }
-    }
-}
-
-Dir Ghost::get_next_move() {
+Dir Ghost::get_next_move() const {
     if(pattern == RANDOM || eatmode) {
         int arr[4] = {0, 1, 2, 3};
         random_shuffle(arr, arr+4);
@@ -124,14 +105,23 @@ void Ghost::set_direction(Dir direction){
     this->direction = direction;
 }
 
-bool Ghost::potentialMove(int row, int col) {
-    if (col == -1 && row == 16) return true;
-    if (col == 28 && row == 16) return true;
-    if (row < 0 || col < 0 || row >= 31 || col >= 28) return false;
-    if ((*board)[row][col] == nullptr) return true;
-    if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return false;
-    if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'P' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V') return true;
-    return false;
+void Ghost::move(int row, int col) {
+    if (col == -1 && row == 16) {
+        ((*board)[this->row][this->col]) = nullptr;
+        ((*board)[16][27]) = this;
+        this->row = 16; this->col = 27;
+    }
+    else if (col == 28 && row == 16) {
+        ((*board)[this->row][this->col]) = nullptr;
+        ((*board)[16][0]) = this;
+        this->row = 16; this->col = 0;
+    }
+    else if(potentialMove(row, col)) {
+        (*board)[this->row][this->col] = prev;
+        prev = ((*board)[row][col]);
+        ((*board)[row][col]) = this;
+        this->row = row; this->col = col;
+    }
 }
 
 void Ghost::update_points() {
@@ -142,11 +132,11 @@ void Ghost::reset_points() {
     points = 200;
 }
 
-int Ghost::get_points() {
+int Ghost::get_points() const {
     return points;
 }
 
-bool Ghost::get_eatmode() {
+bool Ghost::get_eatmode() const {
     return eatmode;
 }
 
@@ -154,33 +144,36 @@ void Ghost::set_eatmode(bool x){
     eatmode = x;
 }
 
-void Ghost::move(int row, int col) {
-    if (col == -1 && row == 16) {
-        ((*board)[this->row][this->col]) = nullptr;
-        ((*board)[16][27]) = this;
-        this->row = 16; this->col = 27;
-        return;
-    }
-    if (col == 28 && row == 16) {
-        ((*board)[this->row][this->col]) = nullptr;
-        ((*board)[16][0]) = this;
-        this->row = 16; this->col = 0;
-        return;
-    }
+bool Ghost::potentialMove(int row, int col) const {
+    if (col == -1 && row == 16) return true;
+    if (col == 28 && row == 16) return true;
+    if (row < 0 || col < 0 || row >= 31 || col >= 28) return false;
+    if ((*board)[row][col] == nullptr) return true;
+    if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return false;
+    if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'P' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V') return true;
+    return false;
+}
 
-    if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
-
-    if ((*board)[row][col] == nullptr) {
-        (*board)[this->row][this->col] = prev;
-        prev = ((*board)[row][col]);
-        ((*board)[row][col]) = this;
-        this->row = row; this->col = col;
+void Ghost::calculateTarget(int &row, int &col) const {
+    if (pattern == CHASE) {
+        row = pacman->getRow();
+        col = pacman->getCol();
     }
-    else if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return;
-    else if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V') {
-        (*board)[this->row][this->col] = prev;
-        prev = ((*board)[row][col]);
-        ((*board)[row][col]) = this;
-        this->row = row; this->col = col;
+    else if (pattern == AMBUSH) {
+        int row = pacman->getRow(), col = pacman->getCol();
+
+        if (pacman->get_direction() == UP) row += 4;
+        else if (pacman->get_direction() == DOWN) row -= 4;
+        else if (pacman->get_direction() == LEFT) col -= 4;
+        else if (pacman->get_direction() == RIGHT) col += 4;
+
+        while(!potentialMove(row, col)){
+            if(row > pacman->getRow()) --row;
+            else if(row < pacman->getRow()) ++row;
+            else if(col > pacman->getCol()) --col;
+            else if(col < pacman->getCol()) ++col;
+
+            if(row == pacman->getRow() && col == pacman->getCol()) break;
+        }
     }
 }

@@ -9,6 +9,6 @@ char Food::getImage() const {
     return IMAGE_FOOD;
 }
 
-int Food::get_points() {
+int Food::get_points() const {
 	return points;
 }

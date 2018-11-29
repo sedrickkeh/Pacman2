@@ -9,7 +9,7 @@ public:
 	Food(int row, int col, Character* (*board)[31][28]);
     const static char IMAGE_FOOD = 'F';
     virtual char getImage() const override;
-    int get_points();
+    int get_points() const;
 
 protected:
     int points;

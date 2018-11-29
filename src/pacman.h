@@ -14,27 +14,32 @@ public:
     Pacman(int row, int col, Character* (*board)[31][28]);
     const static char IMAGE_PACMAN = 'P';
     virtual char getImage() const override;
-    bool just_eaten_superpower();
-    bool just_lost_superpower();
+
+    bool just_eaten_superpower() const;
+    bool just_lost_superpower() const;
     void set_gain();
     void set_lose();
     Dir get_direction();
+
     void update_superpower();
     void update_direction(Dir dir);
+
     void eats_piece(Food* f);
-    void eats_ghost(Ghost* g, int row, int col);
     void not_eat_piece();
     void encounter_ghost();
+    void eats_ghost(Ghost* g, int row, int col);
+    void not_eat_ghost();
+
     bool get_has_encountered_ghost();
     bool get_has_eaten_ghost();
-    void not_eat_ghost();
-    void move(int row, int col);
-    int get_lives();
     int get_points_to_add();
+    int get_lives();
+
+    void move(int row, int col);
 
 private:
     int superpower = -1;
-    Dir direction = Dir::LEFT;
+    Dir direction = Dir::NONE;
     bool has_eaten_piece = false;
     bool has_eaten_ghost = false;
     bool has_encountered_ghost = false;

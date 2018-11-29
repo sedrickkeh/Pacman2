@@ -2,11 +2,18 @@
 #define PACMANGAME_H
 
 #include <iostream>
+#include <algorithm>
+
 using std::cin;
 using std::cout;
 using std::endl;
-#include <algorithm>
+
+#include <string>
 #include <QObject>
+#include <QTimer>
+
+#include "gamewindow.h"
+#include "square.h"
 
 #include "character.h"
 #include "wall.h"
@@ -17,11 +24,6 @@ using std::endl;
 #include "superpower.h"
 #include "ghostwall.h"
 
-#include "gamewindow.h"
-#include "square.h"
-#include <string>
-#include <QTimer>
-
 class PacmanGame : public QObject {
     Q_OBJECT
 public:
@@ -29,11 +31,12 @@ public:
     ~PacmanGame();
     void startGraphicUI();
     GameWindow* get_game_window() const;
-    Pacman* get_pacman();
-    int get_score();
+    Pacman* get_pacman() const;
+    int get_score() const;
 
 private:
     GameWindow* game_window;
+    QTimer *timer;
     Character* board[31][28];
     Pacman* pacman;
     Ghost* ghost1;
@@ -45,27 +48,22 @@ private:
     int level;
 
     void load_map();
+    void update_map();
     void init_block(int row, int col, char c);
-    void load_high_score();
-
-    void complete_level();
-    bool is_level_finished();
-
-    bool exists_ghost_in_box();
 
     void move_pacman(int r, int c);
     void move_ghost(int r, int c, Ghost* g);
+
     void gain_power();
     void lose_power();
-    void set_weak(Ghost* g);
-    void set_unweak(Ghost* g);
     void update_ghost_scores();
     void reset_ghosts();
     void update_score();
-    void update_map();
     void update_lives();
+
+    void complete_level();
+    bool is_level_finished();
     void game_over();
-    QTimer *timer;
 
 private slots:
     void refresh_frame();

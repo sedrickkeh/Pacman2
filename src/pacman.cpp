@@ -16,11 +16,15 @@ Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
     lives(2)
 {}
 
-bool Pacman::just_eaten_superpower() {
+char Pacman::getImage() const {
+    return IMAGE_PACMAN;
+}
+
+bool Pacman::just_eaten_superpower() const {
     return gain;
 }
 
-bool Pacman::just_lost_superpower() {
+bool Pacman::just_lost_superpower() const {
     return lose;
 }
 
@@ -36,15 +40,13 @@ Dir Pacman::get_direction() {
 	return direction;
 }
 
-char Pacman::getImage() const {
-    return IMAGE_PACMAN;
-}
-
-
 void Pacman::update_superpower() {
     if (gain) superpower += 100;
     else if (superpower > 0) --superpower;
-    else if (superpower == 0) {lose = true; superpower = -1;}
+    else if (superpower == 0) {
+        lose = true;
+        superpower = -1;
+    }
     else superpower = -1;
 }
 
@@ -94,22 +96,6 @@ void Pacman::not_eat_piece() {
     addpoints = -1;
 }
 
-bool Pacman::get_has_eaten_ghost() {
-    return has_eaten_ghost;
-}
-
-void Pacman::not_eat_ghost() {
-    has_eaten_ghost = false;
-}
-
-int Pacman::get_points_to_add() {
-    return addpoints;
-}
-
-int Pacman::get_lives() {
-    return lives;
-}
-
 void Pacman::encounter_ghost() {
     has_encountered_ghost = true;
 
@@ -132,7 +118,31 @@ void Pacman::encounter_ghost() {
     }
 
     --lives;
+}
 
+void Pacman::eats_ghost(Ghost* g, int row, int col) {
+    has_eaten_piece = true;
+    has_eaten_ghost = true;
+    addpoints = g->get_points();
+    g -> set_eatmode(false);
+
+    if ((*board)[15][12] == nullptr) g -> move(15, 12);
+    else if ((*board)[16][12] == nullptr) g -> move(16, 12);
+    else if ((*board)[15][15] == nullptr) g -> move(15, 15);
+    else if ((*board)[16][15] == nullptr) g -> move(16, 15);
+    else if ((*board)[15][14] == nullptr) g -> move(15, 14);
+    else if ((*board)[16][14] == nullptr) g -> move(16, 14);
+    else if ((*board)[15][13] == nullptr) g -> move(15, 13);
+    else if ((*board)[16][13] == nullptr) g -> move(16, 13);
+    g -> set_time_in_box(20);
+
+    ((*board)[this->row][this->col]) = nullptr;
+    ((*board)[row][col]) = this;
+    this->row = row; this->col = col;
+}
+
+void Pacman::not_eat_ghost() {
+    has_eaten_ghost = false;
 }
 
 bool Pacman::get_has_encountered_ghost() {
@@ -143,23 +153,16 @@ bool Pacman::get_has_encountered_ghost() {
     return false;
 }
 
-void Pacman::eats_ghost(Ghost* g, int row, int col) {
-    has_eaten_piece = true;
-    has_eaten_ghost = true;
-    addpoints = g->get_points();
-    g -> set_eatmode(false);
-    if ((*board)[15][12] == nullptr) g -> move(15, 12);
-    else if ((*board)[16][12] == nullptr) g -> move(16, 12);
-    else if ((*board)[15][15] == nullptr) g -> move(15, 15);
-    else if ((*board)[16][15] == nullptr) g -> move(16, 15);
-    else if ((*board)[15][14] == nullptr) g -> move(15, 14);
-    else if ((*board)[16][14] == nullptr) g -> move(16, 14);
-    else if ((*board)[15][13] == nullptr) g -> move(15, 13);
-    else if ((*board)[16][13] == nullptr) g -> move(16, 13);
-    g -> set_time_in_box(20);
-    ((*board)[this->row][this->col]) = nullptr;
-    ((*board)[row][col]) = this;
-    this->row = row; this->col = col;
+bool Pacman::get_has_eaten_ghost() {
+    return has_eaten_ghost;
+}
+
+int Pacman::get_points_to_add() {
+    return addpoints;
+}
+
+int Pacman::get_lives() {
+    return lives;
 }
 
 void Pacman::move(int row, int col) {
@@ -181,25 +184,29 @@ void Pacman::move(int row, int col) {
     if ((*board)[this->row][this->col - 1] != nullptr) {
         if ((*board)[this->row][this->col-1]->getImage() == 'C' || (*board)[this->row][this->col-1]->getImage() == 'A' || (*board)[this->row][this->col-1]->getImage() == 'R')
         {
-            encounter_ghost(); return;
+            encounter_ghost();
+            return;
         }
     }
     if ((*board)[this->row][this->col + 1] != nullptr) {
         if ((*board)[this->row][this->col+1]->getImage() == 'C' || (*board)[this->row][this->col+1]->getImage() == 'A' || (*board)[this->row][this->col+1]->getImage() == 'R')
         {
-            encounter_ghost(); return;
+            encounter_ghost();
+            return;
         }
     }
     if ((*board)[this->row - 1][this->col] != nullptr) {
         if ((*board)[this->row-1][this->col]->getImage() == 'C' || (*board)[this->row-1][this->col]->getImage() == 'A' || (*board)[this->row-1][this->col]->getImage() == 'R')
         {
-            encounter_ghost(); return;
+            encounter_ghost();
+            return;
         }
     }
     if ((*board)[this->row + 1][this->col] != nullptr) {
         if ((*board)[this->row+1][this->col]->getImage() == 'C' || (*board)[this->row+1][this->col]->getImage() == 'A' || (*board)[this->row+1][this->col]->getImage() == 'R')
         {
-            encounter_ghost(); return;
+            encounter_ghost();
+            return;
         }
     }
 
@@ -230,4 +237,3 @@ void Pacman::move(int row, int col) {
         eats_ghost(dynamic_cast<Ghost*>((*board)[row][col]), row, col);
     }
 }
-
