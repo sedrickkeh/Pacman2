@@ -66,9 +66,10 @@ void Square::set_piece(char i) {
     else if (i == 'A') setStyle("background-color", "pink");
     else if (i == 'R') setStyle("background-color", "orange");
     else if (i == 'F') setStyle("background-color", "blue");
-    else if (i == 'U') setStyle("background-color", "green");
+    else if (i == 'U') setStyle("background-color", "rgb(50, 205, 50)");
     else if (i == 'E') setStyle("background-color", "purple");
     else if (i == 'W') setStyle("background-color", "black");
+    else if (i == 'V') setStyle("background-color", "gray");
     else setStyle("background-color", "white");
     applyStyle();
 }

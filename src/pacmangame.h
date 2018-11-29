@@ -15,7 +15,7 @@ using std::endl;
 #include "ghost.h"
 #include "direction.h"
 #include "superpower.h"
-#include "eatghost.h"
+#include "ghostwall.h"
 
 #include "gamewindow.h"
 #include "square.h"

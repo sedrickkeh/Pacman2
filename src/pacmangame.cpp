@@ -36,6 +36,7 @@ void PacmanGame::load_map() {
         QString line = file.readLine();
         for (int k = 0; k < line.size()-1; k ++) {
             if (line[k] == 'W') board[rownum][k] = new Wall(rownum, k, &board);
+            else if (line[k] == 'V') board[rownum][k] = new ghostwall(rownum, k, &board);
             else if (line[k] == 'P') {
                 pacman = new Pacman(rownum, k, &board);
                 board[rownum][k] = pacman;
@@ -150,10 +151,29 @@ void PacmanGame::update_ghost_scores() {
 }
 
 void PacmanGame::reset_ghosts() {
+    ghost1->move(17, 15);
+    ghost1->move(15, 15);
+    ghost1->move(17, 12);
     ghost1->move(15, 12);
-    ghost2->move(16, 12);
+    ghost1->set_eatmode(false); ghost1->set_time_in_box(20);
+
+    ghost2->move(17, 15);
+    ghost2->move(15, 15);
+    ghost2->move(17, 12);
+    ghost2->move(15, 12);
+    ghost2->set_eatmode(false); ghost2->set_time_in_box(40);
+
+    ghost3->move(17, 15);
     ghost3->move(15, 15);
-    ghost4->move(16, 15);
+    ghost3->move(17, 12);
+    ghost3->move(15, 12);
+    ghost3->set_eatmode(false); ghost3->set_time_in_box(60);
+
+    ghost4->move(17, 15);
+    ghost4->move(15, 15);
+    ghost4->move(17, 12);
+    ghost4->move(15, 12);
+    ghost4->set_eatmode(false); ghost4->set_time_in_box(80);
 }
 
 void PacmanGame::update_map() {
