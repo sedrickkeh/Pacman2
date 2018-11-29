@@ -87,7 +87,7 @@ void GameWindow::set_lcd(int type, int value)
 void GameWindow::set_lives()
 {
     int lives = pacman_game->get_pacman()->get_lives();
-    QPixmap img2(":/resources/img/lives.jpg");
+    QPixmap img2(":/resources/img/pac_man_hed.jpg");
     QLabel* liveWidgets[5] = {ui->obj_1,ui->obj_2,ui->obj_3,ui->obj_4,ui->obj_5};
     int i =0;
     for (; i<lives; ++i){

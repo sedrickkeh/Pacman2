@@ -3,11 +3,21 @@
 Ghost::Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous) :
     Character(row, col, board),
     prev(previous),
-    time_in_box(timebox)
+    points(200),
+    time_in_box(timebox),
+    eatmode(false)
 {}
+
+Ghost::~Ghost() {
+    delete prev;
+}
 
 int Ghost::get_time_in_box() {
 	return time_in_box;
+}
+
+void Ghost::set_time_in_box(int t) {
+    time_in_box = t;
 }
 
 void Ghost::reduce_time_in_box() {
@@ -15,7 +25,8 @@ void Ghost::reduce_time_in_box() {
 }
 
 char Ghost::getImage() const {
-    return IMAGE_GHOST;
+    if (eatmode) return IMAGE_EAT;
+    else return IMAGE_GHOST;
 }
 
 bool Ghost::moves_empty() {
@@ -31,6 +42,26 @@ Dir Ghost::get_next_move() {
 
 void Ghost::push_move(Dir d) {
     moves.push_back(d);
+}
+
+void Ghost::update_points() {
+    points *= 2;
+}
+
+void Ghost::reset_points() {
+    points = 200;
+}
+
+int Ghost::get_points() {
+    return points;
+}
+
+bool Ghost::get_eatmode() {
+    return eatmode;
+}
+
+void Ghost::set_eatmode(bool x){
+    eatmode = x;
 }
 
 void Ghost::move(int row, int col) {

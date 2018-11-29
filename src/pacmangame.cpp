@@ -1,5 +1,7 @@
 #include "pacmangame.h"
 #include <QTimer>
+#include <QMessageBox>
+#include <QApplication>
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
@@ -78,6 +80,7 @@ void PacmanGame::refresh_frame() {
     move_ghost(ghost4->getRow(), ghost4->getCol(), ghost4);
     move_pacman(pacman->getRow(), pacman->getCol());
     update_score();
+    update_lives();
     update_map();
     game_over();
     complete_level();
@@ -91,6 +94,7 @@ void PacmanGame::move_pacman(int r, int c) {
     else if (dir == Dir::UP) pacman->move(row+1, col);
     else if (dir == Dir::LEFT) pacman->move(row, col-1);
     else if (dir == Dir::RIGHT) pacman->move(row, col+1);
+    update_ghost_scores();
     pacman->update_superpower();
     if (pacman->just_eaten_superpower()) gain_power();
     else if (pacman->just_lost_superpower()) lose_power();
@@ -109,27 +113,33 @@ void PacmanGame::move_ghost(int r, int c, Ghost* g) {
 }
 
 void PacmanGame::gain_power() {
-    EatGhost* temp = new EatGhost(ghost1->getRow(), ghost1->getCol(), &board, 0, ghost1->prev);
-    ghost1 = temp;
-    EatGhost* temp2 = new EatGhost(ghost2->getRow(), ghost2->getCol(), &board, 0, ghost2->prev);
-    ghost2 = temp2;
-    EatGhost* temp3 = new EatGhost(ghost3->getRow(), ghost3->getCol(), &board, 0, ghost3->prev);
-    ghost3 = temp3;
-    EatGhost* temp4 = new EatGhost(ghost4->getRow(), ghost4->getCol(), &board, 0, ghost4->prev);
-    ghost4 = temp4;
+    ghost1->set_eatmode(true);
+    ghost2->set_eatmode(true);
+    ghost3->set_eatmode(true);
+    ghost4->set_eatmode(true);
     pacman->set_gain();
 }
 
 void PacmanGame::lose_power() {
-    Ghost* temp = new Ghost(ghost1->getRow(), ghost1->getCol(), &board, 0, ghost1->prev);
-    ghost1 = temp;
-    Ghost* temp2 = new Ghost(ghost2->getRow(), ghost2->getCol(), &board, 0, ghost2->prev);
-    ghost2 = temp2;
-    Ghost* temp3 = new Ghost(ghost3->getRow(), ghost3->getCol(), &board, 0, ghost3->prev);
-    ghost3 = temp3;
-    Ghost* temp4 = new Ghost(ghost4->getRow(), ghost4->getCol(), &board, 0, ghost4->prev);
-    ghost4 = temp4;
+    ghost1->set_eatmode(false);
+    ghost1->reset_points();
+    ghost2->set_eatmode(false);
+    ghost2->reset_points();
+    ghost3->set_eatmode(false);
+    ghost3->reset_points();
+    ghost4->set_eatmode(false);
+    ghost4->reset_points();
     pacman->set_lose();
+}
+
+void PacmanGame::update_ghost_scores() {
+    if (pacman->get_has_eaten_ghost()) {
+        ghost1->update_points();
+        ghost2->update_points();
+        ghost3->update_points();
+        ghost4->update_points();
+        pacman->not_eat_ghost();
+    }
 }
 
 void PacmanGame::update_map() {
@@ -147,13 +157,22 @@ void PacmanGame::update_score() {
     }
     else {
         current_score += pacman->get_points_to_add();
+        game_window->set_lcd(1, current_score);
         pacman->not_eat_piece();
     }
 }
 
+void PacmanGame::update_lives() {
+    game_window->set_lives();
+}
+
 void PacmanGame::complete_level() {
     if (is_level_finished() == false) return;
-    else std::cout << "level complete" << std::endl;
+    else {
+        QMessageBox::information(nullptr, "Congratulations!", "Level complete");
+        game_window->close();
+        timer->stop();
+    }
 }
 
 bool PacmanGame::is_level_finished() {
@@ -167,12 +186,14 @@ bool PacmanGame::is_level_finished() {
     if (ghost2 -> prev != nullptr && (ghost2->prev->getImage() == 'F' || ghost2->prev->getImage() == 'F')) return false;
     if (ghost3 -> prev != nullptr && (ghost3->prev->getImage() == 'F' || ghost3->prev->getImage() == 'F')) return false;
     if (ghost4 -> prev != nullptr && (ghost4->prev->getImage() == 'F' || ghost4->prev->getImage() == 'F')) return false;
-
-    return true;
 }
 
 void PacmanGame::game_over() {
-    if (pacman->get_lives() == 0) std::cout << "game over" << std::endl;
+    if (pacman->get_lives() == 0) {
+        QMessageBox::information(nullptr, "Game over!", "Game over!");
+        game_window->close();
+        timer->stop();
+    }
 }
 
 GameWindow* PacmanGame::get_game_window() const {return game_window;}
