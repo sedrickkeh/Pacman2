@@ -17,8 +17,8 @@ PacmanGame::PacmanGame(int highscore) :
     level(1)
 {
     game_window = new GameWindow(nullptr, this);
-    for (int k = 0; k < 31; k ++)
-        for (int l = 0; l < 28; l ++)
+    for (int k = 0; k < 31; ++k)
+        for (int l = 0; l < 28; ++l)
             board[k][l] = nullptr;
 
     load_map(highscore);
@@ -53,7 +53,7 @@ void PacmanGame::load_map(int highscore) {
     int rownum = 30;
     while (!file.atEnd()) {
         QString line = file.readLine();
-        for (int k = 0; k < line.size()-1; k ++) {
+        for (int k = 0; k < line.size()-1; ++k) {
             if (line[k] == 'W') board[rownum][k] = new Wall(rownum, k, &board);
             else if (line[k] == 'V') board[rownum][k] = new Ghostwall(rownum, k, &board);
             else if (line[k] == 'P') {
@@ -62,19 +62,19 @@ void PacmanGame::load_map(int highscore) {
             }
             else if (line[k] == 'G') {
                 if (ghost1 == nullptr) {
-                    ghost1 = new Ghost(rownum, k, &board, 20, nullptr, pacman, CHASE);
+                    ghost1 = new Ghost(rownum, k, &board, 20, nullptr, CHASE);
                     board[rownum][k] = ghost1;
                 }
                 else if (ghost2 == nullptr) {
-                    ghost2 = new Ghost(rownum, k, &board, 40, nullptr, pacman, AMBUSH);
+                    ghost2 = new Ghost(rownum, k, &board, 40, nullptr, AMBUSH);
                     board[rownum][k] = ghost2;
                 }
                 else if (ghost3 == nullptr) {
-                    ghost3 = new Ghost(rownum, k, &board, 60, nullptr, pacman, RANDOM);
+                    ghost3 = new Ghost(rownum, k, &board, 60, nullptr, RANDOM);
                     board[rownum][k] = ghost3;
                 }
                 else if (ghost4 == nullptr) {
-                    ghost4 = new Ghost(rownum, k, &board, 80, nullptr, pacman, RANDOM);
+                    ghost4 = new Ghost(rownum, k, &board, 80, nullptr, RANDOM);
                     board[rownum][k] = ghost4;
                 }
             }
@@ -83,12 +83,17 @@ void PacmanGame::load_map(int highscore) {
         }
         --rownum;
     }
+    ghost1->set_pacman(pacman);
+    ghost2->set_pacman(pacman);
+    ghost3->set_pacman(pacman);
+    ghost4->set_pacman(pacman);
+
     game_window->set_lcd(0, highscore);
 }
 
 void PacmanGame::update_map() {
-    for (int k = 0; k < 31; k ++) {
-        for (int l = 0; l < 28; l ++) {
+    for (int k = 0; k < 31; ++k) {
+        for (int l = 0; l < 28; ++l) {
             if (board[k][l] != nullptr)
                 init_block(k, l, board[k][l]->getImage());
             else
@@ -230,8 +235,8 @@ void PacmanGame::complete_level() {
 }
 
 bool PacmanGame::is_level_finished() {
-    for (int k = 0; k < 31; k ++) {
-        for (int l = 0; l < 28; l ++) {
+    for (int k = 0; k < 31; ++k) {
+        for (int l = 0; l < 28; ++l) {
             if (board[k][l] != nullptr && (board[k][l] -> getImage() == 'F' || board[k][l] -> getImage() == 'S')) return false;
         }
     }

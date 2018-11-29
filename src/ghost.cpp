@@ -1,15 +1,14 @@
 #include "ghost.h"
 #include <algorithm>
 
-Ghost::Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Pacman* pacman, Movement pattern) :
+Ghost::Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Movement pattern) :
     Character(row, col, board),
     points(200),
     time_in_box(timebox),
     direction(NONE),
     pattern(pattern),
     eatmode(false),
-    prev(previous),
-    pacman(pacman)
+    prev(previous)
 {}
 
 Ghost::~Ghost() {
@@ -22,6 +21,10 @@ char Ghost::getImage() const {
     if (pattern == AMBUSH) return 'A';
     if (pattern == RANDOM) return 'R';
     return IMAGE_GHOST;
+}
+
+void Ghost::set_pacman(Pacman* pacman) {
+    this->pacman = pacman;
 }
 
 int Ghost::get_time_in_box() const {
