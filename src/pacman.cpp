@@ -6,10 +6,11 @@ Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
 	superpower(-1),
     direction(Dir::NONE),
     has_eaten_piece(false),
+    has_eaten_ghost(false),
     gain(false),
     lose(false),
     addpoints(-1),
-    lives(3)
+    lives(1)
 {}
 
 bool Pacman::just_eaten_superpower() {
@@ -90,6 +91,14 @@ void Pacman::not_eat_piece() {
     addpoints = -1;
 }
 
+bool Pacman::get_has_eaten_ghost() {
+    return has_eaten_ghost;
+}
+
+void Pacman::not_eat_ghost() {
+    has_eaten_ghost = false;
+}
+
 int Pacman::get_points_to_add() {
     return addpoints;
 }
@@ -123,10 +132,15 @@ void Pacman::encounter_ghost(Ghost* g) {
 
 void Pacman::eats_ghost(Ghost* g, int row, int col) {
     has_eaten_piece = true;
+    has_eaten_ghost = true;
     addpoints = g->get_points();
     g -> set_eatmode(false);
     if ((*board)[15][12] == nullptr) g -> move(15, 12);
     else if ((*board)[16][12] == nullptr) g -> move(16, 12);
+    else if ((*board)[15][15] == nullptr) g -> move(15, 15);
+    else if ((*board)[16][15] == nullptr) g -> move(16, 15);
+    else if ((*board)[15][14] == nullptr) g -> move(15, 14);
+    else if ((*board)[16][14] == nullptr) g -> move(16, 14);
     else if ((*board)[15][13] == nullptr) g -> move(15, 13);
     else if ((*board)[16][13] == nullptr) g -> move(16, 13);
     g -> set_time_in_box(20);

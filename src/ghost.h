@@ -26,12 +26,13 @@ public:
     void push_move(Dir d);
 
     void update_points();
+    void reset_points();
     int get_points();
     bool get_eatmode();
     void set_eatmode(bool x);
 
 protected:
-    int points = 200;
+    int points = 100;
     int time_in_box = 10;
     vector<Dir> moves;
     bool eatmode = false;

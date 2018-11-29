@@ -23,6 +23,8 @@ public:
     void eats_piece(Food* f);
     void eats_ghost(Ghost* g, int row, int col);
     void not_eat_piece();
+    bool get_has_eaten_ghost();
+    void not_eat_ghost();
     void encounter_ghost(Ghost* g);
     void move(int row, int col);
     int get_lives();
@@ -32,6 +34,7 @@ private:
     int superpower = -1;
     Dir direction = Dir::LEFT;
     bool has_eaten_piece = false;
+    bool has_eaten_ghost = false;
     bool gain = false;
     bool lose = false;
     int addpoints = -1;

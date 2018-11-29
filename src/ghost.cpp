@@ -48,6 +48,10 @@ void Ghost::update_points() {
     points *= 2;
 }
 
+void Ghost::reset_points() {
+    points = 200;
+}
+
 int Ghost::get_points() {
     return points;
 }
