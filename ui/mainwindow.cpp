@@ -26,7 +26,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::start_button_clicked_handler()
 {
-    this->pacman_game = new PacmanGame;
+    this->pacman_game = new PacmanGame(rm->get_highest_score());
     this->pacman_game->startGraphicUI();
     connect(this->pacman_game->get_game_window(), &GameWindow::closed, this, &MainWindow::game_window_closed_handler);
     this->hide();

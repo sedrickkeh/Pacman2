@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-PacmanGame::PacmanGame() :
+PacmanGame::PacmanGame(int highscore) :
     pacman(nullptr),
     ghost1(nullptr),
     ghost2(nullptr),
@@ -21,7 +21,7 @@ PacmanGame::PacmanGame() :
         for (int l = 0; l < 28; l ++)
             board[k][l] = nullptr;
 
-    load_map();
+    load_map(highscore);
     update_map();
 
     timer = new QTimer(this);
@@ -47,7 +47,7 @@ int PacmanGame::get_score() const{
     return current_score;
 }
 
-void PacmanGame::load_map() {
+void PacmanGame::load_map(int highscore) {
     QFile file(":/resources/maps/pacman_map.txt");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
     int rownum = 30;
@@ -83,6 +83,7 @@ void PacmanGame::load_map() {
         }
         --rownum;
     }
+    game_window->set_lcd(0, highscore);
 }
 
 void PacmanGame::update_map() {
