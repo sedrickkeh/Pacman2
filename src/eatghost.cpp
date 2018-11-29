@@ -1,7 +1,7 @@
 #include "eatghost.h"
 
 EatGhost::EatGhost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous) :
-    Ghost(row, col, board, timebox, previous),
+    Ghost(row, col, board, timebox, previous, RANDOM),
     points(200)
 {}
 

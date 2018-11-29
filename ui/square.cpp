@@ -62,10 +62,12 @@ void Square::clicked_handler() {
 void Square::set_piece(char i) {
     this->piece = i;
     if (i == 'P') setStyle("background-color", "yellow");
-    else if (i == 'G') setStyle("background-color", "red");
+    else if (i == 'C') setStyle("background-color", "red");
+    else if (i == 'A') setStyle("background-color", "pink");
+    else if (i == 'R') setStyle("background-color", "orange");
     else if (i == 'F') setStyle("background-color", "blue");
-    else if (i == 'U') setStyle("background-color", "orange");
-    else if (i == 'E') setStyle("background-color", "pink");
+    else if (i == 'U') setStyle("background-color", "green");
+    else if (i == 'E') setStyle("background-color", "purple");
     else if (i == 'W') setStyle("background-color", "black");
     else setStyle("background-color", "white");
     applyStyle();
