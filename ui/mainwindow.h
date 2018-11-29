@@ -13,6 +13,7 @@ class MainWindow;
 }
 
 class PacmanGame;
+class RecordManager;
 
 class MainWindow : public QMainWindow
 {
@@ -24,6 +25,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    RecordManager *rm;
     PacmanGame* pacman_game;
 
 private slots:

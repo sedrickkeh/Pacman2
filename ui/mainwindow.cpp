@@ -1,11 +1,14 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "recordmanager.h"
 #include "pacmangame.h"
+
+#include <qinputdialog.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
+    rm(new RecordManager()),
     pacman_game(nullptr)
 {
     ui->setupUi(this);
@@ -17,8 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    if (this->pacman_game != nullptr) delete this->pacman_game;
     delete this->ui;
+    delete this->rm;
 }
 
 void MainWindow::startButton_clicked_handler()
@@ -31,5 +34,13 @@ void MainWindow::startButton_clicked_handler()
 }
 
 void MainWindow::game_window_closed_handler() {
+    if(pacman_game->get_score() > rm->get_lowest_score()){
+        QString name = QInputDialog::getText(this, "Highscore", "Enter Name");
+        rm->update_record(name, pacman_game->get_score());
+    }
+
+    if (pacman_game != nullptr) delete pacman_game;
+    pacman_game = nullptr;
+
     this->show();
 }
