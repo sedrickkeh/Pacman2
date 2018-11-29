@@ -6,6 +6,8 @@
 #include "food.h"
 #include "superpower.h"
 
+class Ghost;
+
 class Pacman : public Character
 {
 public:

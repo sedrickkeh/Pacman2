@@ -60,7 +60,7 @@ void Ghost::calculateTarget(int &row, int &col) {
 }
 
 Dir Ghost::get_next_move() {
-    if(pattern == RANDOM) {
+    if(pattern == RANDOM || eatmode) {
         int arr[4] = {0, 1, 2, 3};
         random_shuffle(arr, arr+4);
         for(int i = 0; i < 4; ++i){
@@ -116,6 +116,8 @@ Dir Ghost::get_next_move() {
     if(direction == RIGHT) return LEFT;
     if(direction == UP) return DOWN;
     if(direction == DOWN) return UP;
+
+    return NONE;
 }
 
 void Ghost::set_direction(Dir direction){

@@ -186,7 +186,7 @@ void Pacman::move(int row, int col) {
         ((*board)[row][col]) = this;
         this->row = row; this->col = col;
     }
-    else if ((*board)[row][col] -> getImage() == 'G') {
+    else if ((*board)[row][col] -> getImage() == 'C' || (*board)[row][col] -> getImage() == 'A' || (*board)[row][col] -> getImage() == 'R') {
         encounter_ghost();
     }
     else if ((*board)[row][col] -> getImage() == 'E') {

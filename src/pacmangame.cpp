@@ -192,6 +192,8 @@ bool PacmanGame::is_level_finished() {
     if (ghost2 -> prev != nullptr && (ghost2->prev->getImage() == 'F' || ghost2->prev->getImage() == 'F')) return false;
     if (ghost3 -> prev != nullptr && (ghost3->prev->getImage() == 'F' || ghost3->prev->getImage() == 'F')) return false;
     if (ghost4 -> prev != nullptr && (ghost4->prev->getImage() == 'F' || ghost4->prev->getImage() == 'F')) return false;
+
+    return true;
 }
 
 void PacmanGame::game_over() {
