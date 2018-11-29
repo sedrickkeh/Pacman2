@@ -209,3 +209,7 @@ GameWindow* PacmanGame::get_game_window() const {return game_window;}
 Pacman* PacmanGame::get_pacman(){
     return pacman;
 }
+
+int PacmanGame::get_score(){
+    return current_score;
+}

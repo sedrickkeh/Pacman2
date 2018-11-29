@@ -30,6 +30,7 @@ public:
     void startGraphicUI();
     GameWindow* get_game_window() const;
     Pacman* get_pacman();
+    int get_score();
 
 private:
     GameWindow* game_window;

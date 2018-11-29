@@ -51,6 +51,11 @@ int RecordManager::get_score_at(int rank)
     return scores[rank-1];
 }
 
+int RecordManager::get_lowest_score()
+{
+    return scores[NUM_OF_SCORES-1];
+}
+
 int RecordManager::get_num_of_scores()
 {
     return NUM_OF_SCORES;
@@ -59,14 +64,14 @@ int RecordManager::get_num_of_scores()
 void RecordManager::update_record(QString name, int score)
 {
     int new_rank = NUM_OF_SCORES;
-    while(new_rank > 0 && score < scores[new_rank-1]) --new_rank;
+    while(new_rank > 0 && score > scores[new_rank-1]) --new_rank;
     if (new_rank == NUM_OF_SCORES) return;
 
     for(int i = NUM_OF_SCORES-1; i < new_rank; --i){
         names[i] = names[i-1];
         scores[i] = scores[i-1];
     }
-    names[new_rank] = name;
+    names[new_rank] = name + "\n";
     scores[new_rank] = score;
 
     QFile file(record_path);
@@ -75,7 +80,7 @@ void RecordManager::update_record(QString name, int score)
     else {
         QTextStream out_stream(&file);
         for(int i=0; i<NUM_OF_SCORES; ++i){
-            out_stream << names[i] << "\n";
+            out_stream << names[i];
             out_stream << scores[i];
             if (i < NUM_OF_SCORES-1) out_stream << "\n";
         }
