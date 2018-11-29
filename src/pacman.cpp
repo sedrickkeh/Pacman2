@@ -11,7 +11,7 @@ Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
     gain(false),
     lose(false),
     addpoints(-1),
-    lives(1)
+    lives(2)
 {}
 
 bool Pacman::just_eaten_superpower() {
@@ -165,6 +165,31 @@ void Pacman::move(int row, int col) {
     }
 
     if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
+
+    if ((*board)[this->row][this->col - 1] != nullptr) {
+        if ((*board)[this->row][this->col-1]->getImage() == 'C' || (*board)[this->row][this->col-1]->getImage() == 'A' || (*board)[this->row][this->col-1]->getImage() == 'R')
+        {
+            encounter_ghost(); return;
+        }
+    }
+    if ((*board)[this->row][this->col + 1] != nullptr) {
+        if ((*board)[this->row][this->col+1]->getImage() == 'C' || (*board)[this->row][this->col+1]->getImage() == 'A' || (*board)[this->row][this->col+1]->getImage() == 'R')
+        {
+            encounter_ghost(); return;
+        }
+    }
+    if ((*board)[this->row - 1][this->col] != nullptr) {
+        if ((*board)[this->row-1][this->col]->getImage() == 'C' || (*board)[this->row-1][this->col]->getImage() == 'A' || (*board)[this->row-1][this->col]->getImage() == 'R')
+        {
+            encounter_ghost(); return;
+        }
+    }
+    if ((*board)[this->row + 1][this->col] != nullptr) {
+        if ((*board)[this->row+1][this->col]->getImage() == 'C' || (*board)[this->row+1][this->col]->getImage() == 'A' || (*board)[this->row+1][this->col]->getImage() == 'R')
+        {
+            encounter_ghost(); return;
+        }
+    }
 
     if ((*board)[row][col] == nullptr) {
         ((*board)[this->row][this->col]) = nullptr;
