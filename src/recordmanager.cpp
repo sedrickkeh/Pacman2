@@ -24,7 +24,7 @@ RecordManager::RecordManager()
             QTextStream out_stream(&file);
             for(int i=0; i<NUM_OF_SCORES; ++i){
                 out_stream << "AAA" << "\n";
-                out_stream << i * 1000;
+                out_stream << (NUM_OF_SCORES - i) * 1000;
                 if (i < NUM_OF_SCORES-1) out_stream << "\n";
             }
         }
@@ -63,11 +63,11 @@ void RecordManager::update_record(QString name, int score)
     if (new_rank == NUM_OF_SCORES) return;
 
     for(int i = NUM_OF_SCORES-1; i < new_rank; --i){
-        scores[i] = scores[i-1];
         names[i] = names[i-1];
+        scores[i] = scores[i-1];
     }
-    scores[new_rank] = score;
     names[new_rank] = name;
+    scores[new_rank] = score;
 
     QFile file(record_path);
     if (!file.open(QFile::WriteOnly | QFile::Text))
