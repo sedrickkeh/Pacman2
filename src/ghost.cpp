@@ -4,14 +4,23 @@
 Ghost::Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Movement pattern) :
     Character(row, col, board),
     prev(previous),
+    points(200),
     time_in_box(timebox),
     direction(NONE),
-    pattern(pattern)
-{
+    pattern(pattern),
+    eatmode(false)
+{}
+
+Ghost::~Ghost() {
+    delete prev;
 }
 
 int Ghost::get_time_in_box() {
 	return time_in_box;
+}
+
+void Ghost::set_time_in_box(int t) {
+    time_in_box = t;
 }
 
 void Ghost::reduce_time_in_box() {
@@ -19,6 +28,7 @@ void Ghost::reduce_time_in_box() {
 }
 
 char Ghost::getImage() const {
+    if (eatmode) return IMAGE_EAT;
     if (pattern == CHASE) return 'C';
     if (pattern == AMBUSH) return 'A';
     if (pattern == RANDOM) return 'R';
@@ -120,6 +130,26 @@ bool Ghost::potentialMove(int row, int col) {
     if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return false;
     if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'U') return true;
     return false;
+}
+
+void Ghost::update_points() {
+    points *= 2;
+}
+
+void Ghost::reset_points() {
+    points = 200;
+}
+
+int Ghost::get_points() {
+    return points;
+}
+
+bool Ghost::get_eatmode() {
+    return eatmode;
+}
+
+void Ghost::set_eatmode(bool x){
+    eatmode = x;
 }
 
 void Ghost::move(int row, int col) {

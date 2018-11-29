@@ -58,8 +58,10 @@ private:
     void lose_power();
     void set_weak(Ghost* g);
     void set_unweak(Ghost* g);
+    void update_ghost_scores();
     void update_score();
     void update_map();
+    void update_lives();
     void game_over();
     QTimer *timer;
 
