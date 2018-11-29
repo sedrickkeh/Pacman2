@@ -37,6 +37,7 @@ RecordManager::RecordManager()
     else {
         for (int i=0; i<NUM_OF_SCORES && !file.atEnd(); ++i) {
             QString line1 = file.readLine();
+            if(i != NUM_OF_SCORES - 1) line1.chop(1);
             names[i] = line1;
 
             QString line2 = file.readLine();
@@ -71,7 +72,7 @@ void RecordManager::update_record(QString name, int score)
         names[i] = names[i-1];
         scores[i] = scores[i-1];
     }
-    names[new_rank] = name + "\n";
+    names[new_rank] = name;
     scores[new_rank] = score;
 
     QFile file(record_path);
@@ -80,7 +81,7 @@ void RecordManager::update_record(QString name, int score)
     else {
         QTextStream out_stream(&file);
         for(int i=0; i<NUM_OF_SCORES; ++i){
-            out_stream << names[i];
+            out_stream << names[i] << "\n";
             out_stream << scores[i];
             if (i < NUM_OF_SCORES-1) out_stream << "\n";
         }
