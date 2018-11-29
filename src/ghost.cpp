@@ -130,7 +130,7 @@ bool Ghost::potentialMove(int row, int col) {
     if (row < 0 || col < 0 || row >= 31 || col >= 28) return false;
     if ((*board)[row][col] == nullptr) return true;
     if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return false;
-    if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V') return true;
+    if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'P' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V') return true;
     return false;
 }
 
