@@ -25,7 +25,7 @@ void MapMaker::process_user_input(int row, int col) {
     char c = makerwindow->get_square_choice();
     delete board[row][col];
     if (c == 'P') board[row][col] = new Pacman(row, col, &board);
-    else if (c == 'G') board[row][col] = new Ghost(row, col, &board, 0, nullptr, Movement::AMBUSH);
+    else if (c == 'C') board[row][col] = new Ghost(row, col, &board, 0, nullptr, Movement::CHASE);
     else if (c == 'W') board[row][col] = new Wall(row, col, &board);
     else if (c == 'F') board[row][col] = new Food(row, col, &board);
     else if (c == 'U') board[row][col] = new Superpower(row, col, &board);

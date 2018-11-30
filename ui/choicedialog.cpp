@@ -23,7 +23,7 @@ void ChoiceDialog::on_empty_clicked() {
     close();
 }
 void ChoiceDialog::on_ghost_clicked() {
-    this->choice = 'G';
+    this->choice = 'C';
     close();
 }
 void ChoiceDialog::on_pacman_clicked() {
