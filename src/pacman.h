@@ -5,13 +5,15 @@
 #include "direction.h"
 #include "food.h"
 #include "superpower.h"
+#include "gamemode.h"
 
 class Ghost;
+class PacmanGame;
 
 class Pacman : public Character
 {
 public:
-    Pacman(int row, int col, Character* (*board)[31][28]);
+    Pacman(PacmanGame* pacmangame, int row, int col, Character* (*board)[31][28], Mode mode);
     const static char IMAGE_PACMAN = 'P';
     virtual char getImage() const override;
 
@@ -38,8 +40,10 @@ public:
     void move(int row, int col);
 
 private:
+    PacmanGame* pacmangame;
     int superpower = -1;
     Dir direction = Dir::NONE;
+    Mode mode;
     bool has_eaten_piece = false;
     bool has_eaten_ghost = false;
     bool has_encountered_ghost = false;

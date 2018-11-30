@@ -56,7 +56,8 @@ HEADERS += \
     src/superpower.h \
     src/movement.h \
     src/recordmanager.h \
-    src/ghostwall.h
+    src/ghostwall.h \
+    src/gamemode.h
 
 FORMS += \
         ui/mainwindow.ui \

@@ -1,20 +1,31 @@
 #include "pacman.h"
+#include "pacmangame.h"
 #include "ghost.h"
 #include "wall.h"
 #include "ghostwall.h"
 
-Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
-	Character(row, col, board),
-	superpower(-1),
+Pacman::Pacman(PacmanGame* pacmangame, int row, int col, Character* (*board)[31][28], Mode mode) :
+    Character(row, col, board),
+    pacmangame(pacmangame),
     direction(Dir::NONE),
+    mode(mode),
     has_eaten_piece(false),
     has_eaten_ghost(false),
     has_encountered_ghost(false),
     gain(false),
     lose(false),
-    addpoints(-1),
-    lives(5)
-{}
+    addpoints(-1)
+{
+    if(mode == CLASSIC) {
+        superpower = -1;
+        lives = 5;
+    }
+
+    else if (mode == REVERSE) {
+        superpower = 1000;
+        lives = 1;
+    }
+}
 
 char Pacman::getImage() const {
     return IMAGE_PACMAN;
@@ -124,17 +135,27 @@ void Pacman::eats_ghost(Ghost* g, int row, int col) {
     has_eaten_piece = true;
     has_eaten_ghost = true;
     addpoints = g->get_points();
-    g -> set_eatmode(false);
 
-    if ((*board)[15][12] == nullptr) g -> move(15, 12);
-    else if ((*board)[16][12] == nullptr) g -> move(16, 12);
-    else if ((*board)[15][15] == nullptr) g -> move(15, 15);
-    else if ((*board)[16][15] == nullptr) g -> move(16, 15);
-    else if ((*board)[15][14] == nullptr) g -> move(15, 14);
-    else if ((*board)[16][14] == nullptr) g -> move(16, 14);
-    else if ((*board)[15][13] == nullptr) g -> move(15, 13);
-    else if ((*board)[16][13] == nullptr) g -> move(16, 13);
-    g -> set_time_in_box(20);
+    if(mode == CLASSIC) {
+        g -> set_eatmode(false);
+
+        if ((*board)[15][12] == nullptr) g -> move(15, 12);
+        else if ((*board)[16][12] == nullptr) g -> move(16, 12);
+        else if ((*board)[15][15] == nullptr) g -> move(15, 15);
+        else if ((*board)[16][15] == nullptr) g -> move(16, 15);
+        else if ((*board)[15][14] == nullptr) g -> move(15, 14);
+        else if ((*board)[16][14] == nullptr) g -> move(16, 14);
+        else if ((*board)[15][13] == nullptr) g -> move(15, 13);
+        else if ((*board)[16][13] == nullptr) g -> move(16, 13);
+
+        g -> set_time_in_box(20);
+    }
+
+    else if(mode == REVERSE) {
+        (*board)[g->getRow()][g->getCol()] = nullptr;
+        pacmangame->remove_ghost(g->get_number());
+        g = nullptr;
+    }
 
     ((*board)[this->row][this->col]) = nullptr;
     ((*board)[row][col]) = this;

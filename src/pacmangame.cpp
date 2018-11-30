@@ -8,6 +8,7 @@
 using namespace std;
 
 PacmanGame::PacmanGame(int highscore) :
+    mode(REVERSE),
     pacman(nullptr),
     ghost1(nullptr),
     ghost2(nullptr),
@@ -43,6 +44,25 @@ Pacman* PacmanGame::get_pacman() const{
     return pacman;
 }
 
+void PacmanGame::remove_ghost(int number) {
+    if(number == 1) {
+        delete ghost1;
+        ghost1 = nullptr;
+    }
+    if(number == 2) {
+        delete ghost2;
+        ghost2 = nullptr;
+    }
+    if(number == 3) {
+        delete ghost3;
+        ghost3 = nullptr;
+    }
+    if(number == 4) {
+        delete ghost4;
+        ghost4 = nullptr;
+    }
+}
+
 int PacmanGame::get_score() const{
     return current_score;
 }
@@ -57,24 +77,24 @@ void PacmanGame::load_map(int highscore) {
             if (line[k] == 'W') board[rownum][k] = new Wall(rownum, k, &board);
             else if (line[k] == 'V') board[rownum][k] = new Ghostwall(rownum, k, &board);
             else if (line[k] == 'P') {
-                pacman = new Pacman(rownum, k, &board);
+                pacman = new Pacman(this, rownum, k, &board, mode);
                 board[rownum][k] = pacman;
             }
             else if (line[k] == 'G') {
                 if (ghost1 == nullptr) {
-                    ghost1 = new Ghost(rownum, k, &board, 20, nullptr, CHASE);
+                    ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, CHASE);
                     board[rownum][k] = ghost1;
                 }
                 else if (ghost2 == nullptr) {
-                    ghost2 = new Ghost(rownum, k, &board, 40, nullptr, AMBUSH);
+                    ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, AMBUSH);
                     board[rownum][k] = ghost2;
                 }
                 else if (ghost3 == nullptr) {
-                    ghost3 = new Ghost(rownum, k, &board, 60, nullptr, RANDOM);
+                    ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, RANDOM);
                     board[rownum][k] = ghost3;
                 }
                 else if (ghost4 == nullptr) {
-                    ghost4 = new Ghost(rownum, k, &board, 80, nullptr, RANDOM);
+                    ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, RANDOM);
                     board[rownum][k] = ghost4;
                 }
             }
@@ -117,10 +137,14 @@ void PacmanGame::move_pacman(int r, int c) {
     else if (dir == Dir::LEFT) pacman->move(row, col-1);
     else if (dir == Dir::RIGHT) pacman->move(row, col+1);
 
-    update_ghost_scores();
-    pacman->update_superpower();
-    if (pacman->just_eaten_superpower()) gain_power();
-    else if (pacman->just_lost_superpower()) lose_power();
+    if(mode == CLASSIC) {
+        update_ghost_scores();
+        pacman->update_superpower();
+        if (pacman->just_eaten_superpower()) gain_power();
+        else if (pacman->just_lost_superpower()) lose_power();
+    }
+    else if (mode == REVERSE) {
+    }
 }
 
 void PacmanGame::move_ghost(int r, int c, Ghost* g) {
@@ -258,10 +282,10 @@ void PacmanGame::game_over() {
 }
 
 void PacmanGame::refresh_frame() {
-    move_ghost(ghost1->getRow(), ghost1->getCol(), ghost1);
-    move_ghost(ghost2->getRow(), ghost2->getCol(), ghost2);
-    move_ghost(ghost3->getRow(), ghost3->getCol(), ghost3);
-    move_ghost(ghost4->getRow(), ghost4->getCol(), ghost4);
+    if(ghost1 != nullptr) move_ghost(ghost1->getRow(), ghost1->getCol(), ghost1);
+    if(ghost2 != nullptr) move_ghost(ghost2->getRow(), ghost2->getCol(), ghost2);
+    if(ghost3 != nullptr) move_ghost(ghost3->getRow(), ghost3->getCol(), ghost3);
+    if(ghost4 != nullptr) move_ghost(ghost4->getRow(), ghost4->getCol(), ghost4);
     move_pacman(pacman->getRow(), pacman->getCol());
 
     update_score();
