@@ -3,19 +3,22 @@
 #include "qinputdialog.h"
 #include "ui_mainwindow.h"
 #include "pacmangame.h"
+#include "mapmaker.h"
 #include "recordmanager.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     rm(new RecordManager()),
-    pacman_game(nullptr)
+    pacman_game(nullptr),
+    mapmaker(nullptr)
 {
     ui->setupUi(this);
     //ui->label->setStyleSheet("*{background-image: url(:/titlescreen.jpg);}");
     QPixmap img(":/resources/img/titlepage.jpg");
     ui->label->setPixmap(img.scaled(1000, 500, Qt::KeepAspectRatio));
     connect(this->ui->startButton, &QPushButton::clicked, this, &MainWindow::start_button_clicked_handler);
+    connect(this->ui->startButton_2, &QPushButton::clicked, this, &MainWindow::map_button_clicked_handler);
 }
 
 MainWindow::~MainWindow()
@@ -32,6 +35,13 @@ void MainWindow::start_button_clicked_handler()
     this->hide();
 }
 
+void MainWindow::map_button_clicked_handler() {
+    this->mapmaker = new MapMaker();
+    this->mapmaker->startGraphicUI();
+    connect(this->mapmaker->get_maker_window(), &Makerwindow::closed, this, &MainWindow::maker_window_closed_handler);
+    this->hide();
+}
+
 void MainWindow::game_window_closed_handler() {
     if(pacman_game->get_score() > rm->get_lowest_score()){
         QString name = QInputDialog::getText(this, "New Highscore", "Enter Name");
@@ -40,6 +50,13 @@ void MainWindow::game_window_closed_handler() {
 
     if (pacman_game != nullptr) delete pacman_game;
     pacman_game = nullptr;
+
+    this->show();
+}
+
+void MainWindow::maker_window_closed_handler() {
+    if (mapmaker != nullptr) delete mapmaker;
+    mapmaker = nullptr;
 
     this->show();
 }

@@ -13,7 +13,7 @@ Pacman::Pacman(int row, int col, Character* (*board)[31][28]) :
     gain(false),
     lose(false),
     addpoints(-1),
-    lives(2)
+    lives(5)
 {}
 
 bool Pacman::just_eaten_superpower() {

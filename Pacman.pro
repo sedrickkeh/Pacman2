@@ -40,7 +40,9 @@ SOURCES += \
     src/ghost.cpp \
     src/superpower.cpp \
     src/recordmanager.cpp \
-    src/ghostwall.cpp
+    src/ghostwall.cpp \
+    ui/makerwindow.cpp \
+    src/mapmaker.cpp
 
 HEADERS += \
         ui/mainwindow.h \
@@ -56,11 +58,14 @@ HEADERS += \
     src/superpower.h \
     src/movement.h \
     src/recordmanager.h \
-    src/ghostwall.h
+    src/ghostwall.h \
+    ui/makerwindow.h \
+    src/mapmaker.h
 
 FORMS += \
         ui/mainwindow.ui \
-    ui/gamewindow.ui
+    ui/gamewindow.ui \
+    ui/makerwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
