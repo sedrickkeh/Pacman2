@@ -14,6 +14,7 @@ using std::endl;
 
 #include "gamewindow.h"
 #include "square.h"
+#include "gamemode.h"
 
 #include "character.h"
 #include "wall.h"
@@ -27,16 +28,19 @@ using std::endl;
 class PacmanGame : public QObject {
     Q_OBJECT
 public:
-    PacmanGame(int highscore);
+    PacmanGame(Mode mode, int highscore);
     ~PacmanGame();
     void startGraphicUI();
     GameWindow* get_game_window() const;
     Pacman* get_pacman() const;
+    Mode get_mode() const;
+    void remove_ghost(int number);
     int get_score() const;
 
 private:
     GameWindow* game_window;
     QTimer *timer;
+    Mode mode;
     Character* board[31][28];
     Pacman* pacman;
     Ghost* ghost1;

@@ -14,12 +14,13 @@ class Pacman;
 class Ghost : public Character
 {
 public:
-    Ghost(int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Movement pattern = RANDOM);
+    Ghost(int number, int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Mode mode = CLASSIC, Movement pattern = RANDOM);
     ~Ghost() override;
     const static char IMAGE_GHOST = 'G';
     const static char IMAGE_EAT = 'E';
 
     virtual char getImage() const override;
+    int get_number() const;
     void set_pacman(Pacman* pacman);
 
     int get_time_in_box() const;
@@ -39,6 +40,7 @@ public:
     void set_eatmode(bool x);
 
 private:
+    int number;
     int points = 100;
     int time_in_box = 10;
     Dir direction;

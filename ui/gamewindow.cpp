@@ -17,15 +17,10 @@ GameWindow::GameWindow(QWidget *parent, PacmanGame* _pacman_game) :
    QPixmap img3(":/resources/img/highscore.jpg");
    QPixmap img4(":/resources/img/score.jpg");
 
-   ui->obj_1->setPixmap(img1.scaled(32,32,Qt::KeepAspectRatio));
-   ui->obj_2->setPixmap(img1.scaled(32,32,Qt::KeepAspectRatio));
-   ui->obj_3->setPixmap(img1.scaled(32,32,Qt::KeepAspectRatio));
-   ui->obj_4->setPixmap(img1.scaled(32,32,Qt::KeepAspectRatio));
-   ui->obj_5->setPixmap(img1.scaled(32,32,Qt::KeepAspectRatio));
-
    ui->highscore->setPixmap(img3.scaled(200,32));
    ui->score->setPixmap(img4.scaled(60,32));
-   ui->lives->setPixmap(img2.scaled(100,32,Qt::KeepAspectRatio));
+
+   if(pacman_game->get_mode() == CLASSIC) ui->lives->setPixmap(img2.scaled(100,32,Qt::KeepAspectRatio));
 
    set_lcd(GameWindow::SCORE, 0);
    set_lcd(GameWindow::HIGH_SCORE, 0);

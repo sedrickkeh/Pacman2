@@ -60,6 +60,7 @@ HEADERS += \
     src/movement.h \
     src/recordmanager.h \
     src/ghostwall.h \
+    src/gamemode.h \
     ui/makerwindow.h \
     src/mapmaker.h \
     ui/choicedialog.h
