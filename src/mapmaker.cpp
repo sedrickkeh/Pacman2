@@ -38,11 +38,11 @@ void MapMaker::load_map() {
                     init_block(rownum, k, 'W');
                 }
                 else if (line[k] == 'P') {
-                    board[rownum][k] = new Pacman(rownum, k, &board);
+                    board[rownum][k] = new Pacman(nullptr, rownum, k, &board, Mode::CLASSIC);
                     init_block(rownum, k, 'P');
                 }
                 else if (line[k] == 'G') {
-                    board[rownum][k] = new Ghost(rownum, k, &board, 20, nullptr, CHASE);
+                    board[rownum][k] = new Ghost(1, rownum, k, &board, 20, nullptr,  Mode::CLASSIC, Movement::CHASE);
                     init_block(rownum, k, 'C');
                 }
                 else if (line[k] == 'F') {
@@ -75,8 +75,8 @@ void MapMaker::init_block(int row, int col, char c) {
 void MapMaker::process_user_input(int row, int col) {
     char c = makerwindow->get_square_choice();
     delete board[row][col];
-    if (c == 'P') board[row][col] = new Pacman(row, col, &board);
-    else if (c == 'C') board[row][col] = new Ghost(row, col, &board, 0, nullptr, Movement::CHASE);
+    if (c == 'P') board[row][col] = new Pacman(nullptr, row, col, &board, Mode::CLASSIC);
+    else if (c == 'C') board[row][col] = new Ghost(1, row, col, &board, 0, nullptr, Mode::CLASSIC, Movement::CHASE);
     else if (c == 'W') board[row][col] = new Wall(row, col, &board);
     else if (c == 'F') board[row][col] = new Food(row, col, &board);
     else if (c == 'U') board[row][col] = new Superpower(row, col, &board);

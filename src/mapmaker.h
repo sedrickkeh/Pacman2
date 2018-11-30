@@ -17,6 +17,7 @@ using std::endl;
 #include "superpower.h"
 #include "ghostwall.h"
 #include "movement.h"
+#include "gamemode.h"
 
 #include "makerwindow.h"
 #include "square.h"
