@@ -4,7 +4,6 @@
 Ghost::Ghost(int number, int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Mode mode, Movement pattern) :
     Character(row, col, board),
     number(number),
-    time_in_box(timebox),
     direction(NONE),
     prev(previous)
 {
@@ -12,12 +11,14 @@ Ghost::Ghost(int number, int row, int col, Character* (*board)[31][28], int time
         points = 200;
         eatmode = false;
         this->pattern = pattern;
+        this->time_in_box = timebox;
     }
 
-    else {
+    else if (mode == REVERSE) {
         points = 1000;
         eatmode = true;
         this->pattern = RANDOM;
+        this->time_in_box = 5;
     }
 }
 

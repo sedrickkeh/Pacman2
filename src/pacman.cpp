@@ -22,8 +22,8 @@ Pacman::Pacman(PacmanGame* pacmangame, int row, int col, Character* (*board)[31]
     }
 
     else if (mode == REVERSE) {
-        superpower = 1000;
-        lives = 1;
+        superpower = 200;
+        lives = 0;
     }
 }
 
@@ -47,8 +47,12 @@ void Pacman::set_lose() {
     lose = false;
 }
 
-Dir Pacman::get_direction() {
+Dir Pacman::get_direction() const {
 	return direction;
+}
+
+int Pacman::get_superpower() const {
+    return superpower;
 }
 
 void Pacman::update_superpower() {
@@ -155,6 +159,7 @@ void Pacman::eats_ghost(Ghost* g, int row, int col) {
         (*board)[g->getRow()][g->getCol()] = nullptr;
         pacmangame->remove_ghost(g->get_number());
         g = nullptr;
+        addpoints += (superpower * 5);
     }
 
     ((*board)[this->row][this->col]) = nullptr;
@@ -174,15 +179,15 @@ bool Pacman::get_has_encountered_ghost() {
     return false;
 }
 
-bool Pacman::get_has_eaten_ghost() {
+bool Pacman::get_has_eaten_ghost() const {
     return has_eaten_ghost;
 }
 
-int Pacman::get_points_to_add() {
+int Pacman::get_points_to_add() const {
     return addpoints;
 }
 
-int Pacman::get_lives() {
+int Pacman::get_lives() const {
     return lives;
 }
 

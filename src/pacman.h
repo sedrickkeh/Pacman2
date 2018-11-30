@@ -21,8 +21,9 @@ public:
     bool just_lost_superpower() const;
     void set_gain();
     void set_lose();
-    Dir get_direction();
+    Dir get_direction() const;
 
+    int get_superpower() const;
     void update_superpower();
     void update_direction(Dir dir);
 
@@ -33,9 +34,9 @@ public:
     void not_eat_ghost();
 
     bool get_has_encountered_ghost();
-    bool get_has_eaten_ghost();
-    int get_points_to_add();
-    int get_lives();
+    bool get_has_eaten_ghost() const;
+    int get_points_to_add() const;
+    int get_lives() const;
 
     void move(int row, int col);
 
