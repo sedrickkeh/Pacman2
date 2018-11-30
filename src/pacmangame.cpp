@@ -7,8 +7,8 @@
 #include <iostream>
 using namespace std;
 
-PacmanGame::PacmanGame(int highscore) :
-    mode(REVERSE),
+PacmanGame::PacmanGame(Mode mode, int highscore) :
+    mode(mode),
     pacman(nullptr),
     ghost1(nullptr),
     ghost2(nullptr),

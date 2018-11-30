@@ -28,7 +28,7 @@ using std::endl;
 class PacmanGame : public QObject {
     Q_OBJECT
 public:
-    PacmanGame(int highscore);
+    PacmanGame(Mode mode, int highscore);
     ~PacmanGame();
     void startGraphicUI();
     GameWindow* get_game_window() const;

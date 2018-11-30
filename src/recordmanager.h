@@ -7,18 +7,25 @@ class RecordManager
 {
  public:
     RecordManager();
-    int get_score_at(int rank);
-    int get_lowest_score();
-    int get_highest_score();
+    int get_classic_score_at(int rank);
+    int get_classic_lowest_score();
+    int get_classic_highest_score();
+    int get_reverse_score_at(int rank);
+    int get_reverse_lowest_score();
+    int get_reverse_highest_score();
     int get_num_of_scores();
-    void update_record(QString name, int score);
+    void update_classic_record(QString name, int score);
+    void update_reverse_record(QString name, int score);
 
  private:
     static const int NUM_OF_SCORES = 5;
     static const QString record_dir;
-    static const QString record_path;
-    int scores[NUM_OF_SCORES + 1];
-    QString names[NUM_OF_SCORES + 1];
+    static const QString record_path_classic;
+    static const QString record_path_reverse;
+    int classic_scores[NUM_OF_SCORES + 1];
+    QString classic_names[NUM_OF_SCORES + 1];
+    int reverse_scores[NUM_OF_SCORES + 1];
+    QString reverse_names[NUM_OF_SCORES + 1];
 };
 
 #endif // RECORDMANAGER_H
