@@ -1,7 +1,14 @@
 #include "mapmaker.h"
 #include "QMessageBox"
+#include "QString"
+#include "QStandardPaths"
 #include <iostream>
 using namespace std;
+
+const QString MapMaker::map_dir =
+    QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman";
+const QString MapMaker::map_path =
+    QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman/mapmaker.txt";
 
 MapMaker::MapMaker() {
     makerwindow = new Makerwindow(nullptr, this);
@@ -17,39 +24,44 @@ void MapMaker::startGraphicUI() {
 }
 
 void MapMaker::load_map() {
-    QFile file(":/resources/maps/pacman_map.txt");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
-    int rownum = 30;
-    while (!file.atEnd()) {
-        QString line = file.readLine();
-        for (int k = 0; k < line.size()-1; k ++) {
-            if (line[k] == 'W' || line[k] == 'V') {
-                board[rownum][k] = new Wall(rownum, k, &board);
-                init_block(rownum, k, 'W');
+
+    QFile file(map_path);
+    if (!file.open(QFile::ReadOnly | QFile::Text))
+        QMessageBox::information(nullptr, "ERROR", "Unable to read record file.");
+    else {
+        int rownum = 30;
+        while (!file.atEnd()) {
+            QString line = file.readLine();
+            for (int k = 0; k < line.size()-1; k ++) {
+                if (line[k] == 'W' || line[k] == 'V') {
+                    board[rownum][k] = new Wall(rownum, k, &board);
+                    init_block(rownum, k, 'W');
+                }
+                else if (line[k] == 'P') {
+                    board[rownum][k] = new Pacman(rownum, k, &board);
+                    init_block(rownum, k, 'P');
+                }
+                else if (line[k] == 'G') {
+                    board[rownum][k] = new Ghost(rownum, k, &board, 20, nullptr, CHASE);
+                    init_block(rownum, k, 'C');
+                }
+                else if (line[k] == 'F') {
+                    board[rownum][k] = new Food(rownum, k, &board);
+                    init_block(rownum, k, 'F');
+                }
+                else if (line[k] == 'U') {
+                    board[rownum][k] = new Superpower(rownum, k, &board);
+                    init_block(rownum, k, 'U');
+                }
+                else {
+                    board[rownum][k] = nullptr;
+                    init_block(rownum, k, 'S');
+                }
             }
-            else if (line[k] == 'P') {
-                board[rownum][k] = new Pacman(rownum, k, &board);
-                init_block(rownum, k, 'P');
-            }
-            else if (line[k] == 'G') {
-                board[rownum][k] = new Ghost(rownum, k, &board, 20, nullptr, CHASE);
-                init_block(rownum, k, 'C');
-            }
-            else if (line[k] == 'F') {
-                board[rownum][k] = new Food(rownum, k, &board);
-                init_block(rownum, k, 'F');
-            }
-            else if (line[k] == 'U') {
-                board[rownum][k] = new Superpower(rownum, k, &board);
-                init_block(rownum, k, 'U');
-            }
-            else {
-                board[rownum][k] = nullptr;
-                init_block(rownum, k, 'S');
-            }
+            --rownum;
         }
-        --rownum;
     }
+    file.close();
 }
 
 Makerwindow* MapMaker::get_maker_window() const {

@@ -21,6 +21,7 @@ using std::endl;
 #include "makerwindow.h"
 #include "square.h"
 #include <string>
+#include "QString"
 
 class MapMaker : public QObject {
     Q_OBJECT
@@ -36,6 +37,9 @@ private:
     Character* board[31][28];
     void init_block(int row, int col, char c);
     void load_map();
+
+    static const QString map_dir;
+    static const QString map_path;
 };
 
 #endif // MAPMAKER_H

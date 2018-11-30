@@ -4,6 +4,18 @@
 #include "mapmaker.h"
 #include "choicedialog.h"
 #include "QMessageBox"
+#include "QStandardPaths"
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
+
+
+const QString Makerwindow::map_dir =
+    QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman";
+const QString Makerwindow::map_path =
+    QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman/mapmaker.txt";
+
 
 Makerwindow::Makerwindow(QWidget *parent, MapMaker* _mapmaker) :
     QWidget(parent),
@@ -12,6 +24,49 @@ Makerwindow::Makerwindow(QWidget *parent, MapMaker* _mapmaker) :
 {
     ui->setupUi(this);
     this->make_grid();
+    connect(this->ui->save, &QPushButton::clicked, this, &Makerwindow::save_button_clicked_handler);
+
+    if (!QDir(map_dir).exists()) QDir().mkdir(map_dir);
+    if (!QFile(map_path).exists()) {
+        QFile file(map_path);
+        if (!file.open(QFile::WriteOnly | QFile::Text))
+            QMessageBox::information(nullptr, "ERROR", "Unable to write newly made record file.");
+        else {
+            QTextStream out_stream(&file);
+            out_stream << "WWWWWWWWWWWWWWWWWWWWWWWWWWWW" << "\n";
+            out_stream << "WFFFFFFFFFFFFWWFFFFFFFFFFFFW" << "\n";
+            out_stream << "WFWWWWFWWWWWFWWFWWWWWFWWWWFW" << "\n";
+            out_stream << "WUWWWWFWWWWWFWWFWWWWWFWWWWUW" << "\n";
+            out_stream << "WFWWWWFWWWWWFWWFWWWWWFWWWWFW" << "\n";
+            out_stream << "WFFFFFFFFFFFFWWFFFFFFFFFFFFW" << "\n";
+            out_stream << "WFWWWWFWWFWWWWWWWWFWWFWWWWFW" << "\n";
+            out_stream << "WFWWWWFWWFWWWWWWWWFWWFWWWWFW" << "\n";
+            out_stream << "WFFFFFFWWFFFFWWFFFFWWFFFFFFW" << "\n";
+            out_stream << "WWWWWWFWWWWWSWWSWWWWWFWWWWWW" << "\n";
+            out_stream << "SSSSSWFWWWWWSWWSWWWWWFWSSSSS" << "\n";
+            out_stream << "SSSSSWFWWSSSSSSSSSSWWFWSSSSS" << "\n";
+            out_stream << "SSSSSWFWWSWWWSSWWWSWWFWSSSSS" << "\n";
+            out_stream << "WWWWWWFWWSWSGSSGSWSWWFWWWWWW" << "\n";
+            out_stream << "SSSSSSFSSSWSSSSSSWSSSFSSSSSS" << "\n";
+            out_stream << "WWWWWWFWWSWSGSSGSWSWWFWWWWWW" << "\n";
+            out_stream << "SSSSSWFWWSWWWWWWWWSWWFWSSSSS" << "\n";
+            out_stream << "SSSSSWFWWSSSSFFSSSSWWFWSSSSS" << "\n";
+            out_stream << "SSSSSWFWWSWWWWWWWWSWWFWSSSSS" << "\n";
+            out_stream << "WWWWWWFWWSWWWWWWWWSWWFWWWWWW" << "\n";
+            out_stream << "WFFFFFFFFFFFFWWFFFFFFFFFFFFW" << "\n";
+            out_stream << "WFWWWWFWWWWWFWWFWWWWWFWWWWFW" << "\n";
+            out_stream << "WFWWWWFWWWWWFWWFWWWWWFWWWWFW" << "\n";
+            out_stream << "WUFFWWFFFFFFFPFFFFFFFFWWFFUW" << "\n";
+            out_stream << "WWWFWWFWWFWWWWWWWWFWWFWWFWWW" << "\n";
+            out_stream << "WWWFWWFWWFWWWWWWWWFWWFWWFWWW" << "\n";
+            out_stream << "WFFFFFFWWFFFFWWFFFFWWFFFFFFW" << "\n";
+            out_stream << "WFWWWWWWWWWWFWWFWWWWWWWWWWFW" << "\n";
+            out_stream << "WFWWWWWWWWWWFWWFWWWWWWWWWWFW" << "\n";
+            out_stream << "WFFFFFFFFFFFFFFFFFFFFFFFFFFW" << "\n";
+            out_stream << "WWWWWWWWWWWWWWWWWWWWWWWWWWWW" << "\n";
+        }
+        file.close();
+    }
 }
 
 Makerwindow::~Makerwindow()
@@ -112,6 +167,21 @@ void Makerwindow::save_button_clicked_handler() {
         QMessageBox::information(nullptr, "Error!", "You need exactly four ghosts.");
         return;
     }
+
+
+    QFile file(map_path);
+    if (!file.open(QFile::WriteOnly | QFile::Text))
+        QMessageBox::information(nullptr, "ERROR", "Unable to write record file.");
+    else {
+        QTextStream out_stream(&file);
+        for (int k = 30; k >= 0; k --) {
+            for (int l = 0; l < 28; l ++) out_stream << mapchars[k][l];
+            out_stream << "\n";
+        }
+    }
+    file.close();
+
+    this->close();
 }
 
 void Makerwindow::closeEvent(QCloseEvent *event) {

@@ -5,6 +5,7 @@
 #include <QCloseEvent>
 #include <QKeyEvent>
 #include <QPixmap>
+#include <QString>
 
 class Square;
 class MapMaker;
@@ -33,6 +34,9 @@ private:
 
     void closeEvent(QCloseEvent *event);
     void make_grid();
+
+    static const QString map_dir;
+    static const QString map_path;
 
 private slots:
     void save_button_clicked_handler();
