@@ -35,6 +35,7 @@ private:
     Makerwindow* makerwindow;
     Character* board[31][28];
     void init_block(int row, int col, char c);
+    void load_map();
 };
 
 #endif // MAPMAKER_H
