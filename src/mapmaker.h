@@ -16,6 +16,7 @@ using std::endl;
 #include "direction.h"
 #include "superpower.h"
 #include "ghostwall.h"
+#include "movement.h"
 
 #include "makerwindow.h"
 #include "square.h"
@@ -28,6 +29,7 @@ public:
     void startGraphicUI();
     Makerwindow* get_maker_window() const;
     void process_user_input(int row, int col);
+    Character* getchar(int row, int col);
 
 private:
     Makerwindow* makerwindow;

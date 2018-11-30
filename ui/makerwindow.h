@@ -24,6 +24,7 @@ public:
     MapMaker* get_mapmaker() const;
     Square* get_square(int row, int col) const;
     void set_square(int row, int col, char i);
+    char get_square_choice();
 
 private:
     Ui::Makerwindow *ui;
@@ -32,6 +33,9 @@ private:
 
     void closeEvent(QCloseEvent *event);
     void make_grid();
+
+private slots:
+    void save_button_clicked_handler();
 
 signals:
     void closed();
