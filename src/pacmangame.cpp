@@ -148,6 +148,7 @@ void PacmanGame::move_pacman(int r, int c) {
     else if (dir == Dir::UP) pacman->move(row+1, col);
     else if (dir == Dir::LEFT) pacman->move(row, col-1);
     else if (dir == Dir::RIGHT) pacman->move(row, col+1);
+    else if (dir == Dir::NONE) pacman->move(row, col);
 
     pacman->update_superpower();
 
