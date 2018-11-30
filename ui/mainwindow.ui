@@ -138,7 +138,7 @@ border: none</string>
 border: none</string>
     </property>
     <property name="text">
-     <string>HIGH SCORE</string>
+     <string>MAP MAKER</string>
     </property>
     <property name="autoDefault">
      <bool>false</bool>
@@ -154,7 +154,7 @@ border: none</string>
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
