@@ -26,7 +26,7 @@ MainWindow::~MainWindow()
 void MainWindow::start_button_clicked_handler()
 {
     //have an if statement for highest score
-    this->pacman_game = new PacmanGame(REVERSE, rm->get_classic_highest_score());
+    this->pacman_game = new PacmanGame(CLASSIC, rm->get_classic_highest_score());
     this->pacman_game->startGraphicUI();
     connect(this->pacman_game->get_game_window(), &GameWindow::closed, this, &MainWindow::game_window_closed_handler);
     this->hide();
