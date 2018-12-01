@@ -269,7 +269,7 @@ void PacmanGame::complete_level() {
         current_score += pacman->get_lives() * 1000;
         QMessageBox::information(nullptr, "Congratulations!", "Level complete");
         game_window->close();
-        timer->stop();
+        if (timer != nullptr) timer->stop();
     }
 }
 

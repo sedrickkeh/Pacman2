@@ -53,7 +53,7 @@ RecordManager::RecordManager()
     else {
         for (int i=0; i<NUM_OF_SCORES && !file1.atEnd(); ++i) {
             QString line1 = file1.readLine();
-            if(i != NUM_OF_SCORES - 1) line1.chop(1);
+            line1.chop(1);
             classic_names[i] = line1;
 
             QString line2 = file1.readLine();
@@ -62,13 +62,13 @@ RecordManager::RecordManager()
     }
     file1.close();
 
-    QFile file2(record_path_classic);
+    QFile file2(record_path_reverse);
     if (!file2.open(QFile::ReadOnly | QFile::Text))
         QMessageBox::information(nullptr, "ERROR", "Unable to read record file.");
     else {
         for (int i=0; i<NUM_OF_SCORES && !file2.atEnd(); ++i) {
             QString line1 = file2.readLine();
-            if(i != NUM_OF_SCORES - 1) line1.chop(1);
+            line1.chop(1);
             reverse_names[i] = line1;
 
             QString line2 = file2.readLine();
@@ -119,7 +119,7 @@ void RecordManager::update_classic_record(QString name, int score)
     while(new_rank > 0 && score > classic_scores[new_rank-1]) --new_rank;
     if (new_rank == NUM_OF_SCORES) return;
 
-    for(int i = NUM_OF_SCORES-1; i < new_rank; --i){
+    for(int i = NUM_OF_SCORES-1; i > new_rank; --i){
         classic_names[i] = classic_names[i-1];
         classic_scores[i] = classic_scores[i-1];
     }
@@ -146,7 +146,7 @@ void RecordManager::update_reverse_record(QString name, int score)
     while(new_rank > 0 && score > reverse_scores[new_rank-1]) --new_rank;
     if (new_rank == NUM_OF_SCORES) return;
 
-    for(int i = NUM_OF_SCORES-1; i < new_rank; --i){
+    for(int i = NUM_OF_SCORES-1; i > new_rank; --i){
         reverse_names[i] = reverse_names[i-1];
         reverse_scores[i] = reverse_scores[i-1];
     }
