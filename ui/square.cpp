@@ -66,5 +66,6 @@ char Square::get_piece() const {
 }
 
 void Square::clicked_handler() {
+    if (this->row == 0 || this->row == 30 || this->col == 0 || this->col == 27) return;
     emit clicked_with_pos(this->row, this->col);
 }
