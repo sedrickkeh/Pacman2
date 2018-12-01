@@ -64,14 +64,16 @@ void MainWindow::highscore_button_clicked_handler() {
 void MainWindow::game_window_closed_handler() {
     //have an if statement for lowest score
     if(pacman_game->get_mode()==Mode::CLASSIC){
-        if(pacman_game->get_score() > rm->get_classic_lowest_score()){
+        if (pacman_game->is_mapmaker_mode());
+        else if(pacman_game->get_score() > rm->get_classic_lowest_score()){
             QString name = QInputDialog::getText(this, "New Highscore", "Enter Name");
             //have an if statement for update record
             rm->update_classic_record(name, pacman_game->get_score());
         }
     }
     else {
-        if(pacman_game->get_score() > rm->get_reverse_lowest_score()){
+        if (pacman_game->is_mapmaker_mode());
+        else if(pacman_game->get_score() > rm->get_reverse_lowest_score()){
             QString name = QInputDialog::getText(this, "New Highscore", "Enter Name");
             //have an if statement for update record
             rm->update_reverse_record(name, pacman_game->get_score());

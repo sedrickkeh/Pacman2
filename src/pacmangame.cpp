@@ -55,6 +55,10 @@ Mode PacmanGame::get_mode() const{
     return mode;
 }
 
+bool PacmanGame::is_mapmaker_mode() const {
+    return mapmaker_mode;
+}
+
 void PacmanGame::remove_ghost(int number) {
     if(number == 1) {
         delete ghost1;
@@ -89,6 +93,7 @@ void PacmanGame::load_map(int highscore) {
     if (mapmaker_mode) {
         if (!QDir(map_dir).exists()) QDir().mkdir(map_dir);
         if (!QFile(map_path).exists()) {
+            mapmaker_mode = false;
             QMessageBox::information(nullptr, "Error", "Map not found. Loading classic map.");
             QFile file(":/resources/maps/pacman_map.txt");
             if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
@@ -145,6 +150,7 @@ void PacmanGame::load_map(int highscore) {
         else {
             QFile file(map_path);
             if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+            QMessageBox::information(nullptr, "Welcome!", "Feel free to play your custom map. Your scores will NOT be saved while playing this mode.");
             int rownum = 30;
             while (!file.atEnd()) {
                 QString line = file.readLine();

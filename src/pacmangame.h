@@ -42,6 +42,7 @@ public:
     GameWindow* get_game_window() const;
     Pacman* get_pacman() const;
     Mode get_mode() const;
+    bool is_mapmaker_mode() const;
     void remove_ghost(int number);
     int get_score() const;
 
