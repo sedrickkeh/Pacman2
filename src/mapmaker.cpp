@@ -74,6 +74,7 @@ void MapMaker::init_block(int row, int col, char c) {
 
 void MapMaker::process_user_input(int row, int col) {
     char c = makerwindow->get_square_choice();
+    if (c == 'N') return;
     delete board[row][col];
     if (c == 'P') board[row][col] = new Pacman(nullptr, row, col, &board, Mode::CLASSIC);
     else if (c == 'C') board[row][col] = new Ghost(1, row, col, &board, 0, nullptr, Mode::CLASSIC, Movement::CHASE);

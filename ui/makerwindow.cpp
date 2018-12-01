@@ -45,15 +45,15 @@ Makerwindow::Makerwindow(QWidget *parent, MapMaker* _mapmaker) :
             out_stream << "WFWWWWFWWFWWWWWWWWFWWFWWWWFW" << "\n";
             out_stream << "WFFFFFFWWFFFFWWFFFFWWFFFFFFW" << "\n";
             out_stream << "WWWWWWFWWWWWSWWSWWWWWFWWWWWW" << "\n";
-            out_stream << "WSSSSWFWWWWWSWWSWWWWWFWSSSSW" << "\n";
-            out_stream << "WSSSSWFWWSSSSSSSSSSWWFWSSSSW" << "\n";
-            out_stream << "WSSSSWFWWSWWWSSWWWSWWFWSSSSW" << "\n";
-            out_stream << "WWWWWWFWWSWSGSSGSWSWWFWWWWWW" << "\n";
-            out_stream << "WSSSSSFSSSWSSSSSSWSSSFSSSSSW" << "\n";
-            out_stream << "WWWWWWFWWSWSGSSGSWSWWFWWWWWW" << "\n";
-            out_stream << "WSSSSWFWWSWWWWWWWWSWWFWSSSSW" << "\n";
-            out_stream << "WSSSSWFWWSSSSFFSSSSWWFWSSSSW" << "\n";
-            out_stream << "WSSSSWFWWSWWWWWWWWSWWFWSSSSW" << "\n";
+            out_stream << "WUUUUWFWWWWWSWWSWWWWWFWUUUUW" << "\n";
+            out_stream << "WUFUFWFWWSSSSSSSSSSWWFWFUFUW" << "\n";
+            out_stream << "WFUFUFFWWSWWWSSWWWSWWFFUFUFW" << "\n";
+            out_stream << "WUUUUUFWWSWSGSSGSWSWWFUUUUUW" << "\n";
+            out_stream << "WFFFFFFSSSWSSSSSSWSSSFFFFFFW" << "\n";
+            out_stream << "WUUUUUFWWSWSGSSGSWSWWFUUUUUW" << "\n";
+            out_stream << "WFUFUFFWWSWWWWWWWWSWWFFUFUFW" << "\n";
+            out_stream << "WUFUFWFWWSSSSFFSSSSWWFWFUFUW" << "\n";
+            out_stream << "WUUUUWFWWSWWWWWWWWSWWFWUUUUW" << "\n";
             out_stream << "WWWWWWFWWSWWWWWWWWSWWFWWWWWW" << "\n";
             out_stream << "WFFFFFFFFFFFFWWFFFFFFFFFFFFW" << "\n";
             out_stream << "WFWWWWFWWWWWFWWFWWWWWFWWWWFW" << "\n";
@@ -101,11 +101,13 @@ char Makerwindow::get_square_choice() {
                 mapmaker->getchar(k, l) ->getImage() == 'R') numghost++;
         }
     if (numpac == 0 && numghost < 4) {
-        while((result = d.get_choice()) == ' ');
+        result = d.get_choice();
+        if (result == ' ') result = 'N';
         return result;
     }
     else if (numpac >= 1 && numghost <= 3) {
-        while((result = d.get_choice()) == ' ');
+        result = d.get_choice();
+        if (result == ' ') result = 'N';
         if (result != 'P') return result;
         else {
             QMessageBox::information(nullptr, "Error!", "You can only have one pacman. Plese select another");
@@ -113,7 +115,8 @@ char Makerwindow::get_square_choice() {
         }
     }
     else if (numghost >= 4 && numpac == 0) {
-        while((result = d.get_choice()) == ' ');
+        result = d.get_choice();
+        if (result == ' ') result = 'N';
         if (result != 'C') return result;
         else {
             QMessageBox::information(nullptr, "Error!", "You can only have four ghosts. Plese select another");
@@ -121,7 +124,8 @@ char Makerwindow::get_square_choice() {
         }
     }
     else {
-        while((result = d.get_choice()) == ' ');
+        result = d.get_choice();
+        if (result == ' ') result = 'N';
         if (result != 'P' && result != 'C') return result;
         else if (result == 'P') {
             QMessageBox::information(nullptr, "Error!", "You can only have one pacman. Plese select another");
