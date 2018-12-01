@@ -166,3 +166,18 @@ void RecordManager::update_reverse_record(QString name, int score)
     }
     file.close();
 }
+
+int* RecordManager::get_classic_scores(){
+    return classic_scores;
+};
+int* RecordManager::get_reverse_scores(){
+    return reverse_scores;
+};
+
+QString* RecordManager::get_classic_names(){
+    return classic_names;
+};
+
+QString* RecordManager::get_reverse_names(){
+    return reverse_names;
+};

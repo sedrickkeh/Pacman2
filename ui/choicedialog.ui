@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
   <widget class="QPushButton" name="pacman">
    <property name="geometry">
     <rect>
@@ -21,6 +24,9 @@
      <width>121</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(170, 170, 255);</string>
    </property>
    <property name="text">
     <string>pacman</string>
@@ -35,6 +41,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(170, 170, 255);</string>
+   </property>
    <property name="text">
     <string>food</string>
    </property>
@@ -47,6 +56,9 @@
      <width>111</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(170, 170, 255);</string>
    </property>
    <property name="text">
     <string>superpower</string>
@@ -61,6 +73,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(170, 170, 255);</string>
+   </property>
    <property name="text">
     <string>wall</string>
    </property>
@@ -74,6 +89,9 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(170, 170, 255);</string>
+   </property>
    <property name="text">
     <string>ghost</string>
    </property>
@@ -86,6 +104,9 @@
      <width>121</width>
      <height>51</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(170, 170, 255);</string>
    </property>
    <property name="text">
     <string>empty</string>
