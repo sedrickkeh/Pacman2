@@ -23,6 +23,8 @@ Makerwindow::Makerwindow(QWidget *parent, MapMaker* _mapmaker) :
     mapmaker(_mapmaker)
 {
     ui->setupUi(this);
+    QPixmap img(":/resources/img/mapmaker_logo.png");
+    ui->mapmaker_logo->setPixmap(img.scaled(300,42));
     this->make_grid();
     connect(this->ui->save, &QPushButton::clicked, this, &Makerwindow::save_button_clicked_handler);
 

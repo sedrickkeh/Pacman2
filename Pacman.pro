@@ -43,7 +43,8 @@ SOURCES += \
     src/ghostwall.cpp \
     ui/makerwindow.cpp \
     src/mapmaker.cpp \
-    ui/choicedialog.cpp
+    ui/choicedialog.cpp \
+    ui/highscorewindow.cpp
 
 HEADERS += \
         ui/mainwindow.h \
@@ -63,13 +64,16 @@ HEADERS += \
     src/gamemode.h \
     ui/makerwindow.h \
     src/mapmaker.h \
-    ui/choicedialog.h
+    ui/choicedialog.h \
+    ui/highscorewindow.h \
+    ui/highscorewindow.h
 
 FORMS += \
         ui/mainwindow.ui \
     ui/gamewindow.ui \
     ui/makerwindow.ui \
-    ui/choicedialog.ui
+    ui/choicedialog.ui \
+    ui/highscorewindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -78,3 +82,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resources.qrc
+
+

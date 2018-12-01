@@ -266,7 +266,7 @@ void PacmanGame::update_lives() {
 void PacmanGame::complete_level() {
     if (is_level_finished() == false) return;
     else {
-        current_score += pacman->get_lives() * 2000;
+        current_score += pacman->get_lives() * 1000;
         QMessageBox::information(nullptr, "Congratulations!", "Level complete");
         game_window->close();
         timer->stop();

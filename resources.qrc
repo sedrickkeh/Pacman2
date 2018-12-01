@@ -7,5 +7,12 @@
         <file>img/pac_man_hed.jpg</file>
         <file>img/score.jpg</file>
         <file>img/titlepage.jpg</file>
+        <file>img/mapmaker_logo.png</file>
+        <file>img/classical.png</file>
+        <file>img/reverse.png</file>
+        <file>img/highscores.png</file>
+        <file>img/highscore_header.JPG</file>
+        <file>img/Ranking.JPG</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

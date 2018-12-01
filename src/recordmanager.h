@@ -16,6 +16,10 @@ class RecordManager
     int get_num_of_scores();
     void update_classic_record(QString name, int score);
     void update_reverse_record(QString name, int score);
+    int* get_classic_scores();
+    int* get_reverse_scores();
+    QString* get_classic_names();
+    QString* get_reverse_names();
 
  private:
     static const int NUM_OF_SCORES = 5;
