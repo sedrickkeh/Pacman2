@@ -7,6 +7,11 @@
 #include <iostream>
 using namespace std;
 
+const QString PacmanGame::map_dir =
+    QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman";
+const QString PacmanGame::map_path =
+    QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman/mapmaker.txt";
+
 PacmanGame::PacmanGame(Mode mode, int highscore) :
     mode(mode),
     pacman(nullptr),
@@ -15,13 +20,15 @@ PacmanGame::PacmanGame(Mode mode, int highscore) :
     ghost3(nullptr),
     ghost4(nullptr),
     current_score(0),
-    level(1)
+    level(1),
+    mapmaker_mode(false)
 {
     game_window = new GameWindow(nullptr, this);
     for (int k = 0; k < 31; ++k)
         for (int l = 0; l < 28; ++l)
             board[k][l] = nullptr;
 
+    set_mode();
     load_map(highscore);
     update_map();
 
@@ -71,58 +78,177 @@ int PacmanGame::get_score() const{
     return current_score;
 }
 
-void PacmanGame::load_map(int highscore) {
-    QFile file(":/resources/maps/pacman_map.txt");
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
-    int rownum = 30;
-    while (!file.atEnd()) {
-        QString line = file.readLine();
-        for (int k = 0; k < line.size()-1; ++k) {
-            if (line[k] == 'W') board[rownum][k] = new Wall(rownum, k, &board);
-            else if (line[k] == 'V') board[rownum][k] = new Ghostwall(rownum, k, &board);
-            else if (line[k] == 'P') {
-                pacman = new Pacman(this, rownum, k, &board, mode);
-                board[rownum][k] = pacman;
-            }
-            else if (line[k] == 'G') {
-                if (ghost1 == nullptr) {
-                    ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, CHASE);
-                    board[rownum][k] = ghost1;
-                }
-                else if (ghost2 == nullptr) {
-                    ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, AMBUSH);
-                    board[rownum][k] = ghost2;
-                }
-                else if (ghost3 == nullptr) {
-                    ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, RANDOM);
-                    board[rownum][k] = ghost3;
-                }
-                else if (ghost4 == nullptr) {
-                    ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, RANDOM);
-                    board[rownum][k] = ghost4;
-                }
-            }
-            else if (line[k] == 'F') {
-                if (mode == CLASSIC)
-                    board[rownum][k] = new Food(rownum, k, &board);
-                else if (mode == REVERSE)
-                    board[rownum][k] = nullptr;
-            }
-            else if (line[k] == 'U') {
-                if (mode == CLASSIC)
-                    board[rownum][k] = new Superpower(rownum, k, &board);
-                else if (mode == REVERSE)
-                    board[rownum][k] = nullptr;
-            }
-        }
-        --rownum;
-    }
-    ghost1->set_pacman(pacman);
-    ghost2->set_pacman(pacman);
-    ghost3->set_pacman(pacman);
-    ghost4->set_pacman(pacman);
+void PacmanGame::set_mode() {
+    ModeDialog d(nullptr);
+    char result = d.get_choice();
+    if (result == 'M') mapmaker_mode = true;
+    else mapmaker_mode = false;
+}
 
-    game_window->set_lcd(0, highscore);
+void PacmanGame::load_map(int highscore) {
+    if (mapmaker_mode) {
+        if (!QDir(map_dir).exists()) QDir().mkdir(map_dir);
+        if (!QFile(map_path).exists()) {
+            QMessageBox::information(nullptr, "Error", "Map not found. Loading classic map.");
+            QFile file(":/resources/maps/pacman_map.txt");
+            if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+            int rownum = 30;
+            while (!file.atEnd()) {
+                QString line = file.readLine();
+                for (int k = 0; k < line.size()-1; ++k) {
+                    if (line[k] == 'W') board[rownum][k] = new Wall(rownum, k, &board);
+                    else if (line[k] == 'V') board[rownum][k] = new Ghostwall(rownum, k, &board);
+                    else if (line[k] == 'P') {
+                        pacman = new Pacman(this, rownum, k, &board, mode);
+                        board[rownum][k] = pacman;
+                    }
+                    else if (line[k] == 'G') {
+                        if (ghost1 == nullptr) {
+                            ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, CHASE);
+                            board[rownum][k] = ghost1;
+                        }
+                        else if (ghost2 == nullptr) {
+                            ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, AMBUSH);
+                            board[rownum][k] = ghost2;
+                        }
+                        else if (ghost3 == nullptr) {
+                            ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, RANDOM);
+                            board[rownum][k] = ghost3;
+                        }
+                        else if (ghost4 == nullptr) {
+                            ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, RANDOM);
+                            board[rownum][k] = ghost4;
+                        }
+                    }
+                    else if (line[k] == 'F') {
+                        if (mode == CLASSIC)
+                            board[rownum][k] = new Food(rownum, k, &board);
+                        else if (mode == REVERSE)
+                            board[rownum][k] = nullptr;
+                    }
+                    else if (line[k] == 'U') {
+                        if (mode == CLASSIC)
+                            board[rownum][k] = new Superpower(rownum, k, &board);
+                        else if (mode == REVERSE)
+                            board[rownum][k] = nullptr;
+                    }
+                }
+                --rownum;
+            }
+            ghost1->set_pacman(pacman);
+            ghost2->set_pacman(pacman);
+            ghost3->set_pacman(pacman);
+            ghost4->set_pacman(pacman);
+
+            game_window->set_lcd(0, highscore);
+        }
+        else {
+            QFile file(map_path);
+            if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+            int rownum = 30;
+            while (!file.atEnd()) {
+                QString line = file.readLine();
+                for (int k = 0; k < line.size()-1; ++k) {
+                    if (line[k] == 'W') board[rownum][k] = new Wall(rownum, k, &board);
+                    else if (line[k] == 'V') board[rownum][k] = new Ghostwall(rownum, k, &board);
+                    else if (line[k] == 'P') {
+                        pacman = new Pacman(this, rownum, k, &board, mode);
+                        board[rownum][k] = pacman;
+                    }
+                    else if (line[k] == 'G') {
+                        if (ghost1 == nullptr) {
+                            ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, CHASE);
+                            board[rownum][k] = ghost1;
+                        }
+                        else if (ghost2 == nullptr) {
+                            ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, AMBUSH);
+                            board[rownum][k] = ghost2;
+                        }
+                        else if (ghost3 == nullptr) {
+                            ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, RANDOM);
+                            board[rownum][k] = ghost3;
+                        }
+                        else if (ghost4 == nullptr) {
+                            ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, RANDOM);
+                            board[rownum][k] = ghost4;
+                        }
+                    }
+                    else if (line[k] == 'F') {
+                        if (mode == CLASSIC)
+                            board[rownum][k] = new Food(rownum, k, &board);
+                        else if (mode == REVERSE)
+                            board[rownum][k] = nullptr;
+                    }
+                    else if (line[k] == 'U') {
+                        if (mode == CLASSIC)
+                            board[rownum][k] = new Superpower(rownum, k, &board);
+                        else if (mode == REVERSE)
+                            board[rownum][k] = nullptr;
+                    }
+                }
+                --rownum;
+            }
+            ghost1->set_pacman(pacman);
+            ghost2->set_pacman(pacman);
+            ghost3->set_pacman(pacman);
+            ghost4->set_pacman(pacman);
+
+            game_window->set_lcd(0, highscore);
+        }
+    }
+    else {
+        QFile file(":/resources/maps/pacman_map.txt");
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
+        int rownum = 30;
+        while (!file.atEnd()) {
+            QString line = file.readLine();
+            for (int k = 0; k < line.size()-1; ++k) {
+                if (line[k] == 'W') board[rownum][k] = new Wall(rownum, k, &board);
+                else if (line[k] == 'V') board[rownum][k] = new Ghostwall(rownum, k, &board);
+                else if (line[k] == 'P') {
+                    pacman = new Pacman(this, rownum, k, &board, mode);
+                    board[rownum][k] = pacman;
+                }
+                else if (line[k] == 'G') {
+                    if (ghost1 == nullptr) {
+                        ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, CHASE);
+                        board[rownum][k] = ghost1;
+                    }
+                    else if (ghost2 == nullptr) {
+                        ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, AMBUSH);
+                        board[rownum][k] = ghost2;
+                    }
+                    else if (ghost3 == nullptr) {
+                        ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, RANDOM);
+                        board[rownum][k] = ghost3;
+                    }
+                    else if (ghost4 == nullptr) {
+                        ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, RANDOM);
+                        board[rownum][k] = ghost4;
+                    }
+                }
+                else if (line[k] == 'F') {
+                    if (mode == CLASSIC)
+                        board[rownum][k] = new Food(rownum, k, &board);
+                    else if (mode == REVERSE)
+                        board[rownum][k] = nullptr;
+                }
+                else if (line[k] == 'U') {
+                    if (mode == CLASSIC)
+                        board[rownum][k] = new Superpower(rownum, k, &board);
+                    else if (mode == REVERSE)
+                        board[rownum][k] = nullptr;
+                }
+            }
+            --rownum;
+        }
+        ghost1->set_pacman(pacman);
+        ghost2->set_pacman(pacman);
+        ghost3->set_pacman(pacman);
+        ghost4->set_pacman(pacman);
+
+        game_window->set_lcd(0, highscore);
+    }
 }
 
 void PacmanGame::update_map() {

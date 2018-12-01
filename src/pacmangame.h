@@ -11,6 +11,12 @@ using std::endl;
 #include <string>
 #include <QObject>
 #include <QTimer>
+#include <QStandardPaths>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QTextStream>
+#include <QString>
 
 #include "gamewindow.h"
 #include "square.h"
@@ -24,6 +30,8 @@ using std::endl;
 #include "direction.h"
 #include "superpower.h"
 #include "ghostwall.h"
+#include "modedialog.h"
+
 
 class PacmanGame : public QObject {
     Q_OBJECT
@@ -50,7 +58,12 @@ private:
     int current_score;
     int high_score;
     int level;
+    bool mapmaker_mode;
 
+    static const QString map_dir;
+    static const QString map_path;
+
+    void set_mode();
     void load_map(int highscore);
     void update_map();
     void init_block(int row, int col, char c);

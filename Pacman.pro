@@ -44,7 +44,8 @@ SOURCES += \
     ui/makerwindow.cpp \
     src/mapmaker.cpp \
     ui/choicedialog.cpp \
-    ui/highscorewindow.cpp
+    ui/highscorewindow.cpp \
+    src/modedialog.cpp
 
 HEADERS += \
         ui/mainwindow.h \
@@ -66,14 +67,16 @@ HEADERS += \
     src/mapmaker.h \
     ui/choicedialog.h \
     ui/highscorewindow.h \
-    ui/highscorewindow.h
+    ui/highscorewindow.h \
+    src/modedialog.h
 
 FORMS += \
         ui/mainwindow.ui \
     ui/gamewindow.ui \
     ui/makerwindow.ui \
     ui/choicedialog.ui \
-    ui/highscorewindow.ui
+    ui/highscorewindow.ui \
+    src/modedialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
