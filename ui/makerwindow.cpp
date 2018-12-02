@@ -12,8 +12,6 @@
 #include "square.h"
 #include "mapmaker.h"
 #include "choicedialog.h"
-#include <iostream>
-using namespace std;
 
 const QString Makerwindow::map_dir =
     QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman";
@@ -121,16 +119,23 @@ char Makerwindow::get_square_choice()
         }
     }
 
+    //get results and stored defualt as N
     result = d.get_choice();
     if (result == ' ') result = 'N';
+
+    //if pacman is too many
     if (numpac >= 1 && result == 'P') {
         QMessageBox::information(nullptr, "Error!", "You can only have one pacman. Plese select another");
         return get_square_choice();
     }
+
+    //if ghosts are too many
     else if (numghost >= 4 && result == 'C') {
         QMessageBox::information(nullptr, "Error!", "You can only have four ghosts. Plese select another");
         return get_square_choice();
     }
+
+    //default if no error
     else return result;
 }
 
