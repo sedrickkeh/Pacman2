@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QApplication>
 #include <cstdlib>
+#include <ctime>
 
 const QString PacmanGame::map_dir =
     QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman";
@@ -471,7 +472,7 @@ void PacmanGame::game_over()
     if ((mode == Mode::CLASSIC && pacman->get_lives() == 0) || (mode == Mode::REVERSE && pacman->get_superpower() <= 0)){
         QMessageBox::information(nullptr, "Game over!", "Game over!");
         game_window->close();
-        timer->stop();
+        if (timer != nullptr) timer->stop();
     }
 }
 
