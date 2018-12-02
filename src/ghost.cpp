@@ -69,7 +69,7 @@ Character* Ghost::get_prev() const
 
 Dir Ghost::get_next_move() const
 {
-    if(pattern == Movement::RANDOM) {
+    if(pattern == Movement::RANDOM || eatmode) {
         //choose a random direction and check whether the square is valid, not allowing ghosts to go back
 
         int arr[4] = {0, 1, 2, 3};
