@@ -12,6 +12,8 @@
 #include "square.h"
 #include "mapmaker.h"
 #include "choicedialog.h"
+#include <iostream>
+using namespace std;
 
 const QString Makerwindow::map_dir =
     QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman";
@@ -111,45 +113,17 @@ char Makerwindow::get_square_choice() {
         }
     }
 
-    if (numpac == 0 && numghost < 4) {
-        result = d.get_choice();
-        if (result == ' ') result = 'N';
-        return result;
+    result = d.get_choice();
+    if (result == ' ') result = 'N';
+    if (numpac >= 1 && result == 'P') {
+        QMessageBox::information(nullptr, "Error!", "You can only have one pacman. Plese select another");
+        return get_square_choice();
     }
-    else if (numpac >= 1 && numghost <= 3) {
-        result = d.get_choice();
-        if (result == ' ') result = 'N';
-        if (result != 'P') return result;
-        else {
-            QMessageBox::information(nullptr, "Error!", "You can only have one pacman. Plese select another");
-            return get_square_choice();
-        }
+    else if (numghost >= 4 && result == 'C') {
+        QMessageBox::information(nullptr, "Error!", "You can only have four ghosts. Plese select another");
+        return get_square_choice();
     }
-    else if (numghost >= 4 && numpac == 0) {
-        result = d.get_choice();
-        if (result == ' ') result = 'N';
-        if (result != 'C') return result;
-        else {
-            QMessageBox::information(nullptr, "Error!", "You can only have four ghosts. Plese select another");
-            return get_square_choice();
-        }
-    }
-    else {
-        result = d.get_choice();
-        if (result == ' ') result = 'N';
-        if (result != 'P' && result != 'C') return result;
-        else if (result == 'P') {
-            QMessageBox::information(nullptr, "Error!", "You can only have one pacman. Plese select another");
-            return get_square_choice();
-        }
-        else if (result == 'C') {
-            QMessageBox::information(nullptr, "Error!", "You can only have four ghosts. Plese select another");
-            return get_square_choice();
-        }
-    }
-
-    //default value, but should not reach here
-    return 'N';
+    else return result;
 }
 
 void Makerwindow::make_grid() {
