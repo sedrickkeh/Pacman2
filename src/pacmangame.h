@@ -11,7 +11,6 @@
 #include <QTextStream>
 #include <QString>
 
-#include "modedialog.h"
 #include "gamewindow.h"
 #include "square.h"
 
@@ -29,7 +28,7 @@
 class PacmanGame : public QObject {
     Q_OBJECT
 public:
-    PacmanGame(Mode mode, int highscore);
+    PacmanGame(Mode mode, int highscore, char m);
     ~PacmanGame();
     void startGraphicUI();
     GameWindow* get_game_window() const;
@@ -57,7 +56,6 @@ private:
     static const QString map_dir;
     static const QString map_path;
 
-    void set_mode();
     void load_map(int highscore);
     void update_map();
     void init_block(int row, int col, char c);

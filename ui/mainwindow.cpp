@@ -36,19 +36,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::classic_button_clicked_handler()
 {
+    ModeDialog d(nullptr);
+    char result = d.get_choice();
+    if (result == ' ') return;
+
     //create new classic pacman game with corresponding parameters and connect slot with signal
-    this->pacman_game = new PacmanGame(Mode::CLASSIC, rm->get_classic_highest_score());
+    this->pacman_game = new PacmanGame(Mode::CLASSIC, rm->get_classic_highest_score(), result);
     connect(this->pacman_game->get_game_window(), &GameWindow::closed, this, &MainWindow::game_window_closed_handler);
 
     //show the game and hide main window
     this->pacman_game->startGraphicUI();
-    this->hide();
+    this->hide(); 
 }
 
 void MainWindow::reverse_button_clicked_handler()
 {
+    ModeDialog d(nullptr);
+    char result = d.get_choice();
+    if (result == ' ') return;
+
     //create new reverse pacman game with corresponding parameters and connect slot with signal
-    this->pacman_game = new PacmanGame(Mode::REVERSE, rm->get_reverse_highest_score());
+    this->pacman_game = new PacmanGame(Mode::REVERSE, rm->get_reverse_highest_score(), result);
     connect(this->pacman_game->get_game_window(), &GameWindow::closed, this, &MainWindow::game_window_closed_handler);
 
     //show the game and hide main window

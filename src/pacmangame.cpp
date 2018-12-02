@@ -8,7 +8,7 @@ const QString PacmanGame::map_dir =
 const QString PacmanGame::map_path =
     QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman/mapmaker.txt";
 
-PacmanGame::PacmanGame(Mode mode, int highscore) :
+PacmanGame::PacmanGame(Mode mode, int highscore, char m) :
     mode(mode),
     pacman(nullptr),
     ghost1(nullptr),
@@ -24,8 +24,11 @@ PacmanGame::PacmanGame(Mode mode, int highscore) :
         for (int l = 0; l < 28; ++l)
             board[k][l] = nullptr;
 
+    //set correct mode according to user choice
+    if (m == 'M') mapmaker_mode = true;
+    else mapmaker_mode = false;
+
     //load a given mode with given highscore
-    set_mode();
     load_map(highscore);
     update_map();
 
@@ -90,16 +93,6 @@ void PacmanGame::remove_ghost(int number)
 int PacmanGame::get_score() const
 {
     return current_score;
-}
-
-void PacmanGame::set_mode()
-{
-    ModeDialog d(nullptr);
-    char result = d.get_choice();
-
-    //chose map maker mode or not
-    if (result == 'M') mapmaker_mode = true;
-    else mapmaker_mode = false;
 }
 
 void PacmanGame::load_map(int highscore)

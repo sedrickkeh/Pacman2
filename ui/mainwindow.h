@@ -8,6 +8,7 @@
 #include "gamewindow.h"
 #include "makerwindow.h"
 #include "highscorewindow.h"
+#include "modedialog.h"
 
 namespace Ui {
 class MainWindow;
