@@ -12,16 +12,19 @@ GameWindow::GameWindow(QWidget *parent, PacmanGame* _pacman_game) :
    ui->setupUi(this);
    this->make_grid();
 
-   QPixmap img1(":/resources/img/pac_man_hed.jpg");
-   QPixmap img2(":/resources/img/lives.jpg");
-   QPixmap img3(":/resources/img/highscore.jpg");
-   QPixmap img4(":/resources/img/score.jpg");
+   //load images to be used
+   QPixmap lives(":/resources/img/lives.jpg");
+   QPixmap high(":/resources/img/highscore.jpg");
+   QPixmap score(":/resources/img/score.jpg");
 
-   ui->highscore->setPixmap(img3.scaled(200,32));
-   ui->score->setPixmap(img4.scaled(60,32));
+   //show the highscore and score images
+   ui->highscore->setPixmap(high.scaled(200,32));
+   ui->score->setPixmap(score.scaled(60,32));
 
-   if(pacman_game->get_mode() == CLASSIC) ui->lives->setPixmap(img2.scaled(100,32,Qt::KeepAspectRatio));
+   //only classic mode has lives
+   if(pacman_game->get_mode() == CLASSIC) ui->lives->setPixmap(lives.scaled(100,32,Qt::KeepAspectRatio));
 
+   //show the lcd displays
    set_lcd(GameWindow::SCORE, 0);
    set_lcd(GameWindow::HIGH_SCORE, 0);
 
@@ -60,29 +63,32 @@ void GameWindow::set_square(int row, int col, char i) {
    this->square[row][col]->set_piece(i);
 }
 
-void GameWindow::set_lcd(int type, int value)
-{
-    QLCDNumber *lcds[2] = {ui -> highscore_display, ui -> score_display};
-    lcds[type] -> display(value);
-    lcds[type] -> show();
+void GameWindow::set_lcd(int type, int value) {
+    QLCDNumber *lcds[2] = {ui->highscore_display, ui->score_display};
+    lcds[type]->display(value);
+    lcds[type]->show();
 }
 
-void GameWindow::set_lives()
-{
+void GameWindow::set_lives() {
     int lives = pacman_game->get_pacman()->get_lives();
 
-    QPixmap img2(":/resources/img/pac_man_hed.jpg");
-    QLabel* liveWidgets[5] = {ui->obj_1,ui->obj_2,ui->obj_3,ui->obj_4,ui->obj_5};
+    //load lives image
+    QPixmap head(":/resources/img/pac_man_hed.jpg");
+    QLabel* liveWidgets[5] = {ui->obj_1, ui->obj_2, ui->obj_3, ui->obj_4, ui->obj_5};
+
+    //display number of lives graphics
     int i = 0;
     for (; i<lives; ++i){
-        liveWidgets[i]->setPixmap(img2.scaled(32,32,Qt::KeepAspectRatio));
+        liveWidgets[i]->setPixmap(head.scaled(32,32,Qt::KeepAspectRatio));
     }
     for (; i<5; ++i){
         liveWidgets[i]->clear();
     }
+
 }
 
 void GameWindow::keyPressEvent(QKeyEvent * event){
+    //for the control of pacman with WASD keys
     if (event->key() == Qt::Key_W){
         pacman_game->get_pacman()->update_direction(Dir::UP);
         event->accept();

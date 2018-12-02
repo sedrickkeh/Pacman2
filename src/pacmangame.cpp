@@ -28,13 +28,19 @@ PacmanGame::PacmanGame(Mode mode, int highscore) :
         for (int l = 0; l < 28; ++l)
             board[k][l] = nullptr;
 
+    //load a given mode with given highscore
     set_mode();
     load_map(highscore);
     update_map();
 
+    //start timer for movement and countdown
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(refresh_frame()));
     timer -> start(20);
+
+    //display different messages to explain gameplay
+    if(mode == CLASSIC) QMessageBox::information(nullptr, "Welcome!", "This is classic mode. You can use keys WASD to move around.");
+    if(mode == REVERSE) QMessageBox::information(nullptr, "Welcome!", "This is reverse mode. In this mode, you can chase ghosts until the timer runs out.");
 }
 
 PacmanGame::~PacmanGame(){}
@@ -60,6 +66,7 @@ bool PacmanGame::is_mapmaker_mode() const {
 }
 
 void PacmanGame::remove_ghost(int number) {
+    //to remove ghosts in reverse mode
     if(number == 1) {
         delete ghost1;
         ghost1 = nullptr;
@@ -85,11 +92,14 @@ int PacmanGame::get_score() const{
 void PacmanGame::set_mode() {
     ModeDialog d(nullptr);
     char result = d.get_choice();
+
+    //used map maker mode or not
     if (result == 'M') mapmaker_mode = true;
     else mapmaker_mode = false;
 }
 
 void PacmanGame::load_map(int highscore) {
+    //read and load the correct map file, if it exists and initiate map with correct objects
     if (mapmaker_mode) {
         if (!QDir(map_dir).exists()) QDir().mkdir(map_dir);
         if (!QFile(map_path).exists()) {
@@ -248,6 +258,7 @@ void PacmanGame::load_map(int highscore) {
             }
             --rownum;
         }
+        //initialize pacman variable of the ghosts, needed to chase pacman
         ghost1->set_pacman(pacman);
         ghost2->set_pacman(pacman);
         ghost3->set_pacman(pacman);
@@ -275,30 +286,30 @@ void PacmanGame::init_block(int row, int col, char c) {
 void PacmanGame::move_pacman(int r, int c) {
     Dir dir = pacman->get_direction();
 
-    int row = r; int col = c;
-    if (dir == Dir::DOWN) pacman->move(row-1, col);
-    else if (dir == Dir::UP) pacman->move(row+1, col);
-    else if (dir == Dir::LEFT) pacman->move(row, col-1);
-    else if (dir == Dir::RIGHT) pacman->move(row, col+1);
-    else if (dir == Dir::NONE) pacman->move(row, col);
+    if (dir == Dir::DOWN) pacman->move(r-1, c);
+    else if (dir == Dir::UP) pacman->move(r+1, c);
+    else if (dir == Dir::LEFT) pacman->move(r, c-1);
+    else if (dir == Dir::RIGHT) pacman->move(r, c+1);
+    else if (dir == Dir::NONE) pacman->move(r, c);
 
+    //update superpower status
     pacman->update_superpower();
+    if (pacman->just_eaten_superpower()) gain_power();
+    else if (pacman->just_lost_superpower()) lose_power();
 
-    if(mode == CLASSIC) {
-        update_ghost_scores();
-        if (pacman->just_eaten_superpower()) gain_power();
-        else if (pacman->just_lost_superpower()) lose_power();
-    }
-    else if (mode == REVERSE) {
-    }
+    //double the score of the ghosts per ghost eaten in classic mode
+    if(mode == CLASSIC) update_ghost_scores();
+
 }
 
 void PacmanGame::move_ghost(int r, int c, Ghost* g) {
+    //ensures ghodt stays in box for set amount of time
     if (g->get_time_in_box() > 0) {
         g->reduce_time_in_box();
         return;
     }
 
+    //get next move of the ghost based on the algorithms in ghost file
     Dir direction = g->get_next_move();
 
     if (direction == DOWN) {
@@ -320,6 +331,7 @@ void PacmanGame::move_ghost(int r, int c, Ghost* g) {
 }
 
 void PacmanGame::gain_power() {
+    //change status of pieces when superpower was eaten
     ghost1->set_eatmode(true);
     ghost2->set_eatmode(true);
     ghost3->set_eatmode(true);
@@ -328,6 +340,7 @@ void PacmanGame::gain_power() {
 }
 
 void PacmanGame::lose_power() {
+    //change status of pieces when superpower was eaten
     ghost1->set_eatmode(false);
     ghost1->reset_points();
     ghost2->set_eatmode(false);
@@ -340,6 +353,7 @@ void PacmanGame::lose_power() {
 }
 
 void PacmanGame::update_ghost_scores() {
+    //double scores of ghosts when pacman successfully eats a ghost
     if (pacman->get_has_eaten_ghost()) {
         ghost1->update_points();
         ghost2->update_points();
@@ -350,6 +364,7 @@ void PacmanGame::update_ghost_scores() {
 }
 
 void PacmanGame::reset_ghosts() {
+    //move the ghosts back and reset status when pacman loses a life
     ghost1->move(17, 15);
     ghost1->move(15, 15);
     ghost1->move(17, 12);
@@ -380,6 +395,7 @@ void PacmanGame::reset_ghosts() {
 }
 
 void PacmanGame::update_score() {
+    //add score if it is positive
     if (pacman->get_points_to_add() == -1) {
         pacman->not_eat_piece();
         return;
@@ -396,6 +412,7 @@ void PacmanGame::update_lives() {
 }
 
 void PacmanGame::complete_level() {
+    //show message and get final score when level is completed
     if (is_level_finished() == false) return;
     else {
         current_score += pacman->get_lives() * 1000;
@@ -406,6 +423,7 @@ void PacmanGame::complete_level() {
 }
 
 bool PacmanGame::is_level_finished() {
+    //level finished in classic, which is when all the food is gone
     if(mode == CLASSIC) {
         for (int k = 0; k < 31; ++k) {
             for (int l = 0; l < 28; ++l) {
@@ -421,6 +439,7 @@ bool PacmanGame::is_level_finished() {
         return true;
     }
 
+    //level finished in reverse, which is when all the ghosts have been eaten
     else if (mode == REVERSE) {
         if(ghost1 != nullptr) return false;
         if(ghost2 != nullptr) return false;
@@ -433,6 +452,7 @@ bool PacmanGame::is_level_finished() {
 }
 
 void PacmanGame::game_over() {
+    //if no more liveds or time, depending on the mode, then show game over message
     if ((mode == CLASSIC && pacman->get_lives() == 0) || (mode == REVERSE && pacman->get_superpower() <= 0)){
         QMessageBox::information(nullptr, "Game over!", "Game over!");
         game_window->close();
@@ -445,17 +465,20 @@ void PacmanGame::update_timer(){
 }
 
 void PacmanGame::refresh_frame() {
+    //move the pieces
     if(ghost1 != nullptr) move_ghost(ghost1->getRow(), ghost1->getCol(), ghost1);
     if(ghost2 != nullptr) move_ghost(ghost2->getRow(), ghost2->getCol(), ghost2);
     if(ghost3 != nullptr) move_ghost(ghost3->getRow(), ghost3->getCol(), ghost3);
     if(ghost4 != nullptr) move_ghost(ghost4->getRow(), ghost4->getCol(), ghost4);
     move_pacman(pacman->getRow(), pacman->getCol());
 
+    //update status variables
     update_score();
     update_lives();
     update_timer();
     if (pacman->get_has_encountered_ghost()) reset_ghosts();
 
+    //update map and check end game statuses
     update_map();
     complete_level();
     game_over();

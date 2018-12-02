@@ -4,20 +4,20 @@
 Ghost::Ghost(int number, int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Mode mode, Movement pattern) :
     Character(row, col, board),
     number(number),
-    direction(NONE),
+    direction(Dir::NONE),
     prev(previous)
 {
-    if (mode == CLASSIC) {
+    if (mode == Mode::CLASSIC) {
         points = 200;
         eatmode = false;
         this->pattern = pattern;
         this->time_in_box = timebox;
     }
 
-    else if (mode == REVERSE) {
+    else if (mode == Mode::REVERSE) {
         points = 1000;
         eatmode = true;
-        this->pattern = RANDOM;
+        this->pattern = Movement::RANDOM;
         this->time_in_box = 5;
     }
 }
@@ -27,9 +27,9 @@ Ghost::~Ghost() {
 
 char Ghost::getImage() const {
     if (eatmode) return IMAGE_EAT;
-    if (pattern == CHASE) return 'C';
-    if (pattern == AMBUSH) return 'A';
-    if (pattern == RANDOM) return 'R';
+    if (pattern == Movement::CHASE) return 'C';
+    if (pattern == Movement::AMBUSH) return 'A';
+    if (pattern == Movement::RANDOM) return 'R';
     return IMAGE_GHOST;
 }
 
@@ -58,28 +58,34 @@ Character* Ghost::get_prev() const {
 }
 
 Dir Ghost::get_next_move() const {
-    if(pattern == RANDOM || eatmode) {
+    if(pattern == Movement::RANDOM || eatmode) {
+        //choose a random direction and check whether the square is valid, not allowing going back
+
         int arr[4] = {0, 1, 2, 3};
-        random_shuffle(arr, arr+4);
+        std::random_shuffle(arr, arr+4);
         for(int i = 0; i < 4; ++i){
-            if(direction!= DOWN && arr[i] == 0 && potentialMove(row+1, col)) return UP;
-            if(direction!= UP && arr[i] == 1 && potentialMove(row-1, col)) return DOWN;
-            if(direction!= LEFT && arr[i] == 2 && potentialMove(row, col+1)) return RIGHT;
-            if(direction!= RIGHT && arr[i] == 3 && potentialMove(row, col-1)) return LEFT;
+            if(direction!= Dir::DOWN && arr[i] == 0 && potentialMove(row+1, col)) return Dir::UP;
+            if(direction!= Dir::UP && arr[i] == 1 && potentialMove(row-1, col)) return Dir::DOWN;
+            if(direction!= Dir::LEFT && arr[i] == 2 && potentialMove(row, col+1)) return Dir::RIGHT;
+            if(direction!= Dir::RIGHT && arr[i] == 3 && potentialMove(row, col-1)) return Dir::LEFT;
         }
 
-        if(direction == LEFT) return RIGHT;
-        if(direction == RIGHT) return LEFT;
-        if(direction == UP) return DOWN;
-        if(direction == DOWN) return UP;
+        //in case only going back is the remaining move
+        if(direction == Dir::LEFT) return Dir::RIGHT;
+        if(direction == Dir::RIGHT) return Dir::LEFT;
+        if(direction == Dir::UP) return Dir::DOWN;
+        if(direction == Dir::DOWN) return Dir::UP;
     }
 
+    //calculate the target pixel of the ghost, depending on the movement pattern
     int target_row, target_col;
     calculateTarget(target_row, target_col);
 
+    //store the distance of the 4 directions wrt to current place
     int up = 0, down = 0, left = 0, right = 0;
     int curr_row, curr_col;
 
+    //calculate absolute distance of all 4 directions
     curr_row = row+1; curr_col = col;
     up = (curr_row - target_row) * (curr_row - target_row) + (curr_col - target_col) * (curr_col - target_col);
     curr_row = row-1; curr_col = col;
@@ -89,33 +95,37 @@ Dir Ghost::get_next_move() const {
     curr_row = row; curr_col = col+1;
     right = (curr_row - target_row) * (curr_row - target_row) + (curr_col - target_col) * (curr_col - target_col);
 
-    int current;
-
+    //set invalid move as -1 for checking
     if(!potentialMove(row+1, col)) up = -1;
     if(!potentialMove(row-1, col)) down = -1;
     if(!potentialMove(row, col-1)) left = -1;
     if(!potentialMove(row, col+1)) right = -1;
 
-    if(direction == LEFT) right = -1;
-    if(direction == RIGHT) left = -1;
-    if(direction == UP) down = -1;
-    if(direction == DOWN) up = -1;
+    if(direction == Dir::LEFT) right = -1;
+    if(direction == Dir::RIGHT) left = -1;
+    if(direction == Dir::UP) down = -1;
+    if(direction == Dir::DOWN) up = -1;
 
+    int current;
+
+    //if shortest distance and valid, go there
     current = left;
-    if(direction!= RIGHT && (current <= left || left == -1) && (current <= right || right == -1) && (current <= up || up == -1) && (current <= down || down == -1) && left != -1) return LEFT;
+    if(direction != Dir::RIGHT && (current <= left || left == -1) && (current <= right || right == -1) && (current <= up || up == -1) && (current <= down || down == -1) && left != -1) return Dir::LEFT;
     current = right;
-    if(direction!= LEFT && (current <= left || left == -1) && (current <= right || right == -1) && (current <= up || up == -1) && (current <= down || down == -1) && right != -1) return RIGHT;
+    if(direction != Dir::LEFT && (current <= left || left == -1) && (current <= right || right == -1) && (current <= up || up == -1) && (current <= down || down == -1) && right != -1) return Dir::RIGHT;
     current = up;
-    if(direction!= DOWN && (current <= left || left == -1) && (current <= right || right == -1) && (current <= up || up == -1) && (current <= down || down == -1) && up != -1) return UP;
+    if(direction!= Dir::DOWN && (current <= left || left == -1) && (current <= right || right == -1) && (current <= up || up == -1) && (current <= down || down == -1) && up != -1) return Dir::UP;
     current = down;
-    if(direction!= UP && (current <= left || left == -1) && (current <= right || right == -1) && (current <= up || up == -1) && (current <= down || down == -1) && down != -1) return DOWN;
+    if(direction!= Dir::UP && (current <= left || left == -1) && (current <= right || right == -1) && (current <= up || up == -1) && (current <= down || down == -1) && down != -1) return Dir::DOWN;
 
-    if(direction == LEFT) return RIGHT;
-    if(direction == RIGHT) return LEFT;
-    if(direction == UP) return DOWN;
-    if(direction == DOWN) return UP;
+    //in case none of the above were valid, then have to turn back
+    if(direction == Dir::LEFT) return Dir::RIGHT;
+    if(direction == Dir::RIGHT) return Dir::LEFT;
+    if(direction == Dir::UP) return Dir::DOWN;
+    if(direction == Dir::DOWN) return Dir::UP;
 
-    return NONE;
+    //in case nothing is valid, just stay there
+    return Dir::NONE;
 }
 
 void Ghost::set_direction(Dir direction){
@@ -123,6 +133,7 @@ void Ghost::set_direction(Dir direction){
 }
 
 void Ghost::move(int row, int col) {
+    //wrap around for the teleporting pixels
     if (col == -1 && row == 16) {
         ((*board)[this->row][this->col]) = nullptr;
         ((*board)[16][27]) = this;
@@ -136,15 +147,21 @@ void Ghost::move(int row, int col) {
         return;
     }
 
+    //check if out of the map
     if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
 
+    //move the ghost if empty space
     if ((*board)[row][col] == nullptr) {
         (*board)[this->row][this->col] = prev;
         prev = ((*board)[row][col]);
         ((*board)[row][col]) = this;
         this->row = row; this->col = col;
     }
+
+    //do nothing if we hit a wall
     else if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return;
+
+    //save the previous thing if we pass by food or ghostwall so it will not be deleted
     else if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V') {
         (*board)[this->row][this->col] = prev;
         prev = ((*board)[row][col]);
@@ -174,6 +191,7 @@ void Ghost::set_eatmode(bool x){
 }
 
 bool Ghost::potentialMove(int row, int col) const {
+    //this is like move, but only returns a boolean and sets pacman to a potential move
     if (col == -1 && row == 16) return true;
     if (col == 28 && row == 16) return true;
     if (row < 0 || col < 0 || row >= 31 || col >= 28) return false;
@@ -184,10 +202,15 @@ bool Ghost::potentialMove(int row, int col) const {
 }
 
 void Ghost::calculateTarget(int &row, int &col) const {
+    //for the ghost algorithms
+
+    //chase just targets pacman
     if (pattern == CHASE) {
         row = pacman->getRow();
         col = pacman->getCol();
     }
+
+    //ambush tries to go 4 spaces ahead of pacman or closer if it is an invalid place
     else if (pattern == AMBUSH) {
         int row = pacman->getRow(), col = pacman->getCol();
 

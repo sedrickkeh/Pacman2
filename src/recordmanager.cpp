@@ -16,6 +16,7 @@ const QString RecordManager::record_path_reverse =
 
 RecordManager::RecordManager()
 {
+    //see if record exists, otherwise make a default file
     if (!QDir(record_dir).exists())
         QDir().mkdir(record_dir);
     if (!QFile(record_path_classic).exists()) {
@@ -47,6 +48,7 @@ RecordManager::RecordManager()
         file.close();
     }
 
+    //read the given high scores and store in an array
     QFile file1(record_path_classic);
     if (!file1.open(QFile::ReadOnly | QFile::Text))
         QMessageBox::information(nullptr, "ERROR", "Unable to read record file.");
@@ -78,43 +80,29 @@ RecordManager::RecordManager()
     file2.close();
 }
 
-int RecordManager::get_classic_score_at(int rank)
-{
-    return classic_scores[rank-1];
-}
-
-int RecordManager::get_classic_lowest_score()
-{
+int RecordManager::get_classic_lowest_score() const {
     return classic_scores[NUM_OF_SCORES-1];
 }
 
-int RecordManager::get_classic_highest_score()
-{
+int RecordManager::get_classic_highest_score() const {
     return classic_scores[0];
 }
 
-int RecordManager::get_reverse_score_at(int rank)
-{
-    return reverse_scores[rank-1];
-}
-
-int RecordManager::get_reverse_lowest_score()
-{
+int RecordManager::get_reverse_lowest_score() const {
     return reverse_scores[NUM_OF_SCORES-1];
 }
 
-int RecordManager::get_reverse_highest_score()
-{
+int RecordManager::get_reverse_highest_score() const {
     return reverse_scores[0];
 }
 
-int RecordManager::get_num_of_scores()
-{
+int RecordManager::get_num_of_scores() const {
     return NUM_OF_SCORES;
 }
 
 void RecordManager::update_classic_record(QString name, int score)
 {
+    //if high score is better, insert at appropriate place
     int new_rank = NUM_OF_SCORES;
     while(new_rank > 0 && score > classic_scores[new_rank-1]) --new_rank;
     if (new_rank == NUM_OF_SCORES) return;
@@ -126,6 +114,7 @@ void RecordManager::update_classic_record(QString name, int score)
     classic_names[new_rank] = name;
     classic_scores[new_rank] = score;
 
+    //rewrite the old record
     QFile file(record_path_classic);
     if (!file.open(QFile::WriteOnly | QFile::Text))
         QMessageBox::information(nullptr, "ERROR", "Unable to write record file.");
@@ -142,6 +131,7 @@ void RecordManager::update_classic_record(QString name, int score)
 
 void RecordManager::update_reverse_record(QString name, int score)
 {
+    //if high score is better, insert at appropriate place
     int new_rank = NUM_OF_SCORES;
     while(new_rank > 0 && score > reverse_scores[new_rank-1]) --new_rank;
     if (new_rank == NUM_OF_SCORES) return;
@@ -153,6 +143,7 @@ void RecordManager::update_reverse_record(QString name, int score)
     reverse_names[new_rank] = name;
     reverse_scores[new_rank] = score;
 
+    //rewrite the old record
     QFile file(record_path_reverse);
     if (!file.open(QFile::WriteOnly | QFile::Text))
         QMessageBox::information(nullptr, "ERROR", "Unable to write record file.");

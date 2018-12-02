@@ -6,8 +6,6 @@
 #include "pacman.h"
 #include "movement.h"
 #include "food.h"
-#include <vector>
-using namespace std;
 
 class Pacman;
 

@@ -3,12 +3,9 @@
 
 #include <QWidget>
 #include <QCloseEvent>
-#include <QKeyEvent>
 #include <QPixmap>
 #include <QString>
 #include "recordmanager.h"
-
-class RecordManager;
 
 namespace Ui{
 class Highscorewindow;

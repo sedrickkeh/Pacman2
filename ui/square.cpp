@@ -48,6 +48,7 @@ void Square::applyStyle() {
 }
 
 void Square::set_piece(char i) {
+    //set the correct graphics for each piece
     this->piece = i;
     if (i == 'P') setStyle("background-color", "yellow");
     else if (i == 'C') setStyle("background-color", "red");

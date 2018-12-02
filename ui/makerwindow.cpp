@@ -1,21 +1,22 @@
 #include "makerwindow.h"
 #include "ui_makerwindow.h"
-#include "square.h"
-#include "mapmaker.h"
-#include "choicedialog.h"
-#include "QMessageBox"
-#include "QStandardPaths"
+
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
 
+#include "QMessageBox"
+#include "QStandardPaths"
+
+#include "square.h"
+#include "mapmaker.h"
+#include "choicedialog.h"
 
 const QString Makerwindow::map_dir =
     QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman";
 const QString Makerwindow::map_path =
     QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman/mapmaker.txt";
-
 
 Makerwindow::Makerwindow(QWidget *parent, MapMaker* _mapmaker) :
     QWidget(parent),
@@ -23,11 +24,14 @@ Makerwindow::Makerwindow(QWidget *parent, MapMaker* _mapmaker) :
     mapmaker(_mapmaker)
 {
     ui->setupUi(this);
-    QPixmap img(":/resources/img/mapmaker_logo.png");
-    ui->mapmaker_logo->setPixmap(img.scaled(300,42));
+
+    //display needed images and connect save button
+    QPixmap map_logo(":/resources/img/mapmaker_logo.png");
+    ui->mapmaker_logo->setPixmap(map_logo.scaled(300,42));
     this->make_grid();
     connect(this->ui->save, &QPushButton::clicked, this, &Makerwindow::save_button_clicked_handler);
 
+    //create path and file if needed
     if (!QDir(map_dir).exists()) QDir().mkdir(map_dir);
     if (!QFile(map_path).exists()) {
         QFile file(map_path);
@@ -90,16 +94,23 @@ void Makerwindow::set_square(int row, int col, char i) {
 
 char Makerwindow::get_square_choice() {
     ChoiceDialog d(this);
+    //store result and current number of pacman and ghosts
     char result;
     int numpac = 0; int numghost = 0;
-    for (int k = 0; k < 31; k ++) for (int l = 0; l < 28; l ++)
-        if (mapmaker->getchar(k, l) != nullptr) {
-            if (mapmaker ->getchar(k, l) -> getImage() == 'P') numpac++;
-            if (mapmaker->getchar(k, l) ->getImage() == 'G' ||
-                mapmaker->getchar(k, l) ->getImage() == 'C' ||
-                mapmaker->getchar(k, l) ->getImage() == 'A' ||
-                mapmaker->getchar(k, l) ->getImage() == 'R') numghost++;
+
+    //count the current number of ghosts and pacman
+    for (int k = 0; k < 31; ++k) {
+        for (int l = 0; l < 28; ++l) {
+            if (mapmaker->getchar(k, l) != nullptr) {
+                if (mapmaker ->getchar(k, l) -> getImage() == 'P') ++numpac;
+                if (mapmaker->getchar(k, l) ->getImage() == 'G' ||
+                    mapmaker->getchar(k, l) ->getImage() == 'C' ||
+                    mapmaker->getchar(k, l) ->getImage() == 'A' ||
+                    mapmaker->getchar(k, l) ->getImage() == 'R') ++numghost;
+            }
         }
+    }
+
     if (numpac == 0 && numghost < 4) {
         result = d.get_choice();
         if (result == ' ') result = 'N';
@@ -136,6 +147,9 @@ char Makerwindow::get_square_choice() {
             return get_square_choice();
         }
     }
+
+    //default value, but should not reach here
+    return 'N';
 }
 
 void Makerwindow::make_grid() {
@@ -149,39 +163,50 @@ void Makerwindow::make_grid() {
 void Makerwindow::save_button_clicked_handler() {
     char mapchars[31][28];
     int numpac = 0; int numghost = 0;
-    for (int k = 0; k < 31; k ++) for (int l = 0; l < 28; l ++) {
-        if (mapmaker->getchar(k, l) == nullptr) mapchars[k][l] = 'S';
-        else if (mapmaker->getchar(k, l)->getImage() == 'P') {
-            mapchars[k][l] = 'P'; numpac++;
+
+    //read the map and save it and also count the number of pacman and ghosts
+    for (int k = 0; k < 31; ++k) {
+        for (int l = 0; l < 28; ++l) {
+            if (mapmaker->getchar(k, l) == nullptr) mapchars[k][l] = 'S';
+            else if (mapmaker->getchar(k, l)->getImage() == 'P') {
+                mapchars[k][l] = 'P';
+                ++numpac;
+            }
+            else if (mapmaker->getchar(k, l)->getImage() == 'W') mapchars[k][l] = 'W';
+            else if (mapmaker->getchar(k, l)->getImage() == 'U') mapchars[k][l] = 'U';
+            else if (mapmaker->getchar(k, l)->getImage() == 'F') mapchars[k][l] = 'F';
+            else if (mapmaker->getchar(k, l)->getImage() == 'G' ||
+                     mapmaker->getchar(k, l)->getImage() == 'C' ||
+                     mapmaker->getchar(k, l)->getImage() == 'A' ||
+                     mapmaker->getchar(k, l)->getImage() == 'R') {
+                        mapchars[k][l] = 'G';
+                        ++numghost;
+            }
+            else mapchars[k][l] = 'S';
         }
-        else if (mapmaker->getchar(k, l)->getImage() == 'W') mapchars[k][l] = 'W';
-        else if (mapmaker->getchar(k, l)->getImage() == 'U') mapchars[k][l] = 'U';
-        else if (mapmaker->getchar(k, l)->getImage() == 'F') mapchars[k][l] = 'F';
-        else if (mapmaker->getchar(k, l)->getImage() == 'G' ||
-                 mapmaker->getchar(k, l)->getImage() == 'C' ||
-                 mapmaker->getchar(k, l)->getImage() == 'A' ||
-                 mapmaker->getchar(k, l)->getImage() == 'R') {
-            mapchars[k][l] = 'G'; numghost++;
-        }
-        else mapchars[k][l] = 'S';
     }
+
+    //pacman number is wrong
     if (numpac != 1) {
         QMessageBox::information(nullptr, "Error!", "You need exactly one pacman.");
         return;
     }
+
+    //number of ghosts is wrong
     if (numghost != 4) {
         QMessageBox::information(nullptr, "Error!", "You need exactly four ghosts.");
         return;
     }
 
-
+    //save the new map
     QFile file(map_path);
     if (!file.open(QFile::WriteOnly | QFile::Text))
         QMessageBox::information(nullptr, "ERROR", "Unable to write record file.");
     else {
         QTextStream out_stream(&file);
-        for (int k = 30; k >= 0; k --) {
-            for (int l = 0; l < 28; l ++) out_stream << mapchars[k][l];
+        for (int k = 30; k >= 0; --k) {
+            for (int l = 0; l < 28; ++l)
+                out_stream << mapchars[k][l];
             out_stream << "\n";
         }
     }

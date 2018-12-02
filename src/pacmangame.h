@@ -1,14 +1,6 @@
 #ifndef PACMANGAME_H
 #define PACMANGAME_H
 
-#include <iostream>
-#include <algorithm>
-
-using std::cin;
-using std::cout;
-using std::endl;
-
-#include <string>
 #include <QObject>
 #include <QTimer>
 #include <QStandardPaths>
@@ -31,7 +23,6 @@ using std::endl;
 #include "superpower.h"
 #include "ghostwall.h"
 #include "modedialog.h"
-
 
 class PacmanGame : public QObject {
     Q_OBJECT
