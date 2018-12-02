@@ -12,8 +12,8 @@ Highscorewindow::Highscorewindow(QWidget *parent, RecordManager *_rm) :
     QPixmap high(":/resources/img/highscores.png");
     QPixmap classic(":/resources/img/classical.png");
     QPixmap reverse(":/resources/img/reverse.png");
-    QPixmap high_head(":/resources/img/highscore_header.JPG");
-    QPixmap rank(":/resources/img/Ranking.JPG");
+    QPixmap high_head(":/resources/img/highscore_header.jpg");
+    QPixmap rank(":/resources/img/ranking.jpg");
 
     //use the pictures for the high score
     ui->setupUi(this);

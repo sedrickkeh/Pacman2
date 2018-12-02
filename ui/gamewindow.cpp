@@ -84,7 +84,7 @@ void GameWindow::set_lives()
     int lives = pacman_game->get_pacman()->get_lives();
 
     //load lives image
-    QPixmap head(":/resources/img/pac_man_hed.jpg");
+    QPixmap head(":/resources/img/pacman_head.jpg");
     QLabel* liveWidgets[5] = {ui->obj_1, ui->obj_2, ui->obj_3, ui->obj_4, ui->obj_5};
 
     //display number of lives graphics

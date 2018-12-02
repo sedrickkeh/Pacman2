@@ -1,20 +1,19 @@
 <RCC>
     <qresource prefix="/resources">
-        <file>img/titlescreen.jpg</file>
         <file>maps/pacman_map.txt</file>
         <file>img/highscore.jpg</file>
         <file>img/lives.jpg</file>
-        <file>img/pac_man_hed.jpg</file>
         <file>img/score.jpg</file>
         <file>img/titlepage.jpg</file>
         <file>img/mapmaker_logo.png</file>
         <file>img/classical.png</file>
         <file>img/reverse.png</file>
         <file>img/highscores.png</file>
-        <file>img/highscore_header.JPG</file>
-        <file>img/Ranking.JPG</file>
-        <file>img/foodpixel.JPG</file>
+        <file>img/highscore_header.jpg</file>
+        <file>img/ranking.jpg</file>
+        <file>img/foodpixel.jpg</file>
         <file>img/food_pixel.png</file>
+        <file>img/pacman_head.jpg</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

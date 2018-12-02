@@ -46,7 +46,7 @@ void MainWindow::classic_button_clicked_handler()
 
     //show the game and hide main window
     this->pacman_game->startGraphicUI();
-    this->hide(); 
+    this->hide();
 }
 
 void MainWindow::reverse_button_clicked_handler()

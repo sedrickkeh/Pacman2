@@ -2,6 +2,7 @@
 
 #include <QMessageBox>
 #include <QApplication>
+#include <cstdlib>
 
 const QString PacmanGame::map_dir =
     QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman";
