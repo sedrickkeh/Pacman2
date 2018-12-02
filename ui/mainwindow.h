@@ -37,8 +37,8 @@ private slots:
     void highscore_button_clicked_handler();
     void map_button_clicked_handler();
     void game_window_closed_handler();
-    void maker_window_closed_handler();
     void highscore_window_closed_handler();
+    void maker_window_closed_handler();
 };
 
 #endif // MAINWINDOW_H

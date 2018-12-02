@@ -1,12 +1,11 @@
 #ifndef MAPMAKER_H
 #define MAPMAKER_H
 
-#include <iostream>
-using std::cin;
-using std::cout;
-using std::endl;
-#include <algorithm>
 #include <QObject>
+#include "QString"
+
+#include "makerwindow.h"
+#include "square.h"
 
 #include "character.h"
 #include "wall.h"
@@ -19,11 +18,6 @@ using std::endl;
 #include "movement.h"
 #include "gamemode.h"
 
-#include "makerwindow.h"
-#include "square.h"
-#include <string>
-#include "QString"
-
 class MapMaker : public QObject {
     Q_OBJECT
 public:
@@ -31,7 +25,7 @@ public:
     void startGraphicUI();
     Makerwindow* get_maker_window() const;
     void process_user_input(int row, int col);
-    Character* getchar(int row, int col);
+    Character* getchar(int row, int col) const;
 
 private:
     Makerwindow* makerwindow;

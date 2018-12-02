@@ -67,7 +67,6 @@ HEADERS += \
     src/mapmaker.h \
     ui/choicedialog.h \
     ui/highscorewindow.h \
-    ui/highscorewindow.h \
     src/modedialog.h
 
 FORMS += \

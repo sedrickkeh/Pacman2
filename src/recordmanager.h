@@ -7,13 +7,11 @@ class RecordManager
 {
  public:
     RecordManager();
-    int get_classic_score_at(int rank);
-    int get_classic_lowest_score();
-    int get_classic_highest_score();
-    int get_reverse_score_at(int rank);
-    int get_reverse_lowest_score();
-    int get_reverse_highest_score();
-    int get_num_of_scores();
+    int get_classic_lowest_score() const;
+    int get_classic_highest_score() const;
+    int get_reverse_lowest_score() const;
+    int get_reverse_highest_score() const;
+    int get_num_of_scores() const;
     void update_classic_record(QString name, int score);
     void update_reverse_record(QString name, int score);
     int* get_classic_scores();
