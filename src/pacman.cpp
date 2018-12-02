@@ -20,7 +20,7 @@ Pacman::Pacman(PacmanGame* pacmangame, int row, int col, Character* (*board)[31]
     //if classic, then start normally and with 5 lives
     if(mode == Mode::CLASSIC) {
         superpower = -1;
-        lives = 5;
+        lives = 3;
     }
 
     //if reverse, superpower is our timer and no lives
