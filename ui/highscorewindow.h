@@ -17,7 +17,7 @@ class Highscorewindow: public QWidget
     Q_OBJECT
 
 public:
-    explicit Highscorewindow(QWidget *parent =nullptr, RecordManager* _records=nullptr);
+    explicit Highscorewindow(QWidget *parent = nullptr, RecordManager* _records = nullptr);
     ~Highscorewindow();
 
 private:

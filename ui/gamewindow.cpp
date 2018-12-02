@@ -5,70 +5,70 @@
 #include "pacmangame.h"
 
 GameWindow::GameWindow(QWidget *parent, PacmanGame* _pacman_game) :
-   QWidget(parent),
-   ui(new Ui::GameWindow),
-   pacman_game(_pacman_game)
+    QWidget(parent),
+    ui(new Ui::GameWindow),
+    pacman_game(_pacman_game)
 {
-   ui->setupUi(this);
-   this->make_grid();
+    ui->setupUi(this);
+    this->make_grid();
 
-   //load images to be used
-   QPixmap lives(":/resources/img/lives.jpg");
-   QPixmap high(":/resources/img/highscore.jpg");
-   QPixmap score(":/resources/img/score.jpg");
+    //load images to be used
+    QPixmap lives(":/resources/img/lives.jpg");
+    QPixmap high(":/resources/img/highscore.jpg");
+    QPixmap score(":/resources/img/score.jpg");
 
-   //show the highscore and score images
-   ui->highscore->setPixmap(high.scaled(200,32));
-   ui->score->setPixmap(score.scaled(60,32));
+    //show the highscore and score images
+    ui->highscore->setPixmap(high.scaled(200,32));
+    ui->score->setPixmap(score.scaled(60,32));
 
-   //only classic mode has lives
-   if(pacman_game->get_mode() == Mode::CLASSIC)
-       ui->lives->setPixmap(lives.scaled(100,32,Qt::KeepAspectRatio));
+    //only classic mode has lives
+    if(pacman_game->get_mode() == Mode::CLASSIC)
+        ui->lives->setPixmap(lives.scaled(100,32,Qt::KeepAspectRatio));
 
-   //show the lcd displays
-   set_lcd(GameWindow::SCORE, 0);
-   set_lcd(GameWindow::HIGH_SCORE, 0);
+    //show the lcd displays
+    set_lcd(GameWindow::SCORE, 0);
+    set_lcd(GameWindow::HIGH_SCORE, 0);
 
-   //only reverse mode has a timer
-   if(pacman_game->get_mode() == Mode::REVERSE) {
-       ui->timer->display(200);
-       ui->timer->show();
-   }
+    //only reverse mode has a timer
+    if(pacman_game->get_mode() == Mode::REVERSE) {
+        ui->timer->display(200);
+        ui->timer->show();
+    }
 }
 
 GameWindow::~GameWindow()
 {
-   delete ui;
-   for (int i = 0; i < 31; ++i)
-       for (int j = 0; j < 28; ++j)
-           delete square[i][j];
+    delete ui;
+    for (int i = 0; i < 31; ++i)
+        for (int j = 0; j < 28; ++j)
+            delete square[i][j];
 }
 
 void GameWindow::closeEvent(QCloseEvent *event)
 {
-   emit closed();
+    emit closed();
 }
 
 void GameWindow::make_grid()
 {
-   for (int i=0; i<31; ++i)
-       for (int j=0; j<28; ++j)
-           this->square[i][j] = new Square(this, i, j);
+    for (int i=0; i<31; ++i)
+        for (int j=0; j<28; ++j)
+            this->square[i][j] = new Square(this, i, j);
 }
 
 PacmanGame* GameWindow::get_pacman_game() const
 {
-   return this->pacman_game;
+    return this->pacman_game;
 }
 
 Square* GameWindow::get_square(int row, int col) const
 {
-   return this->square[row][col];
+    return this->square[row][col];
 }
 
 void GameWindow::set_square(int row, int col, char i)
 {
-   this->square[row][col]->set_piece(i);
+    this->square[row][col]->set_piece(i);
 }
 
 void GameWindow::set_lcd(int type, int value)

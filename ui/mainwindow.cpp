@@ -89,7 +89,7 @@ void MainWindow::game_window_closed_handler()
             rm->update_classic_record(name, pacman_game->get_score());
         }
     }
-    else if(pacman_game->get_mode()==Mode::REVERSE) {
+    else if(pacman_game->get_mode() == Mode::REVERSE) {
         //update high score for reverse if needed and only when using default map
         if (pacman_game->is_mapmaker_mode());
         else if(pacman_game->get_score() > rm->get_reverse_lowest_score()){
@@ -108,14 +108,14 @@ void MainWindow::game_window_closed_handler()
 void MainWindow::highscore_window_closed_handler()
 {
     //delete the high score window and reshow main window
-    if (highscore!=nullptr) delete highscore;
+    if (highscore != nullptr) delete highscore;
     highscore = nullptr;
     this->show();
 }
 
 void MainWindow::maker_window_closed_handler()
 {
-    //delet mapmaker window and reshow main window
+    //delete mapmaker window and reshow main window
     if (mapmaker != nullptr) delete mapmaker;
     mapmaker = nullptr;
     this->show();

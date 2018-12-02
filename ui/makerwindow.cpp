@@ -94,7 +94,7 @@ Square* Makerwindow::get_square(int row, int col) const
 
 void Makerwindow::set_square(int row, int col, char i)
 {
-   this->square[row][col]->set_piece(i);
+    this->square[row][col]->set_piece(i);
 }
 
 char Makerwindow::get_square_choice()
@@ -137,6 +137,11 @@ char Makerwindow::get_square_choice()
 
     //default if no error
     else return result;
+}
+
+void Makerwindow::closeEvent(QCloseEvent *event)
+{
+    emit closed();
 }
 
 void Makerwindow::make_grid()
@@ -205,9 +210,4 @@ void Makerwindow::save_button_clicked_handler()
     file.close();
 
     this->close();
-}
-
-void Makerwindow::closeEvent(QCloseEvent *event)
-{
-   emit closed();
 }
