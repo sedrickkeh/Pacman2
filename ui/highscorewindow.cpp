@@ -45,13 +45,13 @@ void Highscorewindow::set_lcd(int classic_scores[], int reverse_scores[])
     //show each score in the array for classic and reverse
     QLCDNumber *classic[5] = {ui->classic_1, ui->classic_2, ui->classic_3, ui->classic_4, ui->classic_5};
     for (int i=0; i<5; i++) {
-        classic[i] -> display(classic_scores[i]);
-        classic[i] ->show();
+        classic[i]->display(classic_scores[i]);
+        classic[i]->show();
     }
     QLCDNumber *reverse[5] = {ui->reverse_1, ui->reverse_2, ui->reverse_3, ui->reverse_4, ui->reverse_5};
     for (int i=0; i<5; ++i) {
-        reverse[i] -> display(reverse_scores[i]);
-        reverse[i] ->show();
+        reverse[i]->display(reverse_scores[i]);
+        reverse[i]->show();
     }
 }
 

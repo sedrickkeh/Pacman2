@@ -58,13 +58,16 @@ void Square::set_piece(char i)
     else if (i == 'C') setStyle("background-color", "red");
     else if (i == 'A') setStyle("background-color", "pink");
     else if (i == 'R') setStyle("background-color", "orange");
-    else if (i == 'F') setStyle("background-color", "blue");
-    //setStyleSheet(QString::fromStdString("background-image: url(\":/resources/img/food_pixel.png\");"));
+    else if (i == 'F') setStyle("image", "url(:/resources/img/food_pixel.png);");
     else if (i == 'U') setStyle("background-color", "rgb(50, 205, 50)");
     else if (i == 'E') setStyle("background-color", "purple");
     else if (i == 'W') setStyle("background-color", "black");
     else if (i == 'V') setStyle("background-color", "gray");
-    else setStyle("background-color", "white");
+    else setStyle("background-color", "blue");
+
+    if (i == 'F') setStyle("background-color", "blue");
+    if (i != 'F') setStyle("image", "none");
+
     applyStyle();
 }
 
