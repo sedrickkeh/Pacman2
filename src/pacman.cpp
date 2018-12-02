@@ -73,7 +73,7 @@ void Pacman::set_superpower(int num)
 void Pacman::update_superpower()
 {
     //if newly gained superpower, extend time
-    if (gain) superpower += 100;
+    if (gain) superpower = 100;
 
     //otherwise, decrement superpower until zero and reset to -1
     else if (superpower > 0) --superpower;

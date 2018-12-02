@@ -211,6 +211,7 @@ bool Ghost::get_eatmode() const
 void Ghost::set_eatmode(bool x)
 {
     eatmode = x;
+    reset_points();
 }
 
 bool Ghost::potentialMove(int row, int col) const
