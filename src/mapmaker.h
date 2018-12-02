@@ -12,11 +12,12 @@
 #include "food.h"
 #include "pacman.h"
 #include "ghost.h"
-#include "direction.h"
 #include "superpower.h"
 #include "ghostwall.h"
-#include "movement.h"
+
 #include "gamemode.h"
+#include "movement.h"
+#include "direction.h"
 
 class MapMaker : public QObject {
     Q_OBJECT

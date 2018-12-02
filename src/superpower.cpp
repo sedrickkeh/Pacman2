@@ -6,6 +6,7 @@ Superpower::Superpower(int row, int col, Character* (*board)[31][28]) :
     points = 200;
 }
 
-char Superpower::getImage() const {
+char Superpower::getImage() const
+{
     return IMAGE_SUPERPOWER;
 }

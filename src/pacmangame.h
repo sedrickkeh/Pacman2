@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTimer>
+
 #include <QStandardPaths>
 #include <QDir>
 #include <QFile>
@@ -10,19 +11,20 @@
 #include <QTextStream>
 #include <QString>
 
+#include "modedialog.h"
 #include "gamewindow.h"
 #include "square.h"
+
 #include "gamemode.h"
+#include "direction.h"
 
 #include "character.h"
 #include "wall.h"
 #include "food.h"
+#include "superpower.h"
 #include "pacman.h"
 #include "ghost.h"
-#include "direction.h"
-#include "superpower.h"
 #include "ghostwall.h"
-#include "modedialog.h"
 
 class PacmanGame : public QObject {
     Q_OBJECT

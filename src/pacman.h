@@ -2,10 +2,10 @@
 #define PACMAN_H
 
 #include "character.h"
-#include "direction.h"
 #include "food.h"
 #include "superpower.h"
 #include "gamemode.h"
+#include "direction.h"
 
 class Ghost;
 class PacmanGame;
@@ -21,6 +21,7 @@ public:
     bool just_lost_superpower() const;
     void set_gain();
     void set_lose();
+
     Dir get_direction() const;
 
     int get_superpower() const;
@@ -30,6 +31,7 @@ public:
 
     void eats_piece(Food* f);
     void not_eat_piece();
+
     void encounter_ghost();
     void eats_ghost(Ghost* g, int row, int col);
     void not_eat_ghost();

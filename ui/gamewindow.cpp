@@ -1,6 +1,6 @@
 #include "gamewindow.h"
-
 #include "ui_gamewindow.h"
+
 #include "square.h"
 #include "pacmangame.h"
 
@@ -22,13 +22,18 @@ GameWindow::GameWindow(QWidget *parent, PacmanGame* _pacman_game) :
    ui->score->setPixmap(score.scaled(60,32));
 
    //only classic mode has lives
-   if(pacman_game->get_mode() == CLASSIC) ui->lives->setPixmap(lives.scaled(100,32,Qt::KeepAspectRatio));
+   if(pacman_game->get_mode() == Mode::CLASSIC)
+       ui->lives->setPixmap(lives.scaled(100,32,Qt::KeepAspectRatio));
 
    //show the lcd displays
    set_lcd(GameWindow::SCORE, 0);
    set_lcd(GameWindow::HIGH_SCORE, 0);
 
-   if(pacman_game->get_mode()==REVERSE) {ui->timer->display(200);  ui->timer->show();}
+   //only reverse mode has a timer
+   if(pacman_game->get_mode() == Mode::REVERSE) {
+       ui->timer->display(200);
+       ui->timer->show();
+   }
 }
 
 GameWindow::~GameWindow()
@@ -39,37 +44,43 @@ GameWindow::~GameWindow()
            delete square[i][j];
 }
 
-void GameWindow::closeEvent(QCloseEvent *event) {
+void GameWindow::closeEvent(QCloseEvent *event)
+{
    emit closed();
 }
 
-void GameWindow::make_grid() {
-   for (int i=0; i<31; ++i) {
-       for (int j=0; j<28; ++j) {
+void GameWindow::make_grid()
+{
+   for (int i=0; i<31; ++i)
+       for (int j=0; j<28; ++j)
            this->square[i][j] = new Square(this, i, j);
-       }
-   }
 }
 
-PacmanGame* GameWindow::get_pacman_game() const {
+PacmanGame* GameWindow::get_pacman_game() const
+{
    return this->pacman_game;
 }
 
-Square* GameWindow::get_square(int row, int col) const {
+Square* GameWindow::get_square(int row, int col) const
+{
    return this->square[row][col];
 }
 
-void GameWindow::set_square(int row, int col, char i) {
+void GameWindow::set_square(int row, int col, char i)
+{
    this->square[row][col]->set_piece(i);
 }
 
-void GameWindow::set_lcd(int type, int value) {
+void GameWindow::set_lcd(int type, int value)
+{
     QLCDNumber *lcds[2] = {ui->highscore_display, ui->score_display};
     lcds[type]->display(value);
     lcds[type]->show();
 }
 
-void GameWindow::set_lives() {
+void GameWindow::set_lives()
+{
+    //get remaining lives
     int lives = pacman_game->get_pacman()->get_lives();
 
     //load lives image
@@ -78,16 +89,22 @@ void GameWindow::set_lives() {
 
     //display number of lives graphics
     int i = 0;
-    for (; i<lives; ++i){
+    for (; i<lives; ++i)
         liveWidgets[i]->setPixmap(head.scaled(32,32,Qt::KeepAspectRatio));
-    }
-    for (; i<5; ++i){
+    for (; i<5; ++i)
         liveWidgets[i]->clear();
-    }
-
 }
 
-void GameWindow::keyPressEvent(QKeyEvent * event){
+void GameWindow::set_timer(int time)
+{
+    int _time = time;
+    if (time == -1) _time = 0;
+    ui->timer->display(_time);
+    ui->timer->show();
+}
+
+void GameWindow::keyPressEvent(QKeyEvent * event)
+{
     //for the control of pacman with WASD keys
     if (event->key() == Qt::Key_W){
         pacman_game->get_pacman()->update_direction(Dir::UP);
@@ -102,11 +119,4 @@ void GameWindow::keyPressEvent(QKeyEvent * event){
         pacman_game->get_pacman()->update_direction(Dir::RIGHT);
         event->accept();
     }
-}
-
-void GameWindow::set_timer(int time){
-    int _time = time;
-    if (time==-1) _time =0;
-    ui->timer->display(_time);
-    ui->timer->show();
 }

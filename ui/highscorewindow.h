@@ -5,9 +5,10 @@
 #include <QCloseEvent>
 #include <QPixmap>
 #include <QString>
-#include "recordmanager.h"
 
-namespace Ui{
+class RecordManager;
+
+namespace Ui {
 class Highscorewindow;
 }
 
@@ -27,7 +28,7 @@ private:
     void set_names(QString[], QString[]);
 
 signals:
-   void closed();
+    void closed();
 
 };
 

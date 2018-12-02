@@ -1,11 +1,7 @@
 #include "pacmangame.h"
-#include <QTimer>
+
 #include <QMessageBox>
 #include <QApplication>
-#include <cstdlib>
-#include <ctime>
-#include <iostream>
-using namespace std;
 
 const QString PacmanGame::map_dir =
     QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman";
@@ -39,33 +35,39 @@ PacmanGame::PacmanGame(Mode mode, int highscore) :
     timer -> start(20);
 
     //display different messages to explain gameplay
-    if(mode == CLASSIC) QMessageBox::information(nullptr, "Welcome!", "This is classic mode. You can use keys WASD to move around.");
-    if(mode == REVERSE) QMessageBox::information(nullptr, "Welcome!", "This is reverse mode. In this mode, you can chase ghosts until the timer runs out.");
+    if(mode == Mode::CLASSIC) QMessageBox::information(nullptr, "Welcome!", "This is classic mode. You can use keys WASD to move around.");
+    if(mode == Mode::REVERSE) QMessageBox::information(nullptr, "Welcome!", "This is reverse mode. In this mode, you can chase ghosts until the timer runs out.");
 }
 
 PacmanGame::~PacmanGame(){}
 
-void PacmanGame::startGraphicUI() {
+void PacmanGame::startGraphicUI()
+{
     game_window->show();
 }
 
-GameWindow* PacmanGame::get_game_window() const {
+GameWindow* PacmanGame::get_game_window() const
+{
     return game_window;
 }
 
-Pacman* PacmanGame::get_pacman() const{
+Pacman* PacmanGame::get_pacman() const
+{
     return pacman;
 }
 
-Mode PacmanGame::get_mode() const{
+Mode PacmanGame::get_mode() const
+{
     return mode;
 }
 
-bool PacmanGame::is_mapmaker_mode() const {
+bool PacmanGame::is_mapmaker_mode() const
+{
     return mapmaker_mode;
 }
 
-void PacmanGame::remove_ghost(int number) {
+void PacmanGame::remove_ghost(int number)
+{
     //to remove ghosts in reverse mode
     if(number == 1) {
         delete ghost1;
@@ -85,77 +87,29 @@ void PacmanGame::remove_ghost(int number) {
     }
 }
 
-int PacmanGame::get_score() const{
+int PacmanGame::get_score() const
+{
     return current_score;
 }
 
-void PacmanGame::set_mode() {
+void PacmanGame::set_mode()
+{
     ModeDialog d(nullptr);
     char result = d.get_choice();
 
-    //used map maker mode or not
+    //chose map maker mode or not
     if (result == 'M') mapmaker_mode = true;
     else mapmaker_mode = false;
 }
 
-void PacmanGame::load_map(int highscore) {
+void PacmanGame::load_map(int highscore)
+{
     //read and load the correct map file, if it exists and initiate map with correct objects
     if (mapmaker_mode) {
         if (!QDir(map_dir).exists()) QDir().mkdir(map_dir);
         if (!QFile(map_path).exists()) {
             mapmaker_mode = false;
             QMessageBox::information(nullptr, "Error", "Map not found. Loading classic map.");
-            QFile file(":/resources/maps/pacman_map.txt");
-            if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
-            int rownum = 30;
-            while (!file.atEnd()) {
-                QString line = file.readLine();
-                for (int k = 0; k < line.size()-1; ++k) {
-                    if (line[k] == 'W') board[rownum][k] = new Wall(rownum, k, &board);
-                    else if (line[k] == 'V') board[rownum][k] = new Ghostwall(rownum, k, &board);
-                    else if (line[k] == 'P') {
-                        pacman = new Pacman(this, rownum, k, &board, mode);
-                        board[rownum][k] = pacman;
-                    }
-                    else if (line[k] == 'G') {
-                        if (ghost1 == nullptr) {
-                            ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, CHASE);
-                            board[rownum][k] = ghost1;
-                        }
-                        else if (ghost2 == nullptr) {
-                            ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, AMBUSH);
-                            board[rownum][k] = ghost2;
-                        }
-                        else if (ghost3 == nullptr) {
-                            ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, RANDOM);
-                            board[rownum][k] = ghost3;
-                        }
-                        else if (ghost4 == nullptr) {
-                            ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, RANDOM);
-                            board[rownum][k] = ghost4;
-                        }
-                    }
-                    else if (line[k] == 'F') {
-                        if (mode == CLASSIC)
-                            board[rownum][k] = new Food(rownum, k, &board);
-                        else if (mode == REVERSE)
-                            board[rownum][k] = nullptr;
-                    }
-                    else if (line[k] == 'U') {
-                        if (mode == CLASSIC)
-                            board[rownum][k] = new Superpower(rownum, k, &board);
-                        else if (mode == REVERSE)
-                            board[rownum][k] = nullptr;
-                    }
-                }
-                --rownum;
-            }
-            ghost1->set_pacman(pacman);
-            ghost2->set_pacman(pacman);
-            ghost3->set_pacman(pacman);
-            ghost4->set_pacman(pacman);
-
-            game_window->set_lcd(0, highscore);
         }
         else {
             QFile file(map_path);
@@ -173,32 +127,32 @@ void PacmanGame::load_map(int highscore) {
                     }
                     else if (line[k] == 'G') {
                         if (ghost1 == nullptr) {
-                            ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, CHASE);
+                            ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, Movement::CHASE);
                             board[rownum][k] = ghost1;
                         }
                         else if (ghost2 == nullptr) {
-                            ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, AMBUSH);
+                            ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, Movement::AMBUSH);
                             board[rownum][k] = ghost2;
                         }
                         else if (ghost3 == nullptr) {
-                            ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, RANDOM);
+                            ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, Movement::RANDOM);
                             board[rownum][k] = ghost3;
                         }
                         else if (ghost4 == nullptr) {
-                            ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, RANDOM);
+                            ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, Movement::RANDOM);
                             board[rownum][k] = ghost4;
                         }
                     }
                     else if (line[k] == 'F') {
-                        if (mode == CLASSIC)
+                        if (mode == Mode::CLASSIC)
                             board[rownum][k] = new Food(rownum, k, &board);
-                        else if (mode == REVERSE)
+                        else if (mode == Mode::REVERSE)
                             board[rownum][k] = nullptr;
                     }
                     else if (line[k] == 'U') {
-                        if (mode == CLASSIC)
+                        if (mode == Mode::CLASSIC)
                             board[rownum][k] = new Superpower(rownum, k, &board);
-                        else if (mode == REVERSE)
+                        else if (mode == Mode::REVERSE)
                             board[rownum][k] = nullptr;
                     }
                 }
@@ -227,32 +181,32 @@ void PacmanGame::load_map(int highscore) {
                 }
                 else if (line[k] == 'G') {
                     if (ghost1 == nullptr) {
-                        ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, CHASE);
+                        ghost1 = new Ghost(1, rownum, k, &board, 20, nullptr, mode, Movement::CHASE);
                         board[rownum][k] = ghost1;
                     }
                     else if (ghost2 == nullptr) {
-                        ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, AMBUSH);
+                        ghost2 = new Ghost(2, rownum, k, &board, 40, nullptr, mode, Movement::AMBUSH);
                         board[rownum][k] = ghost2;
                     }
                     else if (ghost3 == nullptr) {
-                        ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, RANDOM);
+                        ghost3 = new Ghost(3, rownum, k, &board, 60, nullptr, mode, Movement::RANDOM);
                         board[rownum][k] = ghost3;
                     }
                     else if (ghost4 == nullptr) {
-                        ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, RANDOM);
+                        ghost4 = new Ghost(4, rownum, k, &board, 80, nullptr, mode, Movement::RANDOM);
                         board[rownum][k] = ghost4;
                     }
                 }
                 else if (line[k] == 'F') {
-                    if (mode == CLASSIC)
+                    if (mode == Mode::CLASSIC)
                         board[rownum][k] = new Food(rownum, k, &board);
-                    else if (mode == REVERSE)
+                    else if (mode == Mode::REVERSE)
                         board[rownum][k] = nullptr;
                 }
                 else if (line[k] == 'U') {
-                    if (mode == CLASSIC)
+                    if (mode == Mode::CLASSIC)
                         board[rownum][k] = new Superpower(rownum, k, &board);
-                    else if (mode == REVERSE)
+                    else if (mode == Mode::REVERSE)
                         board[rownum][k] = nullptr;
                 }
             }
@@ -268,7 +222,8 @@ void PacmanGame::load_map(int highscore) {
     }
 }
 
-void PacmanGame::update_map() {
+void PacmanGame::update_map()
+{
     for (int k = 0; k < 31; ++k) {
         for (int l = 0; l < 28; ++l) {
             if (board[k][l] != nullptr)
@@ -279,11 +234,14 @@ void PacmanGame::update_map() {
     }
 }
 
-void PacmanGame::init_block(int row, int col, char c) {
+void PacmanGame::init_block(int row, int col, char c)
+{
     game_window->set_square(row, col, c);
 }
 
-void PacmanGame::move_pacman(int r, int c) {
+void PacmanGame::move_pacman(int r, int c)
+{
+    //move pacman in the direction he wants to move
     Dir dir = pacman->get_direction();
 
     if (dir == Dir::DOWN) pacman->move(r-1, c);
@@ -298,39 +256,41 @@ void PacmanGame::move_pacman(int r, int c) {
     else if (pacman->just_lost_superpower()) lose_power();
 
     //double the score of the ghosts per ghost eaten in classic mode
-    if(mode == CLASSIC) update_ghost_scores();
+    if(mode == Mode::CLASSIC) update_ghost_scores();
 
 }
 
-void PacmanGame::move_ghost(int r, int c, Ghost* g) {
-    //ensures ghodt stays in box for set amount of time
+void PacmanGame::move_ghost(int r, int c, Ghost* g)
+{
+    //ensures ghost stays in box for set amount of time
     if (g->get_time_in_box() > 0) {
         g->reduce_time_in_box();
         return;
     }
 
-    //get next move of the ghost based on the algorithms in ghost file
+    //get next move of the ghost based on the algorithms of ghost
     Dir direction = g->get_next_move();
 
-    if (direction == DOWN) {
+    if (direction == Dir::DOWN) {
         g->move(r-1, c);
-        g->set_direction(DOWN);
+        g->set_direction(Dir::DOWN);
     }
-    else if (direction == UP) {
+    else if (direction == Dir::UP) {
         g->move(r+1,c);
-        g->set_direction(UP);
+        g->set_direction(Dir::UP);
     }
-    else if (direction == RIGHT) {
+    else if (direction == Dir::RIGHT) {
         g->move(r, c+1);
-        g->set_direction(RIGHT);
+        g->set_direction(Dir::RIGHT);
     }
-    else if (direction == LEFT) {
+    else if (direction == Dir::LEFT) {
         g->move(r,c-1);
-        g->set_direction(LEFT);
+        g->set_direction(Dir::LEFT);
     }
 }
 
-void PacmanGame::gain_power() {
+void PacmanGame::gain_power()
+{
     //change status of pieces when superpower was eaten
     ghost1->set_eatmode(true);
     ghost2->set_eatmode(true);
@@ -339,7 +299,8 @@ void PacmanGame::gain_power() {
     pacman->set_gain();
 }
 
-void PacmanGame::lose_power() {
+void PacmanGame::lose_power()
+{
     //change status of pieces when superpower was eaten
     ghost1->set_eatmode(false);
     ghost1->reset_points();
@@ -352,7 +313,8 @@ void PacmanGame::lose_power() {
     pacman->set_lose();
 }
 
-void PacmanGame::update_ghost_scores() {
+void PacmanGame::update_ghost_scores()
+{
     //double scores of ghosts when pacman successfully eats a ghost
     if (pacman->get_has_eaten_ghost()) {
         ghost1->update_points();
@@ -363,7 +325,8 @@ void PacmanGame::update_ghost_scores() {
     }
 }
 
-void PacmanGame::reset_ghosts() {
+void PacmanGame::reset_ghosts()
+{
     //move the ghosts back and reset status when pacman loses a life
     ghost1->move(17, 15);
     ghost1->move(15, 15);
@@ -394,7 +357,8 @@ void PacmanGame::reset_ghosts() {
     ghost4->set_time_in_box(80);
 }
 
-void PacmanGame::update_score() {
+void PacmanGame::update_score()
+{
     //add score if it is positive
     if (pacman->get_points_to_add() == -1) {
         pacman->not_eat_piece();
@@ -407,11 +371,13 @@ void PacmanGame::update_score() {
     }
 }
 
-void PacmanGame::update_lives() {
+void PacmanGame::update_lives()
+{
     game_window->set_lives();
 }
 
-void PacmanGame::complete_level() {
+void PacmanGame::complete_level()
+{
     //show message and get final score when level is completed
     if (is_level_finished() == false) return;
     else {
@@ -422,9 +388,10 @@ void PacmanGame::complete_level() {
     }
 }
 
-bool PacmanGame::is_level_finished() {
+bool PacmanGame::is_level_finished()
+{
     //level finished in classic, which is when all the food is gone
-    if(mode == CLASSIC) {
+    if(mode == Mode::CLASSIC) {
         for (int k = 0; k < 31; ++k) {
             for (int l = 0; l < 28; ++l) {
                 if (board[k][l] != nullptr && (board[k][l] -> getImage() == 'F' || board[k][l] -> getImage() == 'S')) return false;
@@ -440,7 +407,7 @@ bool PacmanGame::is_level_finished() {
     }
 
     //level finished in reverse, which is when all the ghosts have been eaten
-    else if (mode == REVERSE) {
+    else if (mode == Mode::REVERSE) {
         if(ghost1 != nullptr) return false;
         if(ghost2 != nullptr) return false;
         if(ghost3 != nullptr) return false;
@@ -451,20 +418,23 @@ bool PacmanGame::is_level_finished() {
     return false;
 }
 
-void PacmanGame::game_over() {
-    //if no more liveds or time, depending on the mode, then show game over message
-    if ((mode == CLASSIC && pacman->get_lives() == 0) || (mode == REVERSE && pacman->get_superpower() <= 0)){
+void PacmanGame::game_over()
+{
+    //if no more lives or time, depending on the mode, then show game over message
+    if ((mode == Mode::CLASSIC && pacman->get_lives() == 0) || (mode == Mode::REVERSE && pacman->get_superpower() <= 0)){
         QMessageBox::information(nullptr, "Game over!", "Game over!");
         game_window->close();
         timer->stop();
     }
 }
 
-void PacmanGame::update_timer(){
+void PacmanGame::update_timer()
+{
     game_window->set_timer(pacman->get_superpower());
 }
 
-void PacmanGame::refresh_frame() {
+void PacmanGame::refresh_frame()
+{
     //move the pieces
     if(ghost1 != nullptr) move_ghost(ghost1->getRow(), ghost1->getCol(), ghost1);
     if(ghost2 != nullptr) move_ghost(ghost2->getRow(), ghost2->getCol(), ghost2);
@@ -476,6 +446,8 @@ void PacmanGame::refresh_frame() {
     update_score();
     update_lives();
     update_timer();
+
+    //reset the ghosts and superpower timer when pacman encounters ghost
     if (pacman->get_has_encountered_ghost()) {
         reset_ghosts();
         pacman->set_superpower(0);
@@ -486,5 +458,3 @@ void PacmanGame::refresh_frame() {
     complete_level();
     game_over();
 }
-
-

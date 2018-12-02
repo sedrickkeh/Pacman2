@@ -5,10 +5,12 @@ Food::Food(int row, int col, Character* (*board)[31][28]) :
     points(15)
 {}
 
-char Food::getImage() const {
+char Food::getImage() const
+{
     return IMAGE_FOOD;
 }
 
-int Food::get_points() const {
+int Food::get_points() const
+{
 	return points;
 }

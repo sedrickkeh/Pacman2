@@ -1,7 +1,6 @@
 #ifndef SUPERPOWER_H
 #define SUPERPOWER_H
 
-#include "character.h"
 #include "food.h"
 
 class Superpower : public Food

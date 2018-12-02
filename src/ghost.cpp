@@ -1,4 +1,6 @@
 #include "ghost.h"
+
+#include "pacman.h"
 #include <algorithm>
 
 Ghost::Ghost(int number, int row, int col, Character* (*board)[31][28], int timebox, Character* previous, Mode mode, Movement pattern) :
@@ -7,6 +9,7 @@ Ghost::Ghost(int number, int row, int col, Character* (*board)[31][28], int time
     direction(Dir::NONE),
     prev(previous)
 {
+    //in classic, we start normally with each ghost worth 200
     if (mode == Mode::CLASSIC) {
         points = 200;
         eatmode = false;
@@ -14,6 +17,7 @@ Ghost::Ghost(int number, int row, int col, Character* (*board)[31][28], int time
         this->time_in_box = timebox;
     }
 
+    //in reverse mode, we start with eatmode and ghosts are worth more with no movement pattern and shorter time in box
     else if (mode == Mode::REVERSE) {
         points = 1000;
         eatmode = true;
@@ -22,10 +26,10 @@ Ghost::Ghost(int number, int row, int col, Character* (*board)[31][28], int time
     }
 }
 
-Ghost::~Ghost() {
-}
+Ghost::~Ghost() {}
 
-char Ghost::getImage() const {
+char Ghost::getImage() const
+{
     if (eatmode) return IMAGE_EAT;
     if (pattern == Movement::CHASE) return 'C';
     if (pattern == Movement::AMBUSH) return 'A';
@@ -33,33 +37,40 @@ char Ghost::getImage() const {
     return IMAGE_GHOST;
 }
 
-int Ghost::get_number() const {
+int Ghost::get_number() const
+{
     return number;
 }
 
-void Ghost::set_pacman(Pacman* pacman) {
+void Ghost::set_pacman(Pacman* pacman)
+{
     this->pacman = pacman;
 }
 
-int Ghost::get_time_in_box() const {
+int Ghost::get_time_in_box() const
+{
 	return time_in_box;
 }
 
-void Ghost::set_time_in_box(int t) {
+void Ghost::set_time_in_box(int t)
+{
     time_in_box = t;
 }
 
-void Ghost::reduce_time_in_box() {
+void Ghost::reduce_time_in_box()
+{
     --time_in_box;
 }
 
-Character* Ghost::get_prev() const {
+Character* Ghost::get_prev() const
+{
     return prev;
 }
 
-Dir Ghost::get_next_move() const {
-    if(pattern == Movement::RANDOM || eatmode) {
-        //choose a random direction and check whether the square is valid, not allowing going back
+Dir Ghost::get_next_move() const
+{
+    if(pattern == Movement::RANDOM) {
+        //choose a random direction and check whether the square is valid, not allowing ghosts to go back
 
         int arr[4] = {0, 1, 2, 3};
         std::random_shuffle(arr, arr+4);
@@ -75,13 +86,16 @@ Dir Ghost::get_next_move() const {
         if(direction == Dir::RIGHT) return Dir::LEFT;
         if(direction == Dir::UP) return Dir::DOWN;
         if(direction == Dir::DOWN) return Dir::UP;
+
+        //in case no movements
+        return Dir::NONE;
     }
 
     //calculate the target pixel of the ghost, depending on the movement pattern
     int target_row, target_col;
     calculateTarget(target_row, target_col);
 
-    //store the distance of the 4 directions wrt to current place
+    //store the distance to pacman of the 4 directions wrt to current position
     int up = 0, down = 0, left = 0, right = 0;
     int curr_row, curr_col;
 
@@ -128,12 +142,14 @@ Dir Ghost::get_next_move() const {
     return Dir::NONE;
 }
 
-void Ghost::set_direction(Dir direction){
+void Ghost::set_direction(Dir direction)
+{
     this->direction = direction;
 }
 
-void Ghost::move(int row, int col) {
-    //wrap around for the teleporting pixels
+void Ghost::move(int row, int col)
+{
+    //wrap around for the esge of map teleportation
     if (col == -1 && row == 16) {
         ((*board)[this->row][this->col]) = nullptr;
         ((*board)[16][27]) = this;
@@ -148,7 +164,8 @@ void Ghost::move(int row, int col) {
     }
 
     //check if out of the map
-    if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
+    if (row < 0 || col < 0 || row >= 31 || col >= 28)
+        return;
 
     //move the ghost if empty space
     if ((*board)[row][col] == nullptr) {
@@ -159,7 +176,8 @@ void Ghost::move(int row, int col) {
     }
 
     //do nothing if we hit a wall
-    else if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return;
+    else if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G')
+        return;
 
     //save the previous thing if we pass by food or ghostwall so it will not be deleted
     else if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V') {
@@ -170,61 +188,78 @@ void Ghost::move(int row, int col) {
     }
 }
 
-void Ghost::update_points() {
-    points *= 2;
-}
-
-void Ghost::reset_points() {
-    points = 200;
-}
-
-int Ghost::get_points() const {
+int Ghost::get_points() const
+{
     return points;
 }
 
-bool Ghost::get_eatmode() const {
+void Ghost::update_points()
+{
+    points *= 2;
+}
+
+void Ghost::reset_points()
+{
+    points = 200;
+}
+
+bool Ghost::get_eatmode() const
+{
     return eatmode;
 }
 
-void Ghost::set_eatmode(bool x){
+void Ghost::set_eatmode(bool x)
+{
     eatmode = x;
 }
 
-bool Ghost::potentialMove(int row, int col) const {
-    //this is like move, but only returns a boolean and sets pacman to a potential move
-    if (col == -1 && row == 16) return true;
-    if (col == 28 && row == 16) return true;
-    if (row < 0 || col < 0 || row >= 31 || col >= 28) return false;
-    if ((*board)[row][col] == nullptr) return true;
-    if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G') return false;
-    if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'P' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V') return true;
+bool Ghost::potentialMove(int row, int col) const
+{
+    //this is like move, but only returns a boolean to see if valid move
+    if (col == -1 && row == 16)
+        return true;
+    if (col == 28 && row == 16)
+        return true;
+    if (row < 0 || col < 0 || row >= 31 || col >= 28)
+        return false;
+    if ((*board)[row][col] == nullptr)
+        return true;
+    if ((*board)[row][col] -> getImage() == 'W' || (*board)[row][col] -> getImage() == 'G')
+        return false;
+    if ((*board)[row][col] -> getImage() == 'F' || (*board)[row][col] -> getImage() == 'P' || (*board)[row][col] -> getImage() == 'U' || (*board)[row][col] -> getImage() == 'V')
+        return true;
+
+    //default value
     return false;
 }
 
-void Ghost::calculateTarget(int &row, int &col) const {
-    //for the ghost algorithms
-
+void Ghost::calculateTarget(int &row, int &col) const
+{
     //chase just targets pacman
-    if (pattern == CHASE) {
+    if (pattern == Movement::CHASE) {
         row = pacman->getRow();
         col = pacman->getCol();
     }
 
     //ambush tries to go 4 spaces ahead of pacman or closer if it is an invalid place
-    else if (pattern == AMBUSH) {
-        int row = pacman->getRow(), col = pacman->getCol();
+    else if (pattern == Movement::AMBUSH) {
+        row = pacman->getRow();
+        col = pacman->getCol();
 
-        if (pacman->get_direction() == UP) row += 4;
-        else if (pacman->get_direction() == DOWN) row -= 4;
-        else if (pacman->get_direction() == LEFT) col -= 4;
-        else if (pacman->get_direction() == RIGHT) col += 4;
+        //4 spaces ahead
+        if (pacman->get_direction() == Dir::UP) row += 4;
+        else if (pacman->get_direction() == Dir::DOWN) row -= 4;
+        else if (pacman->get_direction() == Dir::LEFT) col -= 4;
+        else if (pacman->get_direction() == Dir::RIGHT) col += 4;
 
-        while(!potentialMove(row, col)){
+        //if not a valid place, reduce spaces ahead
+        while(!potentialMove(row, col)) {
             if(row > pacman->getRow()) --row;
             else if(row < pacman->getRow()) ++row;
             else if(col > pacman->getCol()) --col;
             else if(col < pacman->getCol()) ++col;
 
+            //stop when we reach position of pacman
             if(row == pacman->getRow() && col == pacman->getCol()) break;
         }
     }

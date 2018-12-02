@@ -80,33 +80,39 @@ RecordManager::RecordManager()
     file2.close();
 }
 
-int RecordManager::get_classic_lowest_score() const {
+int RecordManager::get_classic_lowest_score() const
+{
     return classic_scores[NUM_OF_SCORES-1];
 }
 
-int RecordManager::get_classic_highest_score() const {
+int RecordManager::get_classic_highest_score() const
+{
     return classic_scores[0];
 }
 
-int RecordManager::get_reverse_lowest_score() const {
+int RecordManager::get_reverse_lowest_score() const
+{
     return reverse_scores[NUM_OF_SCORES-1];
 }
 
-int RecordManager::get_reverse_highest_score() const {
+int RecordManager::get_reverse_highest_score() const
+{
     return reverse_scores[0];
 }
 
-int RecordManager::get_num_of_scores() const {
+int RecordManager::get_num_of_scores() const
+{
     return NUM_OF_SCORES;
 }
 
 void RecordManager::update_classic_record(QString name, int score)
 {
-    //if high score is better, insert at appropriate place
+    //look for ranking of new score
     int new_rank = NUM_OF_SCORES;
     while(new_rank > 0 && score > classic_scores[new_rank-1]) --new_rank;
     if (new_rank == NUM_OF_SCORES) return;
 
+    //if new score is better, then adjust the array accordingly
     for(int i = NUM_OF_SCORES-1; i > new_rank; --i){
         classic_names[i] = classic_names[i-1];
         classic_scores[i] = classic_scores[i-1];
@@ -131,11 +137,12 @@ void RecordManager::update_classic_record(QString name, int score)
 
 void RecordManager::update_reverse_record(QString name, int score)
 {
-    //if high score is better, insert at appropriate place
+    //look for ranking of new score
     int new_rank = NUM_OF_SCORES;
     while(new_rank > 0 && score > reverse_scores[new_rank-1]) --new_rank;
     if (new_rank == NUM_OF_SCORES) return;
 
+    //if new score is better, then adjust the array accordingly
     for(int i = NUM_OF_SCORES-1; i > new_rank; --i){
         reverse_names[i] = reverse_names[i-1];
         reverse_scores[i] = reverse_scores[i-1];
@@ -158,17 +165,22 @@ void RecordManager::update_reverse_record(QString name, int score)
     file.close();
 }
 
-int* RecordManager::get_classic_scores(){
+int* RecordManager::get_classic_scores()
+{
     return classic_scores;
-};
-int* RecordManager::get_reverse_scores(){
+}
+
+int* RecordManager::get_reverse_scores()
+{
     return reverse_scores;
-};
+}
 
-QString* RecordManager::get_classic_names(){
+QString* RecordManager::get_classic_names()
+{
     return classic_names;
-};
+}
 
-QString* RecordManager::get_reverse_names(){
+QString* RecordManager::get_reverse_names()
+{
     return reverse_names;
-};
+}

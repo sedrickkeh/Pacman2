@@ -2,10 +2,9 @@
 #define GHOST_H
 
 #include "character.h"
+#include "gamemode.h"
 #include "direction.h"
-#include "pacman.h"
 #include "movement.h"
-#include "food.h"
 
 class Pacman;
 
@@ -30,24 +29,27 @@ public:
     void set_direction(Dir direction);
     void move(int row, int col);
 
+    int get_points() const;
     void update_points();
     void reset_points();
-    int get_points() const;
 
     bool get_eatmode() const;
     void set_eatmode(bool x);
 
 private:
     int number;
+    Movement pattern;
+
     int points = 100;
     int time_in_box = 10;
-    Dir direction;
-    Movement pattern;
     bool eatmode = false;
+    Dir direction;
     Character* prev;
     Pacman* pacman;
 
     bool potentialMove(int row, int col) const;
+
+    //for the ghost algorithms
     void calculateTarget(int &row, int &col) const;
 };
 

@@ -1,4 +1,5 @@
 #include "pacman.h"
+
 #include "pacmangame.h"
 #include "ghost.h"
 #include "wall.h"
@@ -17,51 +18,60 @@ Pacman::Pacman(PacmanGame* pacmangame, int row, int col, Character* (*board)[31]
     addpoints(-1)
 {
     //if classic, then start normally and with 5 lives
-    if(mode == CLASSIC) {
+    if(mode == Mode::CLASSIC) {
         superpower = -1;
         lives = 5;
     }
 
     //if reverse, superpower is our timer and no lives
-    else if (mode == REVERSE) {
+    else if (mode == Mode::REVERSE) {
         superpower = 200;
         lives = 0;
     }
 }
 
-char Pacman::getImage() const {
+char Pacman::getImage() const
+{
     return IMAGE_PACMAN;
 }
 
-bool Pacman::just_eaten_superpower() const {
+bool Pacman::just_eaten_superpower() const
+{
     return gain;
 }
 
-bool Pacman::just_lost_superpower() const {
+bool Pacman::just_lost_superpower() const
+{
     return lose;
 }
 
-void Pacman::set_gain() {
+void Pacman::set_gain()
+{
     gain = false;
 }
 
-void Pacman::set_lose() {
+void Pacman::set_lose()
+{
     lose = false;
 }
 
-Dir Pacman::get_direction() const {
+Dir Pacman::get_direction() const
+{
 	return direction;
 }
 
-int Pacman::get_superpower() const {
+int Pacman::get_superpower() const
+{
     return superpower;
 }
 
-void Pacman::set_superpower(int num) {
+void Pacman::set_superpower(int num)
+{
     superpower = num;
 }
 
-void Pacman::update_superpower() {
+void Pacman::update_superpower()
+{
     //if newly gained superpower, extend time
     if (gain) superpower += 100;
 
@@ -71,11 +81,13 @@ void Pacman::update_superpower() {
         lose = true;
         superpower = -1;
     }
-    //safeguard
+
+    //safeguar to reset superpower
     else superpower = -1;
 }
 
-void Pacman::update_direction(Dir dir) {
+void Pacman::update_direction(Dir dir)
+{
     //make sure that pacman stays in the map and does not hit a wall or ghost wall
     if (dir == Dir::UP){
         if (row==30) return;
@@ -112,19 +124,22 @@ void Pacman::update_direction(Dir dir) {
     direction = dir;
 }
 
-void Pacman::eats_piece(Food* f) {
+void Pacman::eats_piece(Food* f)
+{
     //set status variable and increment points
     has_eaten_piece = true;
     addpoints = f->get_points();
 }
 
-void Pacman::not_eat_piece() {
+void Pacman::not_eat_piece()
+{
     //reset status variables
     has_eaten_piece = false;
     addpoints = -1;
 }
 
-void Pacman::encounter_ghost() {
+void Pacman::encounter_ghost()
+{
     //if pacman encounters ghost in classic mode
     has_encountered_ghost = true;
     --lives;
@@ -150,13 +165,14 @@ void Pacman::encounter_ghost() {
     }
 }
 
-void Pacman::eats_ghost(Ghost* g, int row, int col) {
+void Pacman::eats_ghost(Ghost* g, int row, int col)
+{
     //set status variables and points when pacman eats ghosts in superpower mode
     has_eaten_piece = true;
     has_eaten_ghost = true;
     addpoints = g->get_points();
 
-    if(mode == CLASSIC) {
+    if(mode == Mode::CLASSIC) {
         //reset ghost status variables and move the ghost back to the box
         g -> set_eatmode(false);
 
@@ -172,7 +188,7 @@ void Pacman::eats_ghost(Ghost* g, int row, int col) {
         g -> set_time_in_box(20);
     }
 
-    else if(mode == REVERSE) {
+    else if(mode == Mode::REVERSE) {
         //in reverse, remove the ghost from the game and add points depending on time remaining
         (*board)[g->getRow()][g->getCol()] = nullptr;
         pacmangame->remove_ghost(g->get_number());
@@ -186,11 +202,13 @@ void Pacman::eats_ghost(Ghost* g, int row, int col) {
     this->row = row; this->col = col;
 }
 
-void Pacman::not_eat_ghost() {
+void Pacman::not_eat_ghost()
+{
     has_eaten_ghost = false;
 }
 
-bool Pacman::get_has_encountered_ghost() {
+bool Pacman::get_has_encountered_ghost()
+{
     if (has_encountered_ghost == true) {
         has_encountered_ghost = false;
         return true;
@@ -198,19 +216,23 @@ bool Pacman::get_has_encountered_ghost() {
     return false;
 }
 
-bool Pacman::get_has_eaten_ghost() const {
+bool Pacman::get_has_eaten_ghost() const
+{
     return has_eaten_ghost;
 }
 
-int Pacman::get_points_to_add() const {
+int Pacman::get_points_to_add() const
+{
     return addpoints;
 }
 
-int Pacman::get_lives() const {
+int Pacman::get_lives() const
+{
     return lives;
 }
 
-void Pacman::move(int row, int col) {
+void Pacman::move(int row, int col)
+{
     //warping for pacman for edge case
     if (col == -1 && row == 16) {
         ((*board)[this->row][this->col]) = nullptr;
@@ -225,10 +247,10 @@ void Pacman::move(int row, int col) {
         return;
     }
 
-    //in case map exceeds
+    //in case coordinates exceeds map size
     if (row < 0 || col < 0 || row >= 31 || col >= 28) return;
 
-    //ghost is directly beside pacman in non-superpower mode
+    //if ghost is directly beside pacman in non-superpower mode, then gets eaten
     if ((*board)[this->row][this->col-1] != nullptr) {
         if ((*board)[this->row][this->col-1]->getImage() == 'C' || (*board)[this->row][this->col-1]->getImage() == 'A' || (*board)[this->row][this->col-1]->getImage() == 'R')
         {
@@ -291,7 +313,7 @@ void Pacman::move(int row, int col) {
         encounter_ghost();
     }
 
-    // pacman collides with a ghost in superpower mode
+    //pacman collides with a ghost in superpower mode
     else if ((*board)[row][col] -> getImage() == 'E') {
         eats_ghost(dynamic_cast<Ghost*>((*board)[row][col]), row, col);
     }

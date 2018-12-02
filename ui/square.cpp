@@ -3,7 +3,6 @@
 #include <sstream>
 #include <QPushButton>
 #include <QString>
-#include <QPixmap>
 
 using std::string;
 using std::ostringstream;
@@ -18,7 +17,8 @@ Square::Square(QWidget* parent, int _row, int _col) :
     connect(this, &Square::clicked, this, &Square::clicked_handler);
 }
 
-void Square::render() {
+void Square::render()
+{
     setGeometry(QRect(OFFSET_X + SQUARE_WIDTH * this->col, OFFSET_Y + SQUARE_HEIGHT * (31-this->row), SQUARE_WIDTH, SQUARE_HEIGHT));
     setVisible(true);
     setFlat(true);
@@ -34,11 +34,13 @@ void Square::render() {
     applyStyle();
 }
 
-void Square::setStyle(string key, string value) {
+void Square::setStyle(string key, string value)
+{
     this->style[key] = value;
 }
 
-void Square::applyStyle() {
+void Square::applyStyle()
+{
     ostringstream s;
     for (StyleMap::iterator i=this->style.begin(); i!=this->style.end(); i++) {
         s << i->first << ":" << i->second << ";";
@@ -47,15 +49,17 @@ void Square::applyStyle() {
     setStyleSheet(QString::fromStdString(style_string));
 }
 
-void Square::set_piece(char i) {
-    //set the correct graphics for each piece
+void Square::set_piece(char i)
+{
     this->piece = i;
+
+    //set the correct graphics for each piece
     if (i == 'P') setStyle("background-color", "yellow");
     else if (i == 'C') setStyle("background-color", "red");
     else if (i == 'A') setStyle("background-color", "pink");
     else if (i == 'R') setStyle("background-color", "orange");
     else if (i == 'F') setStyle("background-color", "blue");
-//        setStyleSheet(QString::fromStdString("background-image: url(\":/resources/img/food_pixel.png\");"));
+    //setStyleSheet(QString::fromStdString("background-image: url(\":/resources/img/food_pixel.png\");"));
     else if (i == 'U') setStyle("background-color", "rgb(50, 205, 50)");
     else if (i == 'E') setStyle("background-color", "purple");
     else if (i == 'W') setStyle("background-color", "black");
@@ -64,11 +68,14 @@ void Square::set_piece(char i) {
     applyStyle();
 }
 
-char Square::get_piece() const {
+char Square::get_piece() const
+{
     return this->piece;
 }
 
-void Square::clicked_handler() {
+void Square::clicked_handler()
+{
+    //emit signal only when row and col are within the grid
     if (this->row == 0 || this->row == 30 || this->col == 0 || this->col == 27) return;
     emit clicked_with_pos(this->row, this->col);
 }

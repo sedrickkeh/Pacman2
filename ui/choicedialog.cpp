@@ -14,32 +14,38 @@ ChoiceDialog::~ChoiceDialog()
     delete ui;
 }
 
-void ChoiceDialog::on_pacman_clicked() {
+void ChoiceDialog::on_pacman_clicked()
+{
     this->choice = 'P';
     close();
 }
 
-void ChoiceDialog::on_ghost_clicked() {
+void ChoiceDialog::on_ghost_clicked()
+{
     this->choice = 'C';
     close();
 }
 
-void ChoiceDialog::on_wall_clicked() {
+void ChoiceDialog::on_wall_clicked()
+{
     this->choice = 'W';
     close();
 }
 
-void ChoiceDialog::on_food_clicked() {
+void ChoiceDialog::on_food_clicked()
+{
     this->choice = 'F';
     close();
 }
 
-void ChoiceDialog::on_superpower_clicked() {
+void ChoiceDialog::on_superpower_clicked()
+{
     this->choice = 'U';
     close();
 }
 
-void ChoiceDialog::on_empty_clicked() {
+void ChoiceDialog::on_empty_clicked()
+{
     this->choice = 'S';
     close();
 }

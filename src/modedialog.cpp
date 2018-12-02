@@ -14,17 +14,20 @@ ModeDialog::~ModeDialog()
     delete ui;
 }
 
-void ModeDialog::on_classic_clicked() {
+void ModeDialog::on_classic_clicked()
+{
     this->choice = 'C';
     close();
 }
 
-void ModeDialog::on_mapmaker_clicked() {
+void ModeDialog::on_mapmaker_clicked()
+{
     this->choice = 'M';
     close();
 }
 
-char ModeDialog::get_choice() {
+char ModeDialog::get_choice()
+{
     exec();
     return this->choice;
 }

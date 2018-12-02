@@ -8,10 +8,12 @@ Character::Character(int row, int col, Character* (*board)[31][28]) :
 
 Character::~Character() {}
 
-int Character::getRow() const {
+int Character::getRow() const
+{
     return row;
 }
 
-int Character::getCol() const {
+int Character::getCol() const
+{
     return col;
 }

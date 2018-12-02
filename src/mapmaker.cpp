@@ -8,7 +8,8 @@ const QString MapMaker::map_dir =
 const QString MapMaker::map_path =
     QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/pacman/mapmaker.txt";
 
-MapMaker::MapMaker() {
+MapMaker::MapMaker()
+{
     //initialize board, load map and display informative text
     makerwindow = new Makerwindow(nullptr, this);
     for (int k = 0; k < 31; ++k)
@@ -18,15 +19,19 @@ MapMaker::MapMaker() {
     QMessageBox::information(nullptr, "Welcome!", "This is map maker mode. You can click on a block in the game board and replace it with a block of your choice. Click the SAVE button when you are done.");
 }
 
-void MapMaker::startGraphicUI() {
+void MapMaker::startGraphicUI()
+{
     makerwindow->show();
+
+    //connect the slots with the signals
     for (int k = 0; k < 31; ++k)
         for (int l = 0; l < 28; ++l)
             connect(makerwindow->get_square(k, l), &Square::clicked_with_pos, this, &MapMaker::process_user_input);
 }
 
-void MapMaker::load_map() {
-    //open the map file and show error if unable
+void MapMaker::load_map()
+{
+    //open the map file and show error if unable to read
     QFile file(map_path);
     if (!file.open(QFile::ReadOnly | QFile::Text))
         QMessageBox::information(nullptr, "ERROR", "Unable to read record file.");
@@ -67,18 +72,21 @@ void MapMaker::load_map() {
     file.close();
 }
 
-Makerwindow* MapMaker::get_maker_window() const {
+Makerwindow* MapMaker::get_maker_window() const
+{
     return makerwindow;
 }
 
-void MapMaker::init_block(int row, int col, char c) {
+void MapMaker::init_block(int row, int col, char c)
+{
     makerwindow->set_square(row, col, c);
 }
 
-void MapMaker::process_user_input(int row, int col) {
+void MapMaker::process_user_input(int row, int col)
+{
     char c = makerwindow->get_square_choice();
 
-    //nothing happens when closed
+    //nothing happens when closed with x button
     if (c == 'N') return;
 
     //delete old object and create the appropriate object for the choice of user
@@ -94,6 +102,7 @@ void MapMaker::process_user_input(int row, int col) {
     init_block(row, col, c);
 }
 
-Character* MapMaker::getchar(int row, int col) const {
+Character* MapMaker::getchar(int row, int col) const
+{
     return board[row][col];
 }

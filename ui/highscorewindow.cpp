@@ -1,6 +1,8 @@
 #include "highscorewindow.h"
 #include "ui_highscorewindow.h"
 
+#include "recordmanager.h"
+
 Highscorewindow::Highscorewindow(QWidget *parent, RecordManager *_rm) :
     QWidget(parent),
     rm(_rm),
@@ -33,29 +35,32 @@ Highscorewindow::~Highscorewindow()
     delete ui;
 }
 
-void Highscorewindow::closeEvent(QCloseEvent *event) {
+void Highscorewindow::closeEvent(QCloseEvent *event)
+{
     emit closed();
 }
 
-void Highscorewindow::set_lcd(int classic_scores[], int reverse_scores[]) {
+void Highscorewindow::set_lcd(int classic_scores[], int reverse_scores[])
+{
     //show each score in the array for classic and reverse
     QLCDNumber *classic[5] = {ui->classic_1, ui->classic_2, ui->classic_3, ui->classic_4, ui->classic_5};
-    for (int i=0; i<5; i++){
+    for (int i=0; i<5; i++) {
         classic[i] -> display(classic_scores[i]);
         classic[i] ->show();
     }
     QLCDNumber *reverse[5] = {ui->reverse_1, ui->reverse_2, ui->reverse_3, ui->reverse_4, ui->reverse_5};
-    for (int i=0; i<5; ++i){
+    for (int i=0; i<5; ++i) {
         reverse[i] -> display(reverse_scores[i]);
         reverse[i] ->show();
     }
 }
 
-void Highscorewindow::set_names(QString c_names[], QString r_names[]) {
+void Highscorewindow::set_names(QString c_names[], QString r_names[])
+{
     //show each name in the array for classic and reverse
     QLabel* classic_names[5] = {ui->classic_6, ui->classic_7, ui->classic_8, ui->classic_9, ui->classic_10};
     QLabel* reverse_names[5] = {ui->reverse_6, ui->reverse_7, ui->reverse_8, ui->reverse_9, ui->reverse_10};
-    for (int i=0; i<5; ++i){
+    for (int i=0; i<5; ++i) {
         classic_names[i]->setText(c_names[i]);
         reverse_names[i]->setText(r_names[i]);
     }
