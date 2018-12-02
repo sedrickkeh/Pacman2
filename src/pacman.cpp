@@ -57,6 +57,10 @@ int Pacman::get_superpower() const {
     return superpower;
 }
 
+void Pacman::set_superpower(int num) {
+    superpower = num;
+}
+
 void Pacman::update_superpower() {
     //if newly gained superpower, extend time
     if (gain) superpower += 100;

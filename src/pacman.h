@@ -24,6 +24,7 @@ public:
     Dir get_direction() const;
 
     int get_superpower() const;
+    void set_superpower(int num);
     void update_superpower();
     void update_direction(Dir dir);
 

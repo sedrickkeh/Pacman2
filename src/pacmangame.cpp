@@ -476,7 +476,10 @@ void PacmanGame::refresh_frame() {
     update_score();
     update_lives();
     update_timer();
-    if (pacman->get_has_encountered_ghost()) reset_ghosts();
+    if (pacman->get_has_encountered_ghost()) {
+        reset_ghosts();
+        pacman->set_superpower(0);
+    }
 
     //update map and check end game statuses
     update_map();
