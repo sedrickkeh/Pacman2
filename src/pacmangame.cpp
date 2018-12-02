@@ -32,14 +32,14 @@ PacmanGame::PacmanGame(Mode mode, int highscore, char m) :
     load_map(highscore);
     update_map();
 
+    //display different messages to explain gameplay
+    if(mode == Mode::CLASSIC) QMessageBox::information(nullptr, "Welcome!", "This is classic mode. You can use keys WASD to move around.");
+    if(mode == Mode::REVERSE) QMessageBox::information(nullptr, "Welcome!", "This is reverse mode. In this mode, you can chase ghosts until the timer runs out.");
+
     //start timer for movement and countdown
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(refresh_frame()));
     timer -> start(20);
-
-    //display different messages to explain gameplay
-    if(mode == Mode::CLASSIC) QMessageBox::information(nullptr, "Welcome!", "This is classic mode. You can use keys WASD to move around.");
-    if(mode == Mode::REVERSE) QMessageBox::information(nullptr, "Welcome!", "This is reverse mode. In this mode, you can chase ghosts until the timer runs out.");
 }
 
 PacmanGame::~PacmanGame(){}
