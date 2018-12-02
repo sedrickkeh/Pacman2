@@ -3,6 +3,7 @@
 #include <sstream>
 #include <QPushButton>
 #include <QString>
+#include <QPixmap>
 
 using std::string;
 using std::ostringstream;
@@ -53,6 +54,7 @@ void Square::set_piece(char i) {
     else if (i == 'A') setStyle("background-color", "pink");
     else if (i == 'R') setStyle("background-color", "orange");
     else if (i == 'F') setStyle("background-color", "blue");
+//        setStyleSheet(QString::fromStdString("background-image: url(\":/resources/img/food_pixel.png\");"));
     else if (i == 'U') setStyle("background-color", "rgb(50, 205, 50)");
     else if (i == 'E') setStyle("background-color", "purple");
     else if (i == 'W') setStyle("background-color", "black");

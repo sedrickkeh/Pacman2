@@ -29,6 +29,7 @@ public:
     void set_square(int row, int col, char i);
     void set_lcd(int type, int value);
     void set_lives();
+    void set_timer(int time);
 
 private:
     Ui::GameWindow *ui;

@@ -13,6 +13,8 @@
         <file>img/highscores.png</file>
         <file>img/highscore_header.JPG</file>
         <file>img/Ranking.JPG</file>
+        <file>img/foodpixel.JPG</file>
+        <file>img/food_pixel.png</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

@@ -134,14 +134,15 @@
   <widget class="QLabel" name="classic_6">
    <property name="geometry">
     <rect>
-     <x>330</x>
+     <x>362</x>
      <y>240</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -150,14 +151,15 @@
   <widget class="QLabel" name="classic_9">
    <property name="geometry">
     <rect>
-     <x>330</x>
+     <x>362</x>
      <y>370</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -166,14 +168,15 @@
   <widget class="QLabel" name="classic_10">
    <property name="geometry">
     <rect>
-     <x>330</x>
+     <x>362</x>
      <y>410</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -182,14 +185,15 @@
   <widget class="QLabel" name="classic_8">
    <property name="geometry">
     <rect>
-     <x>330</x>
+     <x>362</x>
      <y>330</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -198,14 +202,15 @@
   <widget class="QLabel" name="classic_7">
    <property name="geometry">
     <rect>
-     <x>330</x>
+     <x>362</x>
      <y>280</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -237,7 +242,7 @@
   <widget class="QLabel" name="header_2">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>30</x>
      <y>520</y>
      <width>441</width>
      <height>31</height>
@@ -290,14 +295,15 @@
   <widget class="QLabel" name="reverse_6">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>362</x>
      <y>580</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -306,14 +312,15 @@
   <widget class="QLabel" name="reverse_7">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>362</x>
      <y>620</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -322,14 +329,15 @@
   <widget class="QLabel" name="reverse_8">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>362</x>
      <y>670</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -338,14 +346,16 @@
   <widget class="QLabel" name="reverse_9">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>362</x>
      <y>710</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+</string>
    </property>
    <property name="text">
     <string>TextLabel</string>
@@ -354,14 +364,17 @@
   <widget class="QLabel" name="reverse_10">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>362</x>
      <y>750</y>
-     <width>131</width>
-     <height>18</height>
+     <width>100</width>
+     <height>25</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">color: rgb(255, 255, 255);</string>
+    <string notr="true">color: rgb(255, 255, 255);
+font: 75 10pt &quot;MS Shell Dlg 2&quot;;
+
+</string>
    </property>
    <property name="text">
     <string>TextLabel</string>

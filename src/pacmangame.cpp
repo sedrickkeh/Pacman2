@@ -440,6 +440,10 @@ void PacmanGame::game_over() {
     }
 }
 
+void PacmanGame::update_timer(){
+    game_window->set_timer(pacman->get_superpower());
+}
+
 void PacmanGame::refresh_frame() {
     if(ghost1 != nullptr) move_ghost(ghost1->getRow(), ghost1->getCol(), ghost1);
     if(ghost2 != nullptr) move_ghost(ghost2->getRow(), ghost2->getCol(), ghost2);
@@ -449,10 +453,12 @@ void PacmanGame::refresh_frame() {
 
     update_score();
     update_lives();
-
+    update_timer();
     if (pacman->get_has_encountered_ghost()) reset_ghosts();
 
     update_map();
     complete_level();
     game_over();
 }
+
+

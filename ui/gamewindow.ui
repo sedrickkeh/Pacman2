@@ -155,6 +155,16 @@
     <number>0</number>
    </property>
   </widget>
+  <widget class="QLCDNumber" name="timer">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>750</y>
+     <width>161</width>
+     <height>51</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

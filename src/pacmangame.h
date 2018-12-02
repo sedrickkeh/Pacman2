@@ -78,6 +78,7 @@ private:
     void reset_ghosts();
     void update_score();
     void update_lives();
+    void update_timer();
 
     void complete_level();
     bool is_level_finished();

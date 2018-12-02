@@ -24,6 +24,8 @@ GameWindow::GameWindow(QWidget *parent, PacmanGame* _pacman_game) :
 
    set_lcd(GameWindow::SCORE, 0);
    set_lcd(GameWindow::HIGH_SCORE, 0);
+
+   if(pacman_game->get_mode()==REVERSE) {ui->timer->display(200);  ui->timer->show();}
 }
 
 GameWindow::~GameWindow()
@@ -94,4 +96,11 @@ void GameWindow::keyPressEvent(QKeyEvent * event){
         pacman_game->get_pacman()->update_direction(Dir::RIGHT);
         event->accept();
     }
+}
+
+void GameWindow::set_timer(int time){
+    int _time = time;
+    if (time==-1) _time =0;
+    ui->timer->display(_time);
+    ui->timer->show();
 }
