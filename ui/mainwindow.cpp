@@ -40,12 +40,14 @@ void MainWindow::classic_button_clicked_handler()
     char result = d.get_choice();
     if (result == ' ') return;
 
-    //create new classic pacman game with corresponding parameters and connect slot with signal
+    //create new classic pacman game with corresponding parameters
     this->pacman_game = new PacmanGame(Mode::CLASSIC, rm->get_classic_highest_score(), result);
+    this->pacman_game->startGraphicUI();
+
+    //connect the close button with the slot
     connect(this->pacman_game->get_game_window(), &GameWindow::closed, this, &MainWindow::game_window_closed_handler);
 
-    //show the game and hide main window
-    this->pacman_game->startGraphicUI();
+    //hide main window
     this->hide();
 }
 
@@ -55,34 +57,40 @@ void MainWindow::reverse_button_clicked_handler()
     char result = d.get_choice();
     if (result == ' ') return;
 
-    //create new reverse pacman game with corresponding parameters and connect slot with signal
+    //create new reverse pacman game with corresponding parameters
     this->pacman_game = new PacmanGame(Mode::REVERSE, rm->get_reverse_highest_score(), result);
+    this->pacman_game->startGraphicUI();
+
+    //connect the close button with the slot
     connect(this->pacman_game->get_game_window(), &GameWindow::closed, this, &MainWindow::game_window_closed_handler);
 
-    //show the game and hide main window
-    this->pacman_game->startGraphicUI();
+    //hide main window
     this->hide();
 }
 
 void MainWindow::highscore_button_clicked_handler()
 {
-    //create window for high score with corresponding parameters and connect slot with signal
+    //create window for high score with corresponding parameters
     highscore = new Highscorewindow(nullptr, rm);
+    highscore->show();
+
+    //connect the close button with the slot
     connect(this->highscore, &Highscorewindow::closed, this, &MainWindow::highscore_window_closed_handler);
 
-    //show the scores and hide main window
-    highscore->show();
+    //hide main window
     this->hide();
 }
 
 void MainWindow::map_button_clicked_handler()
 {
-    //create new map maker window with corresponding parameters and connect slot with signal
+    //create new map maker window with corresponding parameters
     this->mapmaker = new MapMaker();
+    this->mapmaker->startGraphicUI();
+
+    //connect the close button with the slot
     connect(this->mapmaker->get_maker_window(), &Makerwindow::closed, this, &MainWindow::maker_window_closed_handler);
 
-    //show the map maker and hide main window
-    this->mapmaker->startGraphicUI();
+    //hide main window
     this->hide();
 }
 
